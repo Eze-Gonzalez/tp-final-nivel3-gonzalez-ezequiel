@@ -1,0 +1,371 @@
+﻿body {
+    background-image: url("https://i.imgur.com/hsR4LZx.png");
+}
+
+.w-155 {
+    width: 155px;
+}
+
+.w-375 {
+    width: 375px;
+}
+
+.modalBG {
+    background: rgba(0,0,0,0.95);
+}
+
+.imgnotificacion {
+    max-width: 80px;
+    max-height: 80px;
+}
+
+
+.modalNotificar {
+    width: 375px;
+    height: auto;
+    position: fixed;
+    border-radius: 20px;
+    background-color: rgba(0,0,0,.5);
+    animation-name: notificar;
+    animation-duration: .3s;
+}
+
+.modalAbrir {
+    width: 400px;
+    height: auto;
+    position: fixed;
+    border-radius: 20px;
+    background-color: rgba(0,0,0,1);
+    animation-name: notificar;
+    animation-duration: 0.2s;
+}
+
+
+@keyframes notificar {
+    from {
+        top: 0px;
+    }
+
+    to {
+        bottom: 50px;
+    }
+}
+
+@keyframes abrir {
+    from {
+        transform: scaleX(0.0);
+        transform: scaleY(0.0);
+    }
+
+    to {
+        transform: scaleX(1);
+        transform: scaleY(1);
+    }
+}
+
+.swal-bg {
+    background: rgba(0,0,0,.8);
+}
+
+.swal-title {
+    margin: 0px;
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.21);
+    margin-bottom: 28px;
+    color: white;
+}
+
+.swal-text {
+    padding: 17px;
+    display: block;
+    margin: 22px;
+    text-align: center;
+    color: white;
+}
+
+.swal-button {
+    background: #0d6efd;
+}
+
+.swal-footer {
+    text-align: center;
+    padding-top: 13px;
+    margin-top: 13px;
+    padding: 13px 16px;
+    border-radius: inherit;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+.rdb-asp {
+    width: 20px;
+    height: 25px;
+    padding: 0 10px;
+}
+
+.favorites {
+    max-height: 265px;
+    object-fit: contain;
+}
+
+.swal-icon--error__line {
+    position: absolute;
+    height: 5px;
+    width: 47px;
+    background-color: red;
+    display: block;
+    top: 37px;
+    border-radius: 2px;
+}
+
+.swal-icon--error {
+    border-color: red;
+    -webkit-animation: animateErrorIcon .5s;
+    animation: animateErrorIcon .5s;
+}
+
+.flex-bottom {
+    display: flex;
+    align-items: flex-end;
+}
+
+.content {
+    display: contents;
+}
+
+.h-42 {
+    height: 42px;
+}
+
+.h-30 {
+    height: 30px;
+}
+
+.h-617 {
+    height: 617px;
+}
+
+.w-170 {
+    width: 170px;
+}
+
+.bg-black {
+    background-color: black;
+}
+
+.img-perfil {
+    height: 40px;
+    width: 40px;
+}
+
+.profile-card {
+    width: 300px;
+}
+
+.product-cards {
+    height: 214px;
+    max-width: 540px;
+}
+
+.products {
+    max-width: 540px;
+}
+
+.products-size {
+    height: 295px;
+}
+
+.img {
+    height: 295px;
+    object-fit: contain;
+}
+
+.img-details {
+    max-height: 486px;
+}
+
+.cover {
+    object-fit: cover;
+}
+
+.admin {
+    color: goldenrod;
+}
+
+.img-profile-card {
+    max-height: 183px;
+    object-fit: contain;
+}
+
+.link-profile {
+    color: aqua;
+}
+
+.center-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.center-row {
+    display: flex;
+    justify-content: center;
+}
+
+.align-center {
+    display: flex;
+    align-items: center;
+}
+
+.pequeña {
+    font-size: smaller;
+}
+
+.grande {
+    font-size: larger;
+}
+
+.w-120 {
+    width: 120px;
+}
+
+.img-profile {
+    height: 299px;
+}
+
+.flex-end {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.flex-end-col {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.center-col-justify {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.img-add {
+    max-height: 334px;
+}
+
+.danger {
+    font-weight: bold;
+    color: red;
+}
+
+.alert {
+    color: red;
+}
+
+/*Sliders*/
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 30px;
+    height: 15px;
+}
+
+    .switch input {
+        opacity: 0;
+    }
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 10px;
+        width: 10px;
+        left: 2px;
+        bottom: 3px;
+        background-color: white;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+input:checked + .slider {
+    background-color: #2196F3;
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(15px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+    .slider.round:before {
+        border-radius: 50%;
+    }
+
+/*Radios*/
+
+/* PSEUDO-TOGGLE BUTTON MADE OF ASP.NET CHECKBOX AND CSS3*/
+div.divToggleButton input[type=radio] {
+    display: none;
+    white-space: nowrap;
+}
+
+div.divToggleButton label {
+    display: block;
+    float: left;
+    cursor: pointer;
+}
+
+/* set the size of the pseudo-toggle button control */
+div.divToggleButton input[type=radio]:checked + label::before,
+div.divToggleButton input[type=radio]:not(:checked) + label::before,
+div.divToggleButton input[type=radio] + label {
+    width: 25px;
+    height: 25px;
+    line-height: 18px;
+}
+
+/* additional styling: rounded border, gradient */
+div.divToggleButton input[type=radio] + label {
+    vertical-align: middle;
+    text-align: center;
+    font-size: 10px;
+    font-family: Arial, Calibri;
+    border: 2px solid #bdbdbd;
+    border-radius: 50px;
+    background: #f0f0f0;
+    /* gradient style (optional)*/
+    /*    background-image: -moz-linear-gradient(top, #fdfdfd, #f9f9f9 50%, #e5e5e5 50%, #fdfdfd);
+    background-image: -webkit-gradient(linear, center top, center bottom, from(#fdfdfd), color-stop(0.5, #f9f9f9), color-stop(0.5, #e5e5e5 ), to(#fdfdfd));
+    background-image: linear-gradient(to bottom, #fdfdfd, #f9f9f9 50%, #e5e5e5 50%, #fdfdfd);*/
+}
+
+/* content to display and style pertinent to checked state*/
+div.divToggleButton input[type=radio]:checked + label::before {
+    content: "◉";
+    color: #2196F3;
+    font-size: 25px;
+    font-weight: bold;
+    position: relative;
+    left: -2%;
+    top: 2%;
+}
