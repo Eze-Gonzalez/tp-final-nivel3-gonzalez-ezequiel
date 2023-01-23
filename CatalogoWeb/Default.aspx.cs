@@ -32,11 +32,11 @@ namespace CatalogoWeb
                         producto.ImagenUrl = Helper.cargarImagen(producto);
                     }
                     indiceUltimaPagina = (listaProducto.Count / registrosPagina);
-                    if (listaProducto.Count == 0 && registrosPagina == 0)
+                    if (listaProducto.Count <= 6)
                         indiceUltimaPagina--;
                     ViewState["indicePaginaActual"] = indicePaginaActual;
                     ViewState["indiceUltimaPagina"] = indiceUltimaPagina;
-                    Session["productos"] = listaProducto;
+                    Session.Add("productos", listaProducto);
                     enlazarRepeater();
                 }
                 else
@@ -116,6 +116,9 @@ namespace CatalogoWeb
         {
             try
             {
+                //List<Producto> listaRef = Session["productos"] != null ? (List<Producto>)Session["productos"] : null;
+                //if (listaRef.Count > 6)
+                //{
                 indicePaginaActual = (int)ViewState["indicePaginaActual"];
                 indiceUltimaPagina = (int)ViewState["indiceUltimaPagina"];
                 if (indicePaginaActual < indiceUltimaPagina)
@@ -124,6 +127,8 @@ namespace CatalogoWeb
                     ViewState["indicePaginaActual"] = indicePaginaActual;
                     enlazarRepeater();
                 }
+                //}
+
             }
             catch (Exception ex)
             {
@@ -136,10 +141,14 @@ namespace CatalogoWeb
         {
             try
             {
+                //List<Producto> listaRef = Session["productos"] != null ? (List<Producto>)Session["productos"] : null;
+                //if (listaRef.Count > 6)
+                //{
                 indiceUltimaPagina = (int)ViewState["indiceUltimaPagina"];
                 indicePaginaActual = indiceUltimaPagina;
                 ViewState["indicePaginaActual"] = indicePaginaActual;
                 enlazarRepeater();
+                //}
             }
             catch (Exception ex)
             {
@@ -153,10 +162,11 @@ namespace CatalogoWeb
             {
                 Button btn = (Button)sender;
                 RepeaterItem item = (RepeaterItem)btn.NamingContainer;
-                Label lbl = (Label)item.FindControl("lblCodigo");
-                int id = DatosProducto.traerId(lbl.Text);
+                Image img = (Image)item.FindControl("imgProducto");
+                int id = int.Parse(img.AlternateText);
                 Response.Redirect("Details.aspx?id=" + id);
             }
+            catch (ThreadAbortException) { }
             catch (Exception ex)
             {
 
@@ -175,7 +185,7 @@ namespace CatalogoWeb
                     producto.ImagenUrl = Helper.cargarImagen(producto);
                 }
                 indiceUltimaPagina = (filtrada.Count / registrosPagina);
-                if (filtrada.Count == 0 && registrosPagina == 0)
+                if (filtrada.Count == 0)
                     indiceUltimaPagina--;
                 ViewState["indicePaginaActual"] = indicePaginaActual;
                 ViewState["indiceUltimaPagina"] = indiceUltimaPagina;
@@ -199,7 +209,7 @@ namespace CatalogoWeb
                     producto.ImagenUrl = Helper.cargarImagen(producto);
                 }
                 indiceUltimaPagina = (filtrada.Count / registrosPagina);
-                if (filtrada.Count == 0 && registrosPagina == 0)
+                if (filtrada.Count == 0)
                     indiceUltimaPagina--;
                 ViewState["indicePaginaActual"] = indicePaginaActual;
                 ViewState["indiceUltimaPagina"] = indiceUltimaPagina;

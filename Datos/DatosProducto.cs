@@ -17,7 +17,7 @@ namespace Datos
             List<Producto> lista = new List<Producto>();
             try
             {
-                datos.consultaSP("ListarSP");
+                datos.consultaEmbebida("select A.Id Id, Codigo, Nombre, A.Descripcion Descripcion, IdMarca, IdCategoria, ImagenUrl, Precio, \r\nM.Descripcion Marca, C.Descripcion Categoria  from ARTICULOS A, MARCAS M, CATEGORIAS C \r\nwhere M.Id = IdMarca and C.Id = IdCategoria");
                 datos.lectura();
                 while (datos.Lector.Read())
                 {
@@ -56,50 +56,13 @@ namespace Datos
                 datos.cerrarConexion();
             }
         }
-        //public Producto traerProducto(string codigo)
-        //{
-        //    AccesoDatos datos = new AccesoDatos();
-        //    try
-        //    {
-        //        Producto producto = new Producto();
-        //        datos.consultaSP("traerProducto");
-        //        datos.parametros("@codigo", codigo);
-        //        datos.lectura();
-        //        if (datos.Lector.Read())
-        //        {
-        //            producto.Marca = new Marca();
-        //            producto.Categoria = new Categoria();
-        //            producto.Id = (int)datos.Lector["Id"];
-        //            producto.Codigo = (string)datos.Lector["Codigo"];
-        //            producto.Nombre = (string)datos.Lector["Nombre"];
-        //            producto.Descripcion = (string)datos.Lector["Descripcion"];
-        //            if (!(datos.Lector["ImagenUrl"] is DBNull))
-        //                producto.ImagenUrl = (string)datos.Lector["ImagenUrl"];
-        //            producto.Precio = Math.Round((decimal)datos.Lector["Precio"], 2, MidpointRounding.AwayFromZero);
-        //            producto.Marca.Id = (int)datos.Lector["IdMarca"];
-        //            producto.Marca.Descripcion = (string)datos.Lector["Marca"];
-        //            producto.Categoria.Id = (int)datos.Lector["IdCategoria"];
-        //            producto.Categoria.Descripcion = (string)datos.Lector["Categoria"];
-        //        }
-        //        return producto;
-        //    }
-        //    catch (Exception ex)
-        //    {
-
-        //        throw ex;
-        //    }
-        //    finally
-        //    {
-        //        datos.cerrarConexion();
-        //    }
-        //}
         public Producto traerProducto(int id)
         {
             AccesoDatos datos = new AccesoDatos();
             try
             {
                 Producto producto = new Producto();
-                datos.consultaSP("productoporId");
+                datos.consultaEmbebida("select A.Id Id, Codigo, Nombre, A.Descripcion Descripcion, IdMarca, IdCategoria, ImagenUrl, Precio, M.Descripcion Marca, C.Descripcion Categoria  from ARTICULOS A, MARCAS M, CATEGORIAS C where M.Id = IdMarca and C.Id = IdCategoria and A.Id = @id");
                 datos.parametros("@id", id);
                 datos.lectura();
                 if (datos.Lector.Read())
@@ -137,7 +100,7 @@ namespace Datos
             {
                 if (nuevo)
                 {
-                    datos.consultaSP("agregarArticulo");
+                    datos.consultaEmbebida("Insert into ARTICULOS values (@codigo, @nombre, @descripcion, @idMarca, @idCategoria, @img, @precio)");
                     //@codigo varchar(50),
                     //@nombre varchar(50),
                     //@descripcion varchar(150),
@@ -157,7 +120,7 @@ namespace Datos
                 }
                 else
                 {
-                    datos.consultaSP("modificarArticulo");
+                    datos.consultaEmbebida("update ARTICULOS set Codigo = @codigo, Nombre = @nombre, Descripcion = @descripcion, IdMarca = @idMarca, IdCategoria = @idCategoria, ImagenUrl = @img, Precio = @precio where Id = @id");
                     datos.parametros("@codigo", producto.Codigo);
                     datos.parametros("@nombre", producto.Nombre);
                     datos.parametros("@descripcion", producto.Descripcion);
@@ -198,29 +161,6 @@ namespace Datos
                 datos.cerrarConexion();
             }
         }
-        public static int traerId(string codigo)
-        {
-            AccesoDatos datos = new AccesoDatos();
-            try
-            {
-                datos.consultaSP("traerID");
-                datos.parametros("@codigo", codigo);
-                datos.lectura();
-                if (datos.Lector.Read())
-                    return (int)datos.Lector["Id"];
-                return 0;
-            }
-            catch (Exception ex)
-            {
-
-                throw ex;
-            }
-            finally
-            {
-                datos.cerrarConexion();
-            }
-        }
-
         public List<Producto> filtroAvanzado(string tipo, string criterio, string filtro)
         {
             AccesoDatos datos = new AccesoDatos();
@@ -354,7 +294,7 @@ namespace Datos
             try
             {
                 filtrada = lista.FindAll(p => p.Nombre.ToLower().Contains(filtro) || p.Precio.ToString().Contains(filtro));
-                if(filtrada.Count == 0)
+                if (filtrada.Count == 0)
                     filtrada = lista;
                 return filtrada;
             }
@@ -374,7 +314,7 @@ namespace Datos
                 if (filtro.Contains("."))
                     filtro = filtro.Replace(".", ",");
                 filtrada = lista.FindAll(p => p.Nombre.ToLower().Contains(filtro) || p.Codigo.ToLower().Contains(filtro) || p.Categoria.Descripcion.ToLower().Contains(filtro) || p.Marca.Descripcion.ToLower().Contains(filtro) || p.Precio.ToString().Contains(filtro));
-                if(filtrada.Count == 0)
+                if (filtrada.Count == 0)
                     filtrada = lista;
                 return filtrada;
             }

@@ -1,0 +1,374 @@
+﻿/*Sweet Alerts*/
+
+.swal-icon:first-child {
+    margin-top: 32px;
+}
+
+.swal-icon {
+    width: 80px;
+    height: 80px;
+    border-width: 4px;
+    border-style: solid;
+    border-radius: 50%;
+    padding: 0;
+    position: relative;
+    box-sizing: content-box;
+    margin: 20px auto;
+}
+
+.swal-icon--success {
+    border-color: #199b30;
+}
+
+    .swal-icon--success:before {
+        border-radius: 120px 0 0 120px;
+        top: -7px;
+        left: -33px;
+        -webkit-transform: rotate(-45deg);
+        transform: rotate(-45deg);
+        -webkit-transform-origin: 60px 60px;
+        transform-origin: 60px 60px;
+    }
+
+    .swal-icon--success:after, .swal-icon--success:before {
+        content: "";
+        border-radius: 50%;
+        position: absolute;
+        width: 60px;
+        height: 120px;
+        background: #fff0;
+        -webkit-transform: rotate(45deg);
+        transform: rotate(45deg);
+    }
+
+    .swal-icon--success:after {
+        border-radius: 0 120px 120px 0;
+        top: -11px;
+        left: 30px;
+        -webkit-transform: rotate(-45deg);
+        transform: rotate(-45deg);
+        -webkit-transform-origin: 0 60px;
+        transform-origin: 0 60px;
+        -webkit-animation: rotatePlaceholder 4.25s ease-in;
+        animation: rotatePlaceholder 4.25s ease-in;
+    }
+
+.swal-icon--success__line {
+    height: 5px;
+    background-color: #a5dc86;
+    display: block;
+    border-radius: 2px;
+    position: absolute;
+    z-index: 2;
+}
+
+.swal-icon--success__line--long {
+    width: 47px;
+    right: 8px;
+    top: 38px;
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+    -webkit-animation: animateSuccessLong .75s;
+    animation: animateSuccessLong .75s;
+}
+
+@keyframes animateSuccessLong {
+    0% {
+        width: 0;
+        right: 46px;
+        top: 54px;
+    }
+
+    65% {
+        width: 0;
+        right: 46px;
+        top: 54px;
+    }
+
+    84% {
+        width: 55px;
+        right: 0;
+        top: 35px;
+    }
+
+    100% {
+        width: 47px;
+        right: 8px;
+        top: 38px;
+    }
+}
+
+.swal-icon--success__line--tip {
+    width: 25px;
+    left: 14px;
+    top: 46px;
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+    -webkit-animation: animateSuccessTip .75s;
+    animation: animateSuccessTip .75s;
+}
+
+@keyframes animateSuccessTip {
+    0% {
+        width: 0;
+        left: 1px;
+        top: 19px;
+    }
+
+    54% {
+        width: 0;
+        left: 1px;
+        top: 19px;
+    }
+
+    70% {
+        width: 50px;
+        left: -8px;
+        top: 37px;
+    }
+
+    84% {
+        width: 17px;
+        left: 21px;
+        top: 48px;
+    }
+
+    100% {
+        width: 25px;
+        left: 14px;
+        top: 45px;
+    }
+}
+
+.swal-icon--success__ring {
+    width: 80px;
+    height: 80px;
+    border: 4px solid hsla(98,55%,69%,.2);
+    border-radius: 50%;
+    box-sizing: content-box;
+    position: absolute;
+    left: -4px;
+    top: -4px;
+    z-index: 2;
+}
+
+.swal-icon--success__hide-corners {
+    width: 5px;
+    height: 90px;
+    background-color: #fff0;
+    padding: 1px;
+    position: absolute;
+    left: 28px;
+    top: 8px;
+    z-index: 1;
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+}
+
+.swal-icon--error {
+    border-color: #c30000;
+    -webkit-animation: animateErrorIcon .5s;
+    animation: animateErrorIcon .5s;
+}
+
+.swal-icon--error__x-mark {
+    position: relative;
+    display: block;
+    -webkit-animation: animateXMark .5s;
+    animation: animateXMark .5s;
+}
+
+@keyframes animateXMark{
+     0% {
+        -webkit-transform: scale(.4);
+        transform: scale(.4);
+        margin-top: 26px;
+        opacity: 0;
+    }
+
+     50% {
+        -webkit-transform: scale(.4);
+        transform: scale(.4);
+        margin-top: 26px;
+        opacity: 0;
+    }
+
+     80% {
+        -webkit-transform: scale(1.15);
+        transform: scale(1.15);
+        margin-top: -6px;
+    }
+
+     100% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+        margin-top: 0;
+        opacity: 1;
+    }
+}
+
+.swal-icon--error__line--left {
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+    left: 17px;
+}
+
+.swal-icon--error__line {
+    position: absolute;
+    height: 5px;
+    width: 47px;
+    background-color: #c30000;
+    display: block;
+    top: 37px;
+    border-radius: 2px;
+}
+
+.swal-icon--error__line--right {
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+    right: 16px;
+}
+
+
+
+/*Checkmark*/
+
+:root {
+    --check-size: 200px;
+    --check-border-width: 5px;
+    --checkmark-width: calc(var(--check-size) / 2);
+    --checkmark-height: calc(var(--checkmark-width) / 2);
+    --checkmark-left: calc(var(--checkmark-width) / 2);
+    --checkmark-top: 50%;
+    --checkmark-color: #0c9710;
+}
+
+.checkmark-wrapper {
+    width: var(--check-size);
+    height: var(--check-size);
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+    .checkmark-wrapper::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border: var(--check-border-width) solid #f8f8f8;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        display: block;
+        z-index: 0;
+    }
+
+    .checkmark-wrapper::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border: var(--check-border-width) solid transparent;
+        border-left-color: var(--checkmark-color);
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        display: block;
+        z-index: 1;
+        animation: circle linear forwards .6s;
+    }
+
+.checkmark {
+    height: var(--checkmark-height);
+    width: var(--checkmark-width);
+    position: absolute;
+    opacity: 0;
+    left: var(--checkmark-left);
+    top: var(--checkmark-top);
+    display: block;
+    border-left: var(--check-border-width) solid var(--checkmark-color);
+    border-bottom: var(--check-border-width) solid var(--checkmark-color);
+    transform-origin: left top;
+    transform: rotate(-45deg);
+    animation: checkmark linear both .6s;
+}
+
+@keyframes checkmark {
+    0% {
+        height: 0;
+        width: 0;
+        opacity: 0;
+    }
+
+    80% {
+        height: 0;
+        width: 0;
+        opacity: 0;
+    }
+
+    90% {
+        height: var(--checkmark-height);
+        width: 0;
+        opacity: 1;
+    }
+
+    100% {
+        height: var(--checkmark-height);
+        width: var(--checkmark-width);
+        opacity: 1;
+    }
+}
+
+@keyframes circle {
+    0% {
+        border-color: transparent;
+        border-left-color: var(--checkmark-color);
+    }
+
+    90% {
+        transform: rotate(-360deg);
+        border-color: transparent;
+        border-left-color: var(--checkmark-color);
+    }
+
+    100% {
+        transform: rotate(-360deg);
+        border-color: var(--checkmark-color);
+    }
+}
+
+/*Loader*/
+
+.loader {
+    width: 48px;
+    height: 48px;
+    border: 3px solid #FFF;
+    border-radius: 50%;
+    display: inline-block;
+    position: relative;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+}
+
+    .loader::after {
+        content: '';
+        box-sizing: border-box;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: 3px solid;
+        border-color: #00ffde transparent;
+    }
+
+@keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+} 

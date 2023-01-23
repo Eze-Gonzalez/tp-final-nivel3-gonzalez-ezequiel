@@ -19,7 +19,7 @@ namespace Validaciones
             Usuario usuario = user != null ? (Usuario)user : null;
             try
             {
-                datos.consultaSP("IniciarSesion");
+                datos.consultaEmbebida("Select Id, email, pass, admin, urlImagenPerfil, nombre, apellido from USERS where email = @email and pass = @pass");
                 datos.parametros("@email", usuario.Email);
                 datos.parametros("@pass", usuario.Pass);
                 datos.lectura();
@@ -84,31 +84,8 @@ namespace Validaciones
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.consultaSP("usuarioExistente");
+                datos.consultaEmbebida("Select Id from USERS where email = @email");
                 datos.parametros("@email", email);
-                datos.lectura();
-                if (datos.Lector.Read())
-                    return true;
-                return false;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            finally
-            {
-                datos.cerrarConexion();
-            }
-        }
-        //Valida si el email ingresado le corresponde al usuario logueado (Para cambiar contraseñas o incluso el email actual)
-        public static bool email(string email, int id)
-        {
-            AccesoDatos datos = new AccesoDatos();
-            try
-            {
-                datos.consultaSP("verificarEmail");
-                datos.parametros("@email", email);
-                datos.parametros("@id", id);
                 datos.lectura();
                 if (datos.Lector.Read())
                     return true;
@@ -140,39 +117,15 @@ namespace Validaciones
                 throw ex;
             }
         }
-        //Valida si la pass le pertenece al usuario logueado (Esto es para cambiar la pass en la pagina de perfil)
-        public static bool pass(string pass, int id)
-        {
-            AccesoDatos datos = new AccesoDatos();
-            try
-            {
-                datos.consultaSP("verificarPass");
-                datos.parametros("@pass", pass);
-                datos.parametros("@id", id);
-                datos.lectura();
-                if (datos.Lector.Read())
-                    return true;
-                return false;
-            }
-            catch (Exception ex)
-            {
-
-                throw ex;
-            }
-            finally
-            {
-                datos.cerrarConexion();
-            }
-        }
         //Valida si hay articulos favoritos.
         public static bool favExistente(int idProd, int idUser)
         {
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.consultaSP("favExistente");
-                datos.parametros("@idprod", idProd);
+                datos.consultaEmbebida("select id from FAVORITOS where IdUser = @iduser and IdArticulo = @idprod");
                 datos.parametros("@iduser", idUser);
+                datos.parametros("@idprod", idProd);
                 datos.lectura();
                 if (datos.Lector.Read())
                     return true;
@@ -217,7 +170,7 @@ namespace Validaciones
         {
             try
             {
-                Regex regex = new Regex("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{6,}$");
+                Regex regex = new Regex("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{3,20}$");
                 bool validar = regex.IsMatch(pass);
                 return validar;
             }

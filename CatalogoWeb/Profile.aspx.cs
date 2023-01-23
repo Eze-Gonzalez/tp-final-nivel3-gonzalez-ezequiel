@@ -30,7 +30,7 @@ namespace CatalogoWeb
                         Usuario usuario = (Usuario)Session["usuario"];
                         string emailCodificado = usuario.Email;
                         string passCodificada = usuario.Pass;
-                        //Helper.codificar(ref emailCodificado, ref passCodificada);
+                        Helper.codificar(ref emailCodificado, ref passCodificada);
                         lblUsuario.Text = Helper.nombre(usuario);
                         txtNombre.Text = usuario.Nombre;
                         txtApellido.Text = usuario.Apellido;
@@ -54,10 +54,10 @@ namespace CatalogoWeb
                 Usuario usuario = Session["usuario"] != null ? (Usuario)Session["usuario"] : null;
                 string imagenPerfil;
                 string icono = "";
-                string status = "";
+                string status = "Ok";
                 if (rdbLocal.Checked)
                 {
-                    if (txtImagenLocal.Value != null)
+                    if (!string.IsNullOrEmpty(txtImagenLocal.Value))
                     {
                         string ruta = Server.MapPath("./Imagenes/Perfil/");
                         string img = "profile-" + usuario.Id + ".png";
@@ -69,25 +69,8 @@ namespace CatalogoWeb
                 }
                 else
                     imagenPerfil = string.IsNullOrEmpty(txtImagenUrl.Text) ? usuario.UrlImagen : txtImagenUrl.Text;
-                string mensaje = Helper.cargarDatosUsuario(usuario, txtNombre.Text, txtApellido.Text, imagenPerfil, ref icono, ref status);
-                if (status == "advertencia")
-                    return;
-                if (status == "error")
-                {
-                    lblTituloNotificacion.Text = "Hubo un error";
-                    imgNotificacion.ImageUrl = icono;
-                    lblMensaje.Text = mensaje;
-                    ajxNotificación.Show();
-                    return;
-                }
-                else
-                {
-                    ClientScript.RegisterClientScriptBlock(GetType(), "alert", "swal('Listo!', 'Los cambios fueron guardados exitosamente', { button: {text:'Aceptar', className: 'swal-button'}, icon: '" + icono + "', className: 'swal-bg'})", true);
-                    //lblTituloNotificacion.Text = "Listo!";
-                    //imgNotificacion.ImageUrl = icono;
-                    //lblMensaje.Text = mensaje;
-                    //ajxNotificación.Show();
-                }
+                lblMensaje.Text = Helper.cargarDatosUsuario(usuario, txtNombre.Text, txtApellido.Text, imagenPerfil, ref icono, ref status);
+                Modal.armarNotificacion(ajxNotificación, ref lblTituloNotificacion, status);
             }
             catch (Exception)
             {
@@ -101,9 +84,6 @@ namespace CatalogoWeb
             changeEmail = true;
             try
             {
-                lblCambiarPass.Visible = !changeEmail;
-                lblCambiarEmail.Visible = changeEmail;
-                ajxModal.Show();
             }
             catch (Exception)
             {
@@ -117,9 +97,6 @@ namespace CatalogoWeb
             changePass = true;
             try
             {
-                lblCambiarPass.Visible = changePass;
-                lblCambiarEmail.Visible = !changePass;
-                ajxModal.Show();
             }
             catch (Exception)
             {
@@ -139,10 +116,7 @@ namespace CatalogoWeb
                     string mensaje = Helper.cargarPass(usuario, txtPassActual.Text, txtPassNueva.Text, txtPassRepetir.Text, ref icono);
                     if (icono == "error")
                     {
-                        imgNotificacion.ImageUrl.Remove(0);
-                        imgNotificacion.ImageUrl = "https://i.imgur.com/sFWvAYF.gif";
-                        ajxNotificación.Show();
-                        return;
+                        ClientScript.RegisterClientScriptBlock(GetType(), "alert", "swal('Listo!', 'Los cambios fueron guardados exitosamente', { button: {text:'Aceptar', className: 'swal-button'}, icon: '" + icono + "', className: 'swal-bg'})", true);
                     }
                     else
                         ClientScript.RegisterClientScriptBlock(GetType(), "alert", "swal('Listo!', 'Los cambios fueron guardados exitosamente', { button: {text:'Aceptar', className: 'swal-button'}, icon: '" + icono + "', className: 'swal-bg'})", true);
@@ -150,19 +124,11 @@ namespace CatalogoWeb
                 }
                 if (lblCambiarEmail.Visible)
                 {
-                    string mensaje = Helper.cargarEmail(usuario, txtEmailActual.Text, txtEmailNuevo.Text, ref icono);
-                    if (icono == "error")
-                    {
-                    }
-                    else
-                    {
-                        imgNotificacion.ImageUrl = "icono";
-                        ajxNotificación.Show();
-                    }
+                    lblMensaje.Text = Helper.cargarEmail(usuario, txtEmailActual.Text, txtEmailNuevo.Text, ref icono);
                 }
                 string passCodificada = usuario.Pass;
                 string emailCodificado = usuario.Email;
-                //Helper.codificar(ref emailCodificado, ref passCodificada);
+                Helper.codificar(ref emailCodificado, ref passCodificada);
                 lblEmailUser.Text = emailCodificado;
                 lblPassUser.Text = passCodificada;
             }

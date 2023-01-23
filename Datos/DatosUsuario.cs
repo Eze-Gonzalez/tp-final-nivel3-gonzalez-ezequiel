@@ -15,13 +15,10 @@ namespace Datos
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.consultaSP("NuevoUsuario");
+                datos.consultaEmbebida("insert into USERS (email, pass, admin) values (@email, @pass, @admin)");
                 datos.parametros("@email", usuario.Email);
                 datos.parametros("@pass", usuario.Pass);
-                if (!admin)
-                    datos.parametros("@admin", false);
-                else
-                    datos.parametros("@admin", true);
+                datos.parametros("@admin", admin);
                 return datos.ejecutarScalar();
             }
             catch (Exception)
@@ -38,7 +35,7 @@ namespace Datos
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.consultaSP("modificarUsuario");
+                datos.consultaEmbebida("update USERS set nombre = @nombre, apellido = @apellido, urlImagenPerfil = @img where id = @id");
                 datos.parametros("@nombre", usuario.Nombre);
                 datos.parametros("@apellido", usuario.Apellido);
                 datos.parametros("@img", string.IsNullOrEmpty(usuario.UrlImagen) ? (object)DBNull.Value : usuario.UrlImagen);
@@ -55,31 +52,6 @@ namespace Datos
                 datos.cerrarConexion();
             }
         }
-        public static int idUsuario(object usuario)
-        {
-            AccesoDatos datos = new AccesoDatos();
-            Usuario user = usuario != null ? (Usuario)usuario : null;
-            try
-            {
-                datos.consultaSP("idUsuario");
-                datos.parametros("@pass", user.Pass);
-                datos.parametros("@email", user.Email);
-                datos.lectura();
-                if (datos.Lector.Read())
-                    return (int)datos.Lector["Id"];
-                return 0;
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-            finally
-            {
-                datos.cerrarConexion();
-            }
-        }
-
         public void cambiarEmail(string email, int id)
         {
             AccesoDatos datos = new AccesoDatos();

@@ -71,13 +71,13 @@
     <Content Include="About.aspx" />
     <Content Include="ChangePass.aspx" />
     <Content Include="Contenido\Estilos.css" />
+    <Content Include="Contenido\Iconos.css" />
     <Content Include="Default.aspx" />
     <Content Include="Details.aspx" />
     <Content Include="Error.aspx" />
     <Content Include="Favorite.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Imagenes\Recursos\check.gif" />
-    <Content Include="Imagenes\Recursos\check.webm" />
     <Content Include="ListaProductos.aspx" />
     <Content Include="Login.aspx" />
     <Content Include="Product.aspx" />
@@ -152,6 +152,7 @@
     <Compile Include="Login.aspx.designer.cs">
       <DependentUpon>Login.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Modal.cs" />
     <Compile Include="Product.aspx.cs">
       <DependentUpon>Product.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -186,10 +187,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
     <Folder Include="Imagenes\Perfil\" />
     <Folder Include="Imagenes\Productos\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Datos\Datos.csproj">

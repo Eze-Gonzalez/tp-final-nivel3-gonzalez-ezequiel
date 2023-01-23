@@ -17,7 +17,7 @@ namespace Datos
             List<Favorito> lista = new List<Favorito>();
             try
             {
-                datos.consultaSP("listarFav");
+                datos.consultaEmbebida("Select id, iduser, idarticulo from FAVORITOS where iduser = @id");
                 datos.parametros("@id", idUser);
                 datos.lectura();
                 while (datos.Lector.Read())
@@ -47,7 +47,7 @@ namespace Datos
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.consultaSP("agregarFav");
+                datos.consultaEmbebida("insert into FAVORITOS values (@idUser, @idProd)");
                 datos.parametros("@idUser", fav.Usuario.Id);
                 datos.parametros("@idProd", fav.Producto.Id);
                 datos.ejecutar();
@@ -67,7 +67,7 @@ namespace Datos
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.consultaSP("eliminarFav");
+                datos.consultaEmbebida("delete from FAVORITOS where iduser = @iduser and IdArticulo = idprod");
                 datos.parametros("@idprod", idProd);
                 datos.parametros("@iduser", idUser);
                 datos.ejecutar();

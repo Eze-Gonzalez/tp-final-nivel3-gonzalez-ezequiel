@@ -3,6 +3,12 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
+    <div class="swal-icon swal-icon--error">
+          <div class="swal-icon--error__x-mark">
+            <span class="swal-icon--error__line swal-icon--error__line--left"></span>
+            <span class="swal-icon--error__line swal-icon--error__line--right"></span>
+          </div>
+        </div>
     <%-- boton on click --%>
     <asp:Button ID="btnModal" runat="server" Text="modal" OnClick="btnModal_Click" />
     <div class="row mb-4">
@@ -38,12 +44,13 @@
                             <div class="card mb-3 products bg-black bg-opacity-50 text-bg-dark">
                                 <div class="row g-0 products-size">
                                     <div class="col-md-7 center-col-justify">
-                                        <img src='<%#Eval("ImagenUrl") %>' class="img" alt='<%#Eval("Nombre") %>'>
+                                        <asp:Image ID="imgProducto" ImageUrl='<%#Eval("imagenUrl") %>' AlternateText='<%#Eval("Id") %>' CssClass="img" runat="server" />
                                     </div>
                                     <div class="col">
                                         <div class="card-body">
                                             <h5 class="card-title"><%#Eval("Nombre") %></h5>
-                                            <asp:Label CssClass="card-text" ID="lblCodigo" runat="server" Text='<%#Eval("Codigo") %>'></asp:Label>
+                                            <asp:Label CssClass="card-text" ID="lblCategoria" runat="server" Text='<%#Eval("Categoria") %>'></asp:Label>
+                                            <asp:Label CssClass="card-text" ID="lblMarca" runat="server" Text='<%#Eval("Marca") %>'></asp:Label>
                                             <p class="card-text">$<%#Eval("Precio") %></p>
                                         </div>
                                     </div>
