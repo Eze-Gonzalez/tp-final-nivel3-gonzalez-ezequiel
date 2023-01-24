@@ -111,7 +111,7 @@ namespace CatalogoWeb
             {
                 Usuario usuario = Session["usuario"] != null ? (Usuario)Session["usuario"] : null;
                 string icono = "error";
-                if (lblCambiarPass.Visible)
+                if (changePass)
                 {
                     string mensaje = Helper.cargarPass(usuario, txtPassActual.Text, txtPassNueva.Text, txtPassRepetir.Text, ref icono);
                     if (icono == "error")
@@ -122,7 +122,7 @@ namespace CatalogoWeb
                         ClientScript.RegisterClientScriptBlock(GetType(), "alert", "swal('Listo!', 'Los cambios fueron guardados exitosamente', { button: {text:'Aceptar', className: 'swal-button'}, icon: '" + icono + "', className: 'swal-bg'})", true);
 
                 }
-                if (lblCambiarEmail.Visible)
+                if (changeEmail)
                 {
                     lblMensaje.Text = Helper.cargarEmail(usuario, txtEmailActual.Text, txtEmailNuevo.Text, ref icono);
                 }

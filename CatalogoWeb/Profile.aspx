@@ -25,7 +25,7 @@
             <%-- Fin bienvenida --%>
 
             <%-- Datos "principales" --%>
-            <asp:UpdatePanel ID="UpdatePanel2" runat="server">
+            <asp:UpdatePanel ID="UpdatePanel2" runat="server" UpdateMode="Conditional">
                 <ContentTemplate>
                     <div class="row text-light">
                         <div class="col-6">
@@ -74,6 +74,9 @@
                         </div>
                     </div>
                 </ContentTemplate>
+                <Triggers>
+                    <asp:PostBackTrigger ControlID="btnAceptar" />
+                </Triggers>
             </asp:UpdatePanel>
             <%-- Fin datos principales --%>
 
@@ -127,38 +130,28 @@
 
 
     <%-- Modal cambio email/contraseña --%>
-    <asp:Panel ID="modalCambio" CssClass="modalAbrir" runat="server">
-        <div class="card bg-black text-bg-danger border">
-            <%-- Titulo --%>
-            <div class="card-header center-row">
-                <asp:UpdatePanel ID="UpdatePanel4" runat="server">
-                    <ContentTemplate>
-                        <%if (changeEmail)
-                            {%>
-                        <asp:Label ID="lblCambiarEmail" CssClass="card-tittle" runat="server" Text="Cambiar Email" Visible="false"></asp:Label>
-                        <%}                                %>
-                    </ContentTemplate>
-                    <Triggers>
-                        <asp:AsyncPostBackTrigger ControlID="btnCambiarEmail" EventName="Click" />
-                    </Triggers>
-                </asp:UpdatePanel>
-                <asp:UpdatePanel ID="UpdatePanel7" runat="server">
-                    <ContentTemplate>
-                        <%if (changePass)
-                            { %>
-                        <asp:Label ID="lblCambiarPass" CssClass="card-tittle" runat="server" Text="Cambiar Contraseña" Visible="false"></asp:Label>
-                        <%}  %>
-                    </ContentTemplate>
-                    <Triggers>
-                        <asp:AsyncPostBackTrigger ControlID="btnCambiarPass" EventName="Click" />
-                    </Triggers>
-                </asp:UpdatePanel>
-                <%-- Fin Titulo --%>
-            </div>
-            <div class="card-body">
-                <%-- Campos --%>
-                <asp:UpdatePanel ID="UpdatePanel5" runat="server">
-                    <ContentTemplate>
+    <asp:UpdatePanel ID="UpdatePanel3" runat="server" UpdateMode="Conditional">
+        <ContentTemplate>
+            <asp:Panel ID="modalCambio" CssClass="modalAbrir" runat="server">
+                <div class="card bg-black text-bg-danger border">
+                    <%-- Titulo --%>
+                    <div class="card-header center-row">
+                        <label class="card-title h4">
+                            <%if (changeEmail)
+                                { %>
+                    Cambiar Email
+                    <%}
+                    %>
+                            <%if (changePass)
+                                { %>
+                    Cambiar Contraseña
+                    <%}  %>
+                        </label>
+                        <%-- Fin Titulo --%>
+                    </div>
+                    <div class="card-body">
+                        <%-- Campos --%>
+
                         <%if (changeEmail)
                             {  %>
                         <label class="card-text">Ingrese su email actual:</label>
@@ -166,13 +159,7 @@
                         <label class="card-text">Ingrese un nuevo email:</label>
                         <asp:TextBox ID="txtEmailNuevo" CssClass="form-control" placeholder="emailnuevo@emailnuevo.com" runat="server"></asp:TextBox>
                         <%} %>
-                    </ContentTemplate>
-                    <Triggers>
-                        <asp:AsyncPostBackTrigger ControlID="btnCambiarEmail" EventName="Click" />
-                    </Triggers>
-                </asp:UpdatePanel>
-                <asp:UpdatePanel ID="UpdatePanel8" runat="server">
-                    <ContentTemplate>
+
                         <%if (changePass)
                             { %>
                         <label class="card-text">Ingrese su contraseña actual:</label>
@@ -182,27 +169,25 @@
                         <label class="card-text">Repita la nueva contraseña:</label>
                         <asp:TextBox ID="txtPassRepetir" CssClass="form-control" placeholder="Repetir Nueva Contraseña" runat="server"></asp:TextBox>
                         <%}  %>
-                    </ContentTemplate>
-                    <Triggers>
-                        <asp:AsyncPostBackTrigger ControlID="btnCambiarPass" EventName="Click" />
-                    </Triggers>
-                </asp:UpdatePanel>
-                <%-- Fin campos --%>
-            </div>
-            <div class="card-footer center-row mb-3">
-                <%-- Botones cancelar/aceptar --%>
-                <asp:UpdatePanel ID="UpdatePanel11" runat="server">
-                    <ContentTemplate>
+
+                        <%-- Fin campos --%>
+                    </div>
+                    <div class="card-footer center-row mb-3">
+                        <%-- Botones cancelar/aceptar --%>
                         <asp:Button ID="btnCambiar" CssClass="btn btn-primary btn-outline-light w-120 me-3" runat="server" Text="Guardar" OnClick="btnCambiar_Click" />
                         <asp:Button ID="btnCerrarModal" CssClass="btn btn-danger w-120" runat="server" Text="Cancelar" OnClick="btnCerrarModal_Click" />
-                    </ContentTemplate>
-                </asp:UpdatePanel>
-                <%-- Fin botones --%>
-            </div>
-        </div>
-        <%-- Fin modal --%>
-        <%-- Notificación --%>
-    </asp:Panel>
+                        <%-- Fin botones --%>
+                    </div>
+                </div>
+            </asp:Panel>
+        </ContentTemplate>
+        <Triggers>
+            <asp:PostBackTrigger ControlID="btnCambiarEmail" />
+            <asp:PostBackTrigger ControlID="btnCambiarPass" />
+        </Triggers>
+    </asp:UpdatePanel>
+    <%-- Fin modal --%>
+    <%-- Notificación --%>
     <asp:Panel ID="notificacion" CssClass="modalNotificar" runat="server">
         <asp:UpdatePanel ID="UpdatePanel10" runat="server">
             <ContentTemplate>
