@@ -30,57 +30,53 @@ namespace CatalogoWeb
         {
             try
             {
-                Page.Validate();
-                if (!Page.IsValid)
+                if (Validar.campoEmail(txtEmail.Text))
                 {
-                    return;
-                }
-                string email = txtEmail.Text;
-                if (!Validar.email(email))
-                {
-                    if (Validar.campoEmail(email))
+                    if (!Validar.email(txtEmail.Text))
                     {
                         lblErrorEmail.Visible = false;
-                        Usuario nuevo = new Usuario();
-                        DatosUsuario datos = new DatosUsuario();
-                        nuevo.Email = email;
-                        if (txtRepetir.Text == txtPassword.Text)
+                        if (Validar.campoPass(txtPassword.Text))
                         {
-                            ServicioEmail envioEmail = new ServicioEmail();
-                            lblErrorRep.Visible = false;
-                            nuevo.Pass = txtPassword.Text;
-                            nuevo.Id = datos.nuevoUsuario(nuevo);
-                            envioEmail.armarEmail(nuevo.Email, "Bienvenido", "Gracias por registrarte en la web");
-                            envioEmail.enviarEmail();
-                            Session.Add("usuario", nuevo);
-                            Response.Redirect("Profile.aspx?id=" + nuevo.Id);
+                            lblErrorPass.Visible = false;
+                            if (txtRepetir.Text == txtPassword.Text)
+                            {
+                                lblErrorRep.Visible = false;
+                                DatosUsuario datos = new DatosUsuario();
+                                Usuario usuario = new Usuario();
+                                usuario.Email = txtEmail.Text;
+                                usuario.Pass = txtRepetir.Text;
+                                usuario.Id = datos.nuevoUsuario(usuario);
+                                Session.Add("usuario", usuario);
+                                Response.Redirect("Profile.aspx?id=" + usuario.Id, false);
+                            }
+                            else
+                            {
+                                lblErrorRep.Text = "Las contraseñas no coinciden, intente nuevamente.";
+                            }
                         }
                         else
                         {
-                            lblErrorRep.Text = "Las contraseñas no coinciden, repita la misma contraseña.";
-                            lblErrorRep.Visible = true;
+                            lblErrorPass.Text = "Debe introducir una contraseña de 3 a 20 dígitos, incluyendo al menos, una mayúscula, una minúscula y un número.";
+                            lblErrorPass.Visible = true;
                         }
                     }
                     else
                     {
-                        lblErrorEmail.Text = "Debe completar este campo con un email válido.";
+                        lblErrorEmail.Text = "El email ingresado ya se encuentra registrado, intente con otro.";
                         lblErrorEmail.Visible = true;
                     }
                 }
                 else
                 {
-                    lblErrorEmail.Text = "El email ingresado ya se encuentra registrado, intente con otro.";
+                    lblErrorEmail.Text = "Debe ingresar un email válido.";
                     lblErrorEmail.Visible = true;
                 }
-
             }
-            catch (ThreadAbortException) { }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                throw;
+                throw ex;
             }
-
         }
     }
 }

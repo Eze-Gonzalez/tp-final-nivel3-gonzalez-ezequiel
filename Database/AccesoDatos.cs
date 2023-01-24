@@ -20,7 +20,7 @@ namespace Database
         {
             try
             {
-                conexion = new SqlConnection();
+                conexion = new SqlConnection("server=.\\SQLEXPRESS; database=CATALOGO_WEB_DB; integrated security=true");
                 comando = new SqlCommand();
             }
             catch (Exception ex)

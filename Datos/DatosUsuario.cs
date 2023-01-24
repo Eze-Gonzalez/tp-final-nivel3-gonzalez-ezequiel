@@ -10,15 +10,15 @@ namespace Datos
 {
     public class DatosUsuario
     {
-        public int nuevoUsuario(Usuario usuario, bool admin = false)
+        public int nuevoUsuario(Usuario usuario)
         {
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.consultaEmbebida("insert into USERS (email, pass, admin) values (@email, @pass, @admin)");
+                datos.consultaEmbebida("insert into USERS (email, pass, admin) output inserted.Id values (@email, @pass, @admin)");
                 datos.parametros("@email", usuario.Email);
                 datos.parametros("@pass", usuario.Pass);
-                datos.parametros("@admin", admin);
+                datos.parametros("@admin", usuario.Admin);
                 return datos.ejecutarScalar();
             }
             catch (Exception)

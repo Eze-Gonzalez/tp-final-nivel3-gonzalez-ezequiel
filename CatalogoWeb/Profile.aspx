@@ -6,9 +6,8 @@
     <div class="bg-black bg-opacity-50 center-col">
         <%-- Formato datos usuario --%>
         <div class="col mt-4">
-
             <%-- Bienvenida --%>
-            <asp:UpdatePanel ID="UpdatePanel1" runat="server">
+            <asp:UpdatePanel ID="UpdatePanel2" runat="server">
                 <ContentTemplate>
                     <div class="row mb-5">
                         <div class="mb-2">
@@ -20,13 +19,9 @@
                             <p class="center-row text-light">Aquí podrá editar los datos de su cuenta.</p>
                         </div>
                     </div>
-                </ContentTemplate>
-            </asp:UpdatePanel>
-            <%-- Fin bienvenida --%>
+                    <%-- Fin bienvenida --%>
 
-            <%-- Datos "principales" --%>
-            <asp:UpdatePanel ID="UpdatePanel2" runat="server" UpdateMode="Conditional">
-                <ContentTemplate>
+                    <%-- Datos "principales" --%>
                     <div class="row text-light">
                         <div class="col-6">
                             <div class="mb-3">
@@ -62,7 +57,7 @@
                                 <%}
                                     else if (rdbLocal.Checked)
                                     {  %>
-                                <input class="form-control" type="file" id="txtImagenLocal" runat="server">
+                                        <ajax:AsyncFileUpload ID="fileLocal" OnUploadedComplete="fileLocal_UploadedComplete" runat="server" />   
                                 <%}
                                 %>
                             </div>
@@ -74,15 +69,13 @@
                         </div>
                     </div>
                 </ContentTemplate>
-                <Triggers>
-                    <asp:PostBackTrigger ControlID="btnAceptar" />
-                </Triggers>
             </asp:UpdatePanel>
             <%-- Fin datos principales --%>
 
             <%-- Estructura botones aceptar/cancelar --%>
             <div class="row">
                 <div class="col-6 flex-end">
+                    
                     <asp:Button ID="btnAceptar" runat="server" Text="Aceptar" CssClass="btn btn-outline-light btn-primary w-120" OnClick="btnAceptar_Click" />
                 </div>
                 <div class="col-6">
@@ -130,95 +123,79 @@
 
 
     <%-- Modal cambio email/contraseña --%>
-    <asp:UpdatePanel ID="UpdatePanel3" runat="server" UpdateMode="Conditional">
-        <ContentTemplate>
-            <asp:Panel ID="modalCambio" CssClass="modalAbrir" runat="server">
-                <div class="card bg-black text-bg-danger border">
-                    <%-- Titulo --%>
-                    <div class="card-header center-row">
-                        <label class="card-title h4">
-                            <%if (changeEmail)
-                                { %>
+    <asp:Panel ID="modalCambio" CssClass="modalAbrir" runat="server">
+        <div class="card bg-black text-bg-danger border">
+            <%-- Titulo --%>
+            <div class="card-header center-row">
+                <label class="card-title h4">
+                    <%if (changeEmail)
+                        { %>
                     Cambiar Email
                     <%}
                     %>
-                            <%if (changePass)
-                                { %>
+                    <%if (changePass)
+                        { %>
                     Cambiar Contraseña
                     <%}  %>
-                        </label>
-                        <%-- Fin Titulo --%>
-                    </div>
-                    <div class="card-body">
-                        <%-- Campos --%>
+                </label>
+                <%-- Fin Titulo --%>
+            </div>
+            <div class="card-body">
+                <%-- Campos --%>
 
-                        <%if (changeEmail)
-                            {  %>
-                        <label class="card-text">Ingrese su email actual:</label>
-                        <asp:TextBox ID="txtEmailActual" CssClass="form-control" placeholder="emailactual@emailactual.com" runat="server"></asp:TextBox>
-                        <label class="card-text">Ingrese un nuevo email:</label>
-                        <asp:TextBox ID="txtEmailNuevo" CssClass="form-control" placeholder="emailnuevo@emailnuevo.com" runat="server"></asp:TextBox>
-                        <%} %>
+                <%if (changeEmail)
+                    {  %>
+                <label class="card-text">Ingrese su email actual:</label>
+                <asp:TextBox ID="txtEmailActual" CssClass="form-control" placeholder="emailactual@emailactual.com" runat="server"></asp:TextBox>
+                <label class="card-text">Ingrese un nuevo email:</label>
+                <asp:TextBox ID="txtEmailNuevo" CssClass="form-control" placeholder="emailnuevo@emailnuevo.com" runat="server"></asp:TextBox>
+                <%} %>
 
-                        <%if (changePass)
-                            { %>
-                        <label class="card-text">Ingrese su contraseña actual:</label>
-                        <asp:TextBox ID="txtPassActual" CssClass="form-control" placeholder="Contraseña Actual" runat="server"></asp:TextBox>
-                        <label class="card-text">Ingrese una nueva contraseña:</label>
-                        <asp:TextBox ID="txtPassNueva" CssClass="form-control" placeholder="Nueva Contraseña" runat="server"></asp:TextBox>
-                        <label class="card-text">Repita la nueva contraseña:</label>
-                        <asp:TextBox ID="txtPassRepetir" CssClass="form-control" placeholder="Repetir Nueva Contraseña" runat="server"></asp:TextBox>
-                        <%}  %>
+                <%if (changePass)
+                    { %>
+                <label class="card-text">Ingrese su contraseña actual:</label>
+                <asp:TextBox ID="txtPassActual" CssClass="form-control" placeholder="Contraseña Actual" runat="server"></asp:TextBox>
+                <label class="card-text">Ingrese una nueva contraseña:</label>
+                <asp:TextBox ID="txtPassNueva" CssClass="form-control" placeholder="Nueva Contraseña" runat="server"></asp:TextBox>
+                <label class="card-text">Repita la nueva contraseña:</label>
+                <asp:TextBox ID="txtPassRepetir" CssClass="form-control" placeholder="Repetir Nueva Contraseña" runat="server"></asp:TextBox>
+                <%}  %>
 
-                        <%-- Fin campos --%>
-                    </div>
-                    <div class="card-footer center-row mb-3">
-                        <%-- Botones cancelar/aceptar --%>
-                        <asp:Button ID="btnCambiar" CssClass="btn btn-primary btn-outline-light w-120 me-3" runat="server" Text="Guardar" OnClick="btnCambiar_Click" />
-                        <asp:Button ID="btnCerrarModal" CssClass="btn btn-danger w-120" runat="server" Text="Cancelar" OnClick="btnCerrarModal_Click" />
-                        <%-- Fin botones --%>
-                    </div>
-                </div>
-            </asp:Panel>
-        </ContentTemplate>
-        <Triggers>
-            <asp:PostBackTrigger ControlID="btnCambiarEmail" />
-            <asp:PostBackTrigger ControlID="btnCambiarPass" />
-        </Triggers>
-    </asp:UpdatePanel>
+                <%-- Fin campos --%>
+            </div>
+            <div class="card-footer center-row mb-3">
+                <%-- Botones cancelar/aceptar --%>
+                <asp:Button ID="btnCambiar" CssClass="btn btn-primary btn-outline-light w-120 me-3" runat="server" Text="Guardar" OnClick="btnCambiar_Click" />
+                <asp:Button ID="btnCerrarModal" CssClass="btn btn-danger w-120" runat="server" Text="Cancelar" OnClick="btnCerrarModal_Click" />
+                <%-- Fin botones --%>
+            </div>
+        </div>
+    </asp:Panel>
     <%-- Fin modal --%>
     <%-- Notificación --%>
     <asp:Panel ID="notificacion" CssClass="modalNotificar" runat="server">
-        <asp:UpdatePanel ID="UpdatePanel10" runat="server">
-            <ContentTemplate>
-                <div class="card bg-black text-light bg-opacity-10 border">
-                    <%-- Titulo --%>
-                    <div class="checkmark-wrapper">
-                        <span class="checkmark"></span>
-                    </div>
-                    <%-- Fin Titulo --%>
-                    <%-- Cuerpo --%>
-                    <div class="card-body">
-                        <div class="row-cols-1 center-col mb-5">
-                            <asp:Label ID="lblTituloNotificacion" CssClass="card-tittle h3" runat="server" Text="Titulo"></asp:Label>
-                        </div>
-                        <div class="row">
-                            <asp:Label ID="lblMensaje" runat="server" Text="Label"></asp:Label>
-                        </div>
-                    </div>
-                    <%-- Fin cuerpo --%>
-                    <%-- Boton aceptar --%>
-                    <div class="card-footer center-row mb-3">
-                        <asp:Button ID="btnAceptarN" CssClass="btn btn-primary btn-outline-light w-120" runat="server" Text="Aceptar" OnClick="btnAceptarN_Click" />
-                    </div>
-                    <%-- Fin boton --%>
+        <div class="card bg-black text-light bg-opacity-10 border">
+            <%-- Titulo --%>
+            <div class="checkmark-wrapper">
+                <span class="checkmark"></span>
+            </div>
+            <%-- Fin Titulo --%>
+            <%-- Cuerpo --%>
+            <div class="card-body">
+                <div class="row-cols-1 center-col mb-5">
+                    <asp:Label ID="lblTituloNotificacion" CssClass="card-tittle h3" runat="server" Text="Titulo"></asp:Label>
                 </div>
-            </ContentTemplate>
-            <Triggers>
-                <asp:AsyncPostBackTrigger ControlID="btnAceptar" EventName="Click" />
-                <asp:AsyncPostBackTrigger ControlID="btnCambiar" EventName="Click" />
-            </Triggers>
-        </asp:UpdatePanel>
+                <div class="row">
+                    <asp:Label ID="lblMensaje" runat="server" Text="Label"></asp:Label>
+                </div>
+            </div>
+            <%-- Fin cuerpo --%>
+            <%-- Boton aceptar --%>
+            <div class="card-footer center-row mb-3">
+                <asp:Button ID="btnAceptarN" CssClass="btn btn-primary btn-outline-light w-120" runat="server" Text="Aceptar" OnClick="btnAceptarN_Click" />
+            </div>
+            <%-- Fin boton --%>
+        </div>
     </asp:Panel>
     <%-- Fin notificación --%>
     <%-- Boton invisible para asociar a los Ajax --%>

@@ -15,13 +15,13 @@ namespace CatalogoWeb
     {
 
         /// <summary>
-        /// Control UpdatePanel1.
+        /// Control UpdatePanel2.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.UpdatePanel UpdatePanel1;
+        protected global::System.Web.UI.UpdatePanel UpdatePanel2;
 
         /// <summary>
         /// Control lblUsuario.
@@ -31,15 +31,6 @@ namespace CatalogoWeb
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblUsuario;
-
-        /// <summary>
-        /// Control UpdatePanel2.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.UpdatePanel UpdatePanel2;
 
         /// <summary>
         /// Control lblNombre.
@@ -141,13 +132,13 @@ namespace CatalogoWeb
         protected global::System.Web.UI.WebControls.TextBox txtImagenUrl;
 
         /// <summary>
-        /// Control txtImagenLocal.
+        /// Control fileLocal.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputFile txtImagenLocal;
+        protected global::AjaxControlToolkit.AsyncFileUpload fileLocal;
 
         /// <summary>
         /// Control imgPerfil.
@@ -220,15 +211,6 @@ namespace CatalogoWeb
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnCambiarPass;
-
-        /// <summary>
-        /// Control UpdatePanel3.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.UpdatePanel UpdatePanel3;
 
         /// <summary>
         /// Control modalCambio.
@@ -310,15 +292,6 @@ namespace CatalogoWeb
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Panel notificacion;
-
-        /// <summary>
-        /// Control UpdatePanel10.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.UpdatePanel UpdatePanel10;
 
         /// <summary>
         /// Control lblTituloNotificacion.

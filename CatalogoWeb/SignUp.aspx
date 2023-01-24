@@ -25,10 +25,12 @@
                                     <asp:TextBox ID="txtPassword" TextMode="Password" CssClass="form-control" runat="server" placeholder="Contraseña"></asp:TextBox>
                                     <asp:RequiredFieldValidator ErrorMessage="Este campo es requerido" CssClass="danger" ControlToValidate="txtPassword" runat="server" />
                                     <label for="txtPassword">Ingrese una contraseña</label>
+                                    <div class="row">
+                                        <asp:Label ID="lblErrorPass" CssClass="danger" Visible="false" runat="server" Text="Label"></asp:Label>
+                                    </div>
                                 </div>
                                 <div class="form-floating mb-3">
                                     <asp:TextBox ID="txtRepetir" TextMode="Password" CssClass="form-control" runat="server" placeholder="Repetir Contraseña"></asp:TextBox>
-
                                     <asp:RequiredFieldValidator ErrorMessage="Este campo es requerido" CssClass="danger" ControlToValidate="txtRepetir" runat="server" />
                                     <label for="txtPassword">Repita la contraseña ingresada</label>
                                     <div class="row">
