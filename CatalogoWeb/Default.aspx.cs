@@ -33,7 +33,11 @@ namespace CatalogoWeb
                     }
                     indiceUltimaPagina = (listaProducto.Count / registrosPagina);
                     if (listaProducto.Count <= 6)
-                        indiceUltimaPagina--;
+                    {
+                        if (indiceUltimaPagina > 0)
+                            indiceUltimaPagina--;     
+                    }
+
                     ViewState["indicePaginaActual"] = indicePaginaActual;
                     ViewState["indiceUltimaPagina"] = indiceUltimaPagina;
                     Session.Add("productos", listaProducto);
@@ -116,9 +120,6 @@ namespace CatalogoWeb
         {
             try
             {
-                //List<Producto> listaRef = Session["productos"] != null ? (List<Producto>)Session["productos"] : null;
-                //if (listaRef.Count > 6)
-                //{
                 indicePaginaActual = (int)ViewState["indicePaginaActual"];
                 indiceUltimaPagina = (int)ViewState["indiceUltimaPagina"];
                 if (indicePaginaActual < indiceUltimaPagina)
@@ -127,8 +128,6 @@ namespace CatalogoWeb
                     ViewState["indicePaginaActual"] = indicePaginaActual;
                     enlazarRepeater();
                 }
-                //}
-
             }
             catch (Exception ex)
             {
@@ -141,14 +140,10 @@ namespace CatalogoWeb
         {
             try
             {
-                //List<Producto> listaRef = Session["productos"] != null ? (List<Producto>)Session["productos"] : null;
-                //if (listaRef.Count > 6)
-                //{
                 indiceUltimaPagina = (int)ViewState["indiceUltimaPagina"];
                 indicePaginaActual = indiceUltimaPagina;
                 ViewState["indicePaginaActual"] = indicePaginaActual;
                 enlazarRepeater();
-                //}
             }
             catch (Exception ex)
             {
@@ -220,11 +215,6 @@ namespace CatalogoWeb
             {
                 throw ex;
             }
-        }
-
-        protected void btnModal_Click(object sender, EventArgs e)
-        {
-            ajxModal.Show();
         }
     }
 }

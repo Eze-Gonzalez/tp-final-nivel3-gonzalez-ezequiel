@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -18,6 +19,7 @@ namespace CatalogoWeb
     {
         public bool changePass { get; set; }
         public bool changeEmail { get; set; }
+        public string Status { get; set; }
         protected void Page_Load(object sender, EventArgs e)
         {
             Title = "Mi perfil";
@@ -25,9 +27,9 @@ namespace CatalogoWeb
             {
                 if (Validar.sesion((Usuario)Session["usuario"]))
                 {
+                    Usuario usuario = (Usuario)Session["usuario"];
                     if (!IsPostBack)
                     {
-                        Usuario usuario = (Usuario)Session["usuario"];
                         string emailCodificado = usuario.Email;
                         string passCodificada = usuario.Pass;
                         Helper.codificar(ref emailCodificado, ref passCodificada);
@@ -51,26 +53,40 @@ namespace CatalogoWeb
         {
             try
             {
+                notificacion.Visible = true;
                 Usuario usuario = Session["usuario"] != null ? (Usuario)Session["usuario"] : null;
                 string imagenPerfil;
-                string icono = "";
-                string status = "Ok";
+                string status = "";
                 if (rdbLocal.Checked)
                 {
-                    //if (txtImagenLocal.HasFile)
-                    //{
-                    //    string ruta = Server.MapPath("./Imagenes/Perfil/");
-                    //    string img = "profile-" + usuario.Id + ".png";
-                    //    txtImagenLocal.PostedFile.SaveAs(ruta + img);
-                    //    imagenPerfil = img;
-                    //}
-                    //else
-                    //    imagenPerfil = usuario.UrlImagen;
+                    if (fileLocal.HasFile)
+                    {
+                        if (fileLocal.PostedFile.ContentLength < 2097152)
+                        {
+                            string ruta = Server.MapPath("./Imagenes/Perfil/");
+                            imagenPerfil = "profile-" + usuario.Id + ".png";
+                            fileLocal.PostedFile.SaveAs(ruta + imagenPerfil);
+                            imgPerfil.ImageUrl = Helper.cargarImagen(usuario);
+                        }
+                        else
+                        {
+                            imagenPerfil = usuario.UrlImagen;
+                            lblMensaje.Text = "El tamaño del archivo es demasiado grande, elija uno mas pequeño (2MB Máximo)";
+                            lblTituloNotificacion.Text = Modal.armarNotificacion(ajxNotificación, status = "error");
+                        }
+                    }
+                    else
+                        imagenPerfil = usuario.UrlImagen;
                 }
                 else
                     imagenPerfil = string.IsNullOrEmpty(txtImagenUrl.Text) ? usuario.UrlImagen : txtImagenUrl.Text;
-                //lblMensaje.Text = Helper.cargarDatosUsuario(usuario, txtNombre.Text, txtApellido.Text, imagenPerfil, ref icono, ref status);
-                //Modal.armarNotificacion(ajxNotificación, ref lblTituloNotificacion, status);
+
+                if (Validar.datosPerfil(usuario, txtNombre.Text, txtApellido.Text, imagenPerfil))
+                {
+                    lblMensaje.Text = Helper.cargarDatosUsuario(usuario, txtNombre.Text, txtApellido.Text, imagenPerfil, ref status);
+                    Status = status;
+                    lblTituloNotificacion.Text = Modal.armarNotificacion(ajxNotificación, status);
+                }
             }
             catch (Exception)
             {
@@ -84,6 +100,7 @@ namespace CatalogoWeb
             changeEmail = true;
             try
             {
+                lblCambioAcceso.Text = "Cambiar Email";
                 ajxModal.Show();
             }
             catch (Exception)
@@ -98,6 +115,7 @@ namespace CatalogoWeb
             changePass = true;
             try
             {
+                lblCambioAcceso.Text = "Cambiar Contraseña";
                 ajxModal.Show();
             }
             catch (Exception)
@@ -109,30 +127,31 @@ namespace CatalogoWeb
 
         protected void btnCambiar_Click(object sender, EventArgs e)
         {
+            notificacion.Visible = true;
             try
             {
-                //Usuario usuario = Session["usuario"] != null ? (Usuario)Session["usuario"] : null;
-                //string icono = "error";
-                //if (changePass)
-                //{
-                //    string mensaje = Helper.cargarPass(usuario, txtPassActual.Text, txtPassNueva.Text, txtPassRepetir.Text, ref icono);
-                //    if (icono == "error")
-                //    {
-                //        ClientScript.RegisterClientScriptBlock(GetType(), "alert", "swal('Listo!', 'Los cambios fueron guardados exitosamente', { button: {text:'Aceptar', className: 'swal-button'}, icon: '" + icono + "', className: 'swal-bg'})", true);
-                //    }
-                //    else
-                //        ClientScript.RegisterClientScriptBlock(GetType(), "alert", "swal('Listo!', 'Los cambios fueron guardados exitosamente', { button: {text:'Aceptar', className: 'swal-button'}, icon: '" + icono + "', className: 'swal-bg'})", true);
-
-                //}
-                //if (changeEmail)
-                //{
-                //    lblMensaje.Text = Helper.cargarEmail(usuario, txtEmailActual.Text, txtEmailNuevo.Text, ref icono);
-                //}
-                //string passCodificada = usuario.Pass;
-                //string emailCodificado = usuario.Email;
-                //Helper.codificar(ref emailCodificado, ref passCodificada);
-                //lblEmailUser.Text = emailCodificado;
-                //lblPassUser.Text = passCodificada;
+                string status = "";
+                Usuario usuario = Session["usuario"] != null ? (Usuario)Session["usuario"] : null;
+                if (lblCambioAcceso.Text == "Cambiar Contraseña")
+                {
+                    lblMensaje.Text = Helper.cargarPass(usuario, txtPassActual.Text, txtPassNueva.Text, txtPassRepetir.Text, ref status);
+                    Status = status;
+                    lblTituloNotificacion.Text = Modal.armarNotificacion(ajxNotificación, Status);
+                }
+                else
+                {
+                    lblMensaje.Text = Helper.cargarEmail(usuario, txtEmailActual.Text, txtEmailNuevo.Text, ref status);
+                    Status = status;
+                    lblTituloNotificacion.Text = Modal.armarNotificacion(ajxNotificación, Status);
+                }
+                if (status == "ok")
+                {
+                    string passCodificada = usuario.Pass;
+                    string emailCodificado = usuario.Email;
+                    Helper.codificar(ref emailCodificado, ref passCodificada);
+                    lblEmailUser.Text = emailCodificado;
+                    lblPassUser.Text = passCodificada;
+                }
             }
             catch (Exception)
             {
@@ -141,23 +160,18 @@ namespace CatalogoWeb
             }
             finally
             {
-                //ajxModal.Hide();
+                ajxModal.Hide();
             }
         }
 
         protected void btnAceptarN_Click(object sender, EventArgs e)
         {
-            //ajxNotificación.Hide();
+            ajxNotificación.Hide();
         }
 
         protected void btnCerrarModal_Click(object sender, EventArgs e)
         {
-            //ajxModal.Hide();
-        }
-
-        protected void fileLocal_UploadedComplete(object sender, AjaxControlToolkit.AsyncFileUploadEventArgs e)
-        {
-
+            ajxModal.Hide();
         }
     }
 }

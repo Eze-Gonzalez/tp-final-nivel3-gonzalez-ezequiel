@@ -1,37 +1,12 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Catalogo.Master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="CatalogoWeb.Default" %>
 
-<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-</asp:Content>
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server"></asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-    <div class="swal-icon swal-icon--error">
-          <div class="swal-icon--error__x-mark">
-            <span class="swal-icon--error__line swal-icon--error__line--left"></span>
-            <span class="swal-icon--error__line swal-icon--error__line--right"></span>
-          </div>
-        </div>
-    <%-- boton on click --%>
-    <asp:Button ID="btnModal" runat="server" Text="modal" OnClick="btnModal_Click" />
-    <div class="row mb-4">
-        <div class="col-4"></div>
+    <div class="row mb-4 center-row">
         <div class="col-4">
             <asp:TextBox ID="txtBuscar" CssClass="form-control" OnTextChanged="txtBuscar_TextChanged" AutoPostBack="true" runat="server"></asp:TextBox>
         </div>
-        <%-- modal --%>
-        <asp:Panel ID="modalPrueba" CssClass="modalNotificar" runat="server">
-            <div class="container">
-                <label class="form-label">Probando</label>
-                <asp:TextBox ID="txtProbando" CssClass="form-control" runat="server"></asp:TextBox>
-                <asp:Button ID="btnProbando" CssClass="btn btn-primary" runat="server" Text="Funciona" />
-                <asp:Button ID="btnCerrarModal" CssClass="btn btn-primary" runat="server" Text="Cerrar" />
-            </div>
-        </asp:Panel>
-        <%-- boton invisible --%>
-        <asp:Button ID="btnMostrarModal" runat="server" Text="Button" Style="display: none" />
-        <%-- ajax --%>
-        <ajax:ModalPopupExtender runat="server" ID="ajxModal" OkControlID="btnCerrarModal" CancelControlID="btnCerrarModal"
-            TargetControlID="btnMostrarModal" PopupControlID="modalPrueba" BackgroundCssClass="bg-black bg-opacity-75">
-        </ajax:ModalPopupExtender>
-        <div class="col">
+        <div class="col-4">
             <asp:Button ID="btnBuscar" CssClass="btn btn-outline btn-primary w-120" runat="server" Text="Buscar" OnClick="btnBuscar_Click" />
         </div>
     </div>

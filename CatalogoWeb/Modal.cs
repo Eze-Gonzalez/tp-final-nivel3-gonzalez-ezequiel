@@ -8,21 +8,23 @@ namespace CatalogoWeb
 {
     public static class Modal
     {
-        public static void armarNotificacion(AjaxControlToolkit.ModalPopupExtender ajax, ref Label lblTitulo, string status)
+        public static string armarNotificacion(AjaxControlToolkit.ModalPopupExtender ajax, string status)
         {
+            string titulo = "";
             switch (status)
             {
                 case "ok":
-                    lblTitulo.Text = "Listo!";
+                    titulo = "Listo!";
                     break;
                 case "error":
-                    lblTitulo.Text = "Hubo un problema";
+                    titulo = "Hubo un problema";
                     break;
                 case "advertencia":
-                    lblTitulo.Text = "No se detectaron cambios";
+                    titulo = "No encontrado";
                     break;
             }
             ajax.Show();
+            return titulo;
         }
     }
 }

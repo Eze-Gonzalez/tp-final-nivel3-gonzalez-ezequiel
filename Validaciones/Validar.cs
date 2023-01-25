@@ -240,11 +240,11 @@ namespace Validaciones
             }
         }
 
-        public static bool nombreApellido(Usuario usuario, string nombre, string apellido)
+        public static bool datosPerfil(Usuario usuario, string nombre, string apellido, string imagenPerfil)
         {
             try
             {
-                if (nombre != usuario.Nombre || apellido != usuario.Apellido)
+                if (nombre != usuario.Nombre || apellido != usuario.Apellido || imagenPerfil != usuario.UrlImagen)
                     return true;
                 return false;
             }

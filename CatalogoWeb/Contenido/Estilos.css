@@ -36,7 +36,7 @@
     position: fixed;
     border-radius: 20px;
     background-color: rgba(0,0,0,1);
-    animation-name: notificar;
+    animation-name: abrir;
     animation-duration: 0.2s;
 }
 

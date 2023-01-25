@@ -109,47 +109,29 @@ namespace Helpers
             }
         }
         //Carga los datos del usuario
-        public static string cargarDatosUsuario(Usuario usuario, string nombre, string apellido, string imagenPerfil, ref string icono, ref string status)
+        public static string cargarDatosUsuario(Usuario usuario, string nombre, string apellido, string imagenPerfil, ref string status)
         {
             try
             {
                 status = "error";
                 string mensaje;
-                if (Validar.nombreApellido(usuario, nombre, apellido))
+                if (Validar.campo(nombre))
                 {
-                    if (Validar.campo(nombre))
+                    if (Validar.campo(apellido))
                     {
-                        if (Validar.campo(apellido))
-                        {
-                            status = "ok";
-                            DatosUsuario datos = new DatosUsuario();
-                            usuario.Nombre = nombre;
-                            usuario.Apellido = apellido;
-                            usuario.UrlImagen = imagenPerfil;
-                            datos.modificarUsuario(usuario);
-                            icono = "https://i.imgur.com/sFWvAYF.gif";
-                            mensaje = "Los cambios fueron guardados exitosamente!";
-                        }
-                        else
-                            mensaje = "Debe completar el campo, Apellido";
+                        status = "ok";
+                        DatosUsuario datos = new DatosUsuario();
+                        usuario.Nombre = nombre;
+                        usuario.Apellido = apellido;
+                        usuario.UrlImagen = imagenPerfil;
+                        datos.modificarUsuario(usuario);
+                        mensaje = "Los cambios fueron guardados exitosamente!";
                     }
                     else
-                        mensaje = "Debe completar el campo, Nombre";
-                }
-                else if (imagenPerfil != usuario.UrlImagen)
-                {
-                    DatosUsuario datos = new DatosUsuario();
-                    usuario.UrlImagen = imagenPerfil;
-                    datos.modificarUsuario(usuario);
-                    icono = ConfigurationManager.AppSettings["iconoAlerta"];
-                    mensaje = "Imagen de perfil cambiada exitosamente";
+                        mensaje = "Debe completar el campo, Apellido";
                 }
                 else
-                {
-                    status = "advertencia";
-                    icono = "info";
-                    mensaje = "No se detectaron cambios a guardar";
-                }
+                    mensaje = "Debe completar el campo, Nombre";
                 return mensaje;
             }
             catch (Exception)
@@ -159,10 +141,11 @@ namespace Helpers
             }
         }
         //En caso de que haya elegido cambiar email, lo cambia
-        public static string cargarEmail(Usuario usuario, string emailActual, string emailNuevo, ref string icono)
+        public static string cargarEmail(Usuario usuario, string emailActual, string emailNuevo, ref string status)
         {
             try
             {
+                status = "error";
                 string mensaje;
                 if (Validar.campoEmail(emailActual))
                 {
@@ -172,23 +155,23 @@ namespace Helpers
                         {
                             if (!Validar.email(emailNuevo))
                             {
+                                status = "ok";
                                 DatosUsuario datos = new DatosUsuario();
                                 usuario.Email = emailNuevo;
                                 datos.cambiarEmail(usuario.Email, usuario.Id);
                                 mensaje = "El email fue guardado exitosamente!";
-                                icono = ConfigurationManager.AppSettings["iconoAlerta"];
                             }
                             else
                                 mensaje = "El nuevo email ya se encuentra registrado, ingrese otro.";
                         }
                         else
-                            mensaje = "Debe completar el campo nuevo email, con un email.";
+                            mensaje = "Debe completar el campo nuevo email, con un email válido.";
                     }
                     else
-                        mensaje = "El email ingresado, no coincide con su cuenta, debe ingresar su email en Email Actual.";
+                        mensaje = "El email ingresado en email actual, no coincide con su cuenta, debe ingresar su email.";
                 }
                 else
-                    mensaje = "El campo email actual, debe estar completo con su email.";
+                    mensaje = "Debe ingresar un email válido en el campo, email actual";
                 return mensaje;
             }
             catch (Exception)
@@ -198,11 +181,11 @@ namespace Helpers
             }
         }
         //en caso de que haya elegido cambiar contraseña, la cambia si los campos son válidos
-        public static string cargarPass(Usuario usuario, string passActual, string passNueva, string passRepetir, ref string icono)
+        public static string cargarPass(Usuario usuario, string passActual, string passNueva, string passRepetir, ref string status)
         {
             try
             {
-                icono = "error";
+                status = "error";
                 string mensaje;
                 if (Validar.campo(passActual))
                 {
@@ -216,11 +199,11 @@ namespace Helpers
                                 {
                                     if (passRepetir == passNueva)
                                     {
+                                        status = "ok";
                                         DatosUsuario datos = new DatosUsuario();
                                         usuario.Pass = passRepetir;
                                         datos.cambiarPass(usuario.Pass, usuario.Id);
                                         mensaje = "La contraseña fue guardada exitosamente!";
-                                        icono = ConfigurationManager.AppSettings["iconoAlerta"];
                                     }
                                     else
                                         mensaje = "Las contraseñas no coinciden, intente nuevamente.";
