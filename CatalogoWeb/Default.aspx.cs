@@ -216,5 +216,15 @@ namespace CatalogoWeb
                 throw ex;
             }
         }
+
+        protected void Button1_Click(object sender, EventArgs e)
+        {
+            bool resultado = true;
+            string titulo = "Prueba";
+            string mensajeN = "La operación se realizó con éxito";
+            string script = string.Format("crearAlerta({0}, '{1}', '{2}');", resultado.ToString().ToLower(), titulo, mensajeN);
+            ScriptManager.RegisterStartupScript(this, GetType(), "crearAlerta", script, true);
+
+        }
     }
 }

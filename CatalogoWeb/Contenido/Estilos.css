@@ -19,19 +19,69 @@
     max-height: 80px;
 }
 
+.modal-completo {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,.7);
+}
+
+.m-content {
+    background: #000000;
+    margin: 15% auto;
+    padding: 8px;
+    border: 2px solid #fff;
+    width: 478px;
+    animation-name: notificar;
+    animation-duration: .3s;
+    border-radius: 10px;
+}
+
+.close {
+    display:none;
+    position: relative;
+    color: #aaa;
+    float: right;
+    font-size: 35px;
+    font-weight: bold;
+    top: -43px;
+    right: 8px;
+}
+
+    .close:hover,
+    .close:focus {
+        color: white;
+        text-decoration: none;
+        cursor: pointer;
+    }
 
 .modalNotificar {
     width: 478px;
     height: auto;
     position: fixed;
-    border-radius: 20px;
+    border-radius: 10px;
     background-color: rgba(0,0,0,.5);
     animation-name: notificar;
     animation-duration: .3s;
 }
 
+@keyframes notificar {
+    from {
+        transform:scale(0);
+    }
+
+    to {
+        transform:scale(1);
+    }
+}
+
 .modalAbrir {
-    width: 400px;
+    width: 478px;
     height: auto;
     position: fixed;
     border-radius: 20px;
@@ -41,15 +91,6 @@
 }
 
 
-@keyframes notificar {
-    from {
-        top: 0px;
-    }
-
-    to {
-        bottom: 50px;
-    }
-}
 
 @keyframes abrir {
     from {

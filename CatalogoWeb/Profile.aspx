@@ -1,17 +1,88 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Catalogo.Master" AutoEventWireup="true" CodeBehind="Profile.aspx.cs" Inherits="CatalogoWeb.Profile" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-    <script type="text/javascript">
-        function ValidateSize(file) {
-            var maxFileSize = 2097152;
-            if (file.files && file.files[0].size > maxFileSize) {
-                alert("El archivo es demasiado grande. El tamaño máximo permitido es de 2 MB.");
-                file.value = "";
-            }
-        }
+    <script>
+        
     </script>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
+    <asp:Button ID="Button1" runat="server" Text="Button" OnClientClick="mostrarNotificacion()" />
+    <%-- Notificacion tamaño máximo --%>
+    <div id="modal" class="modal-completo">
+        <div class="m-content text-light text-center">
+            <div class="card-header">
+                <h5 class="modal-title">Tamaño Excedido</h5>
+                <span class="close" id="cerrar">&times;</span>
+            </div>
+            <div class="card-body">
+                <div class="swal-icon swal-icon--error">
+                    <div class="swal-icon--error__x-mark">
+                        <span class="swal-icon--error__line swal-icon--error__line--left"></span>
+                        <span class="swal-icon--error__line swal-icon--error__line--right"></span>
+                    </div>
+                </div>
+                <p class="card-text">El archivo es demasiado grande. El tamaño máximo permitido es de 2 MB.</p>
+            </div>
+            <div class="card-footer mt-4">
+                <button type="button" id="btnCerrarM" class="btn btn-primary btn-outline-light w-120 c">Aceptar</button>
+            </div>
+        </div>
+    </div>
+    <%-- Notificaciones dinamicas --%>
+    <div id="notDin" class="modal-completo">
+        <div class="m-content text-light text-center">
+            <span class="close" style="display:none">&times;</span>
+            <%-- Titulo --%>
+            <asp:UpdatePanel ID="UpdatePanel5" runat="server">
+                <ContentTemplate>
+                    <%if (Status == "ok")
+                        { %>
+                    <div class="swal-icon swal-icon--success">
+                        <span class="swal-icon--success__line swal-icon--success__line--long"></span>
+                        <span class="swal-icon--success__line swal-icon--success__line--tip"></span>
+                        <div class="swal-icon--success__ring"></div>
+                        <div class="swal-icon--success__hide-corners"></div>
+                    </div>
+                    <%}
+                    %>
+                    <%else
+                        { %>
+                    <div class="swal-icon swal-icon--error">
+                        <div class="swal-icon--error__x-mark">
+                            <span class="swal-icon--error__line swal-icon--error__line--left"></span>
+                            <span class="swal-icon--error__line swal-icon--error__line--right"></span>
+                        </div>
+                    </div>
+                    <%}  %>
+                </ContentTemplate>
+            </asp:UpdatePanel>
+            <%-- Fin Titulo --%>
+            <%-- Cuerpo --%>
+            <asp:UpdatePanel ID="UpdatePanel6" runat="server">
+                <ContentTemplate>
+                    <div class="card-body center-col">
+                        <div class="row-cols-1 mb-5">
+                            <asp:Label ID="lblTituloNotificacion" CssClass="card-tittle h3" runat="server" Text="lblTituloNotificacion"></asp:Label>
+                        </div>
+                        <div class="row">
+                            <asp:Label ID="lblMensaje" runat="server" Text="lblMensaje"></asp:Label>
+                        </div>
+                    </div>
+                </ContentTemplate>
+            </asp:UpdatePanel>
+            <%-- Fin cuerpo --%>
+            <%-- Boton aceptar --%>
+            <div class="card-footer center-row mb-3 mt-4">
+                <asp:UpdatePanel ID="UpdatePanel9" runat="server">
+                    <ContentTemplate>
+                        <asp:Button ID="btnAceptarN" CssClass="btn btn-primary btn-outline-light w-120 c" runat="server" Text="Aceptar" />
+                    </ContentTemplate>
+                </asp:UpdatePanel>
+            </div>
+            <%-- Fin boton --%>
+        </div>
+    </div>
+    <%-- Fin notificaciones dinamicas --%>
     <div class="bg-black bg-opacity-50 center-col">
         <%-- Formato datos usuario --%>
         <div class="col mt-4">
@@ -143,7 +214,7 @@
             <div class="card-header center-row">
                 <asp:UpdatePanel ID="UpdatePanel4" runat="server">
                     <ContentTemplate>
-                        <asp:Label ID="lblCambioAcceso" runat="server" Text="Label"></asp:Label>
+                        <asp:Label ID="lblCambioAcceso" CssClass="h4" runat="server" Text="Label"></asp:Label>
                     </ContentTemplate>
                     <Triggers>
                         <asp:AsyncPostBackTrigger ControlID="btnCambiarEmail" EventName="Click" />
@@ -194,69 +265,10 @@
         </div>
     </asp:Panel>
     <%-- Fin modal --%>
-
-    <%-- Notificación --%>
-    <asp:Panel ID="notificacion" CssClass="modalNotificar" runat="server">
-        <div class="card bg-black text-light bg-opacity-10 border center-col">
-            <%-- Titulo --%>
-            <asp:UpdatePanel ID="UpdatePanel5" runat="server">
-                <ContentTemplate>
-                    <%if (Status == "ok")
-                        { %>
-                    <div class="swal-icon swal-icon--success">
-                        <span class="swal-icon--success__line swal-icon--success__line--long"></span>
-                        <span class="swal-icon--success__line swal-icon--success__line--tip"></span>
-                        <div class="swal-icon--success__ring"></div>
-                        <div class="swal-icon--success__hide-corners"></div>
-                    </div>
-                    <%}
-                    %>
-                    <%else
-                        { %>
-                    <div class="swal-icon swal-icon--error">
-                        <div class="swal-icon--error__x-mark">
-                            <span class="swal-icon--error__line swal-icon--error__line--left"></span>
-                            <span class="swal-icon--error__line swal-icon--error__line--right"></span>
-                        </div>
-                    </div>
-                    <%}  %>
-                </ContentTemplate>
-            </asp:UpdatePanel>
-            <%-- Fin Titulo --%>
-            <%-- Cuerpo --%>
-            <asp:UpdatePanel ID="UpdatePanel6" runat="server">
-                <ContentTemplate>
-                    <div class="card-body center-col">
-                        <div class="row-cols-1 mb-5">
-                            <asp:Label ID="lblTituloNotificacion" CssClass="card-tittle h3" runat="server" Text="lblTituloNotificacion"></asp:Label>
-                        </div>
-                        <div class="row">
-                            <asp:Label ID="lblMensaje" runat="server" Text="lblMensaje"></asp:Label>
-                        </div>
-                    </div>
-                </ContentTemplate>
-            </asp:UpdatePanel>
-            <%-- Fin cuerpo --%>
-            <%-- Boton aceptar --%>
-            <div class="card-footer center-row mb-3">
-                <asp:Button ID="btnAceptarN" CssClass="btn btn-primary btn-outline-light w-120" runat="server" Text="Aceptar" OnClick="btnAceptarN_Click" />
-            </div>
-            <%-- Fin boton --%>
-        </div>
-    </asp:Panel>
-    <%-- Fin notificación --%>
-
-    <%-- Boton invisible para asociar a los Ajax --%>
     <asp:Button ID="btnMostrarModal" runat="server" Text="Button" Style="display: none" />
-    <asp:Button ID="btnMostrarNotificacion" runat="server" Text="Button" Style="display: none" />
-    <%-- Ajax para controlar notificaciones --%>
-    <ajax:ModalPopupExtender runat="server" ID="ajxNotificación" OkControlID="btnAceptarN" CancelControlID="btnAceptarN"
-        TargetControlID="btnMostrarModal" PopupControlID="notificacion" BackgroundCssClass="modalBG">
-    </ajax:ModalPopupExtender>
-    <%-- Fin Ajax notificaciones --%>
     <%-- Ajax para controlar modal cambio email/pass --%>
     <ajax:ModalPopupExtender runat="server" ID="ajxModal" OkControlID="btnCambiar" CancelControlID="btnCerrarModal"
-        TargetControlID="btnMostrarNotificacion" PopupControlID="modalCambio" BackgroundCssClass="modalBG">
+        TargetControlID="btnMostrarModal" PopupControlID="modalCambio" BackgroundCssClass="modalBG">
     </ajax:ModalPopupExtender>
     <%-- Fin Ajax modal --%>
 </asp:Content>

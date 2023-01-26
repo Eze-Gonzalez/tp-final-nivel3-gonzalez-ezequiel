@@ -84,6 +84,7 @@
     <Content Include="ChangePass.aspx" />
     <Content Include="Contenido\Estilos.css" />
     <Content Include="Contenido\Iconos.css" />
+    <Content Include="Contenido\Notificaciones.js" />
     <Content Include="Default.aspx" />
     <Content Include="Details.aspx" />
     <Content Include="Error.aspx" />
@@ -92,6 +93,7 @@
     <Content Include="Imagenes\Recursos\check.gif" />
     <Content Include="ListaProductos.aspx" />
     <Content Include="Login.aspx" />
+    <Content Include="Modal.html" />
     <Content Include="Product.aspx" />
     <Content Include="Profile.aspx" />
     <Content Include="SignUp.aspx" />

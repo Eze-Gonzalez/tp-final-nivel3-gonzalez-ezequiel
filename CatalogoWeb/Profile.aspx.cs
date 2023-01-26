@@ -53,7 +53,6 @@ namespace CatalogoWeb
         {
             try
             {
-                notificacion.Visible = true;
                 Usuario usuario = Session["usuario"] != null ? (Usuario)Session["usuario"] : null;
                 string imagenPerfil;
                 string status = "";
@@ -72,7 +71,6 @@ namespace CatalogoWeb
                         {
                             imagenPerfil = usuario.UrlImagen;
                             lblMensaje.Text = "El tamaño del archivo es demasiado grande, elija uno mas pequeño (2MB Máximo)";
-                            lblTituloNotificacion.Text = Modal.armarNotificacion(ajxNotificación, status = "error");
                         }
                     }
                     else
@@ -85,7 +83,6 @@ namespace CatalogoWeb
                 {
                     lblMensaje.Text = Helper.cargarDatosUsuario(usuario, txtNombre.Text, txtApellido.Text, imagenPerfil, ref status);
                     Status = status;
-                    lblTituloNotificacion.Text = Modal.armarNotificacion(ajxNotificación, status);
                 }
             }
             catch (Exception)
@@ -127,7 +124,6 @@ namespace CatalogoWeb
 
         protected void btnCambiar_Click(object sender, EventArgs e)
         {
-            notificacion.Visible = true;
             try
             {
                 string status = "";
@@ -136,13 +132,11 @@ namespace CatalogoWeb
                 {
                     lblMensaje.Text = Helper.cargarPass(usuario, txtPassActual.Text, txtPassNueva.Text, txtPassRepetir.Text, ref status);
                     Status = status;
-                    lblTituloNotificacion.Text = Modal.armarNotificacion(ajxNotificación, Status);
                 }
                 else
                 {
                     lblMensaje.Text = Helper.cargarEmail(usuario, txtEmailActual.Text, txtEmailNuevo.Text, ref status);
                     Status = status;
-                    lblTituloNotificacion.Text = Modal.armarNotificacion(ajxNotificación, Status);
                 }
                 if (status == "ok")
                 {
@@ -152,6 +146,7 @@ namespace CatalogoWeb
                     lblEmailUser.Text = emailCodificado;
                     lblPassUser.Text = passCodificada;
                 }
+                ScriptManager.RegisterStartupScript(this, GetType(), "mostrarNotificacion", "mostrarNotificacion();", true);
             }
             catch (Exception)
             {
@@ -162,11 +157,6 @@ namespace CatalogoWeb
             {
                 ajxModal.Hide();
             }
-        }
-
-        protected void btnAceptarN_Click(object sender, EventArgs e)
-        {
-            ajxNotificación.Hide();
         }
 
         protected void btnCerrarModal_Click(object sender, EventArgs e)

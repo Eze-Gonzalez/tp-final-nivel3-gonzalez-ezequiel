@@ -12,6 +12,7 @@ namespace CatalogoWeb
 {
     public partial class Catalogo : System.Web.UI.MasterPage
     {
+        public string Status { get; set; }
         protected void Page_Load(object sender, EventArgs e)
         {
             //Valida si esta iniciada una sesion en las paginas necesarias
@@ -54,5 +55,11 @@ namespace CatalogoWeb
             Session.Clear();
             Response.Redirect("Default.aspx");
         }
+
+        //protected void btnAceptarN_Click(object sender, EventArgs e)
+        //{
+        //    Status = 
+        //    ajxNotificacion.Hide();
+        //}
     }
 }

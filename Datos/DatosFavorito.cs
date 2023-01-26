@@ -68,8 +68,8 @@ namespace Datos
             try
             {
                 datos.consultaEmbebida("delete from FAVORITOS where iduser = @iduser and IdArticulo = idprod");
-                datos.parametros("@idprod", idProd);
                 datos.parametros("@iduser", idUser);
+                datos.parametros("@idprod", idProd);
                 datos.ejecutar();
             }
             catch (Exception)
