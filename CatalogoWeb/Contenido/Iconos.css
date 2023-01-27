@@ -178,28 +178,28 @@
     animation: animateXMark .5s;
 }
 
-@keyframes animateXMark{
-     0% {
+@keyframes animateXMark {
+    0% {
         -webkit-transform: scale(.4);
         transform: scale(.4);
         margin-top: 26px;
         opacity: 0;
     }
 
-     50% {
+    50% {
         -webkit-transform: scale(.4);
         transform: scale(.4);
         margin-top: 26px;
         opacity: 0;
     }
 
-     80% {
+    80% {
         -webkit-transform: scale(1.15);
         transform: scale(1.15);
         margin-top: -6px;
     }
 
-     100% {
+    100% {
         -webkit-transform: scale(1);
         transform: scale(1);
         margin-top: 0;
@@ -229,113 +229,44 @@
     right: 16px;
 }
 
-
-
-/*Checkmark*/
-
-:root {
-    --check-size: 200px;
-    --check-border-width: 5px;
-    --checkmark-width: calc(var(--check-size) / 2);
-    --checkmark-height: calc(var(--checkmark-width) / 2);
-    --checkmark-left: calc(var(--checkmark-width) / 2);
-    --checkmark-top: 50%;
-    --checkmark-color: #0c9710;
+/*Warning*/
+.swal-icon--warning {
+    border-color: #00fdff;
+    -webkit-animation: pulseWarning .75s alternate;
+    animation: pulseWarning .75s alternate;
 }
 
-.checkmark-wrapper {
-    width: var(--check-size);
-    height: var(--check-size);
-    position: relative;
-    margin-left: auto;
-    margin-right: auto;
+@keyframes pulseWarning {
+    0% {
+        transform: rotate(0deg)
+    }
+
+    100% {
+        transform: rotate(360deg)
+    }
 }
 
-    .checkmark-wrapper::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        border: var(--check-border-width) solid #f8f8f8;
-        width: 100%;
-        height: 100%;
-        border-radius: 50%;
-        display: block;
-        z-index: 0;
-    }
-
-    .checkmark-wrapper::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        border: var(--check-border-width) solid transparent;
-        border-left-color: var(--checkmark-color);
-        width: 100%;
-        height: 100%;
-        border-radius: 50%;
-        display: block;
-        z-index: 1;
-        animation: circle linear forwards .6s;
-    }
-
-.checkmark {
-    height: var(--checkmark-height);
-    width: var(--checkmark-width);
+.swal-icon--warning__body {
+    width: 5px;
+    height: 47px;
+    top: 10px;
+    border-radius: 2px;
+    margin-left: -2px;
     position: absolute;
-    opacity: 0;
-    left: var(--checkmark-left);
-    top: var(--checkmark-top);
-    display: block;
-    border-left: var(--check-border-width) solid var(--checkmark-color);
-    border-bottom: var(--check-border-width) solid var(--checkmark-color);
-    transform-origin: left top;
-    transform: rotate(-45deg);
-    animation: checkmark linear both .6s;
+    left: 50%;
+    background-color: #00fdff;
 }
 
-@keyframes checkmark {
-    0% {
-        height: 0;
-        width: 0;
-        opacity: 0;
-    }
-
-    80% {
-        height: 0;
-        width: 0;
-        opacity: 0;
-    }
-
-    90% {
-        height: var(--checkmark-height);
-        width: 0;
-        opacity: 1;
-    }
-
-    100% {
-        height: var(--checkmark-height);
-        width: var(--checkmark-width);
-        opacity: 1;
-    }
+.swal-icon--warning__dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    margin-left: -4px;
+    bottom: -11px;
+    position: absolute;
+    left: 50%;
+    background-color: #00fdff;
 }
-
-@keyframes circle {
-    0% {
-        border-color: transparent;
-        border-left-color: var(--checkmark-color);
-    }
-
-    90% {
-        transform: rotate(-360deg);
-        border-color: transparent;
-        border-left-color: var(--checkmark-color);
-    }
-
-    100% {
-        transform: rotate(-360deg);
-        border-color: var(--checkmark-color);
-    }
-}
-
 /*Loader*/
 
 .loader {
@@ -371,4 +302,4 @@
     100% {
         transform: rotate(360deg);
     }
-} 
+}

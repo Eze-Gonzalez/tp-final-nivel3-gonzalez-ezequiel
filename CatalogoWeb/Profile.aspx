@@ -2,11 +2,9 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <script>
-        
-    </script>
+</script>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-    <asp:Button ID="Button1" runat="server" Text="Button" OnClientClick="mostrarNotificacion()" />
     <%-- Notificacion tamaño máximo --%>
     <div id="modal" class="modal-completo">
         <div class="m-content text-light text-center">
@@ -28,61 +26,7 @@
             </div>
         </div>
     </div>
-    <%-- Notificaciones dinamicas --%>
-    <div id="notDin" class="modal-completo">
-        <div class="m-content text-light text-center">
-            <span class="close" style="display:none">&times;</span>
-            <%-- Titulo --%>
-            <asp:UpdatePanel ID="UpdatePanel5" runat="server">
-                <ContentTemplate>
-                    <%if (Status == "ok")
-                        { %>
-                    <div class="swal-icon swal-icon--success">
-                        <span class="swal-icon--success__line swal-icon--success__line--long"></span>
-                        <span class="swal-icon--success__line swal-icon--success__line--tip"></span>
-                        <div class="swal-icon--success__ring"></div>
-                        <div class="swal-icon--success__hide-corners"></div>
-                    </div>
-                    <%}
-                    %>
-                    <%else
-                        { %>
-                    <div class="swal-icon swal-icon--error">
-                        <div class="swal-icon--error__x-mark">
-                            <span class="swal-icon--error__line swal-icon--error__line--left"></span>
-                            <span class="swal-icon--error__line swal-icon--error__line--right"></span>
-                        </div>
-                    </div>
-                    <%}  %>
-                </ContentTemplate>
-            </asp:UpdatePanel>
-            <%-- Fin Titulo --%>
-            <%-- Cuerpo --%>
-            <asp:UpdatePanel ID="UpdatePanel6" runat="server">
-                <ContentTemplate>
-                    <div class="card-body center-col">
-                        <div class="row-cols-1 mb-5">
-                            <asp:Label ID="lblTituloNotificacion" CssClass="card-tittle h3" runat="server" Text="lblTituloNotificacion"></asp:Label>
-                        </div>
-                        <div class="row">
-                            <asp:Label ID="lblMensaje" runat="server" Text="lblMensaje"></asp:Label>
-                        </div>
-                    </div>
-                </ContentTemplate>
-            </asp:UpdatePanel>
-            <%-- Fin cuerpo --%>
-            <%-- Boton aceptar --%>
-            <div class="card-footer center-row mb-3 mt-4">
-                <asp:UpdatePanel ID="UpdatePanel9" runat="server">
-                    <ContentTemplate>
-                        <asp:Button ID="btnAceptarN" CssClass="btn btn-primary btn-outline-light w-120 c" runat="server" Text="Aceptar" />
-                    </ContentTemplate>
-                </asp:UpdatePanel>
-            </div>
-            <%-- Fin boton --%>
-        </div>
-    </div>
-    <%-- Fin notificaciones dinamicas --%>
+    <%-- Fin notificacion tamaño --%>
     <div class="bg-black bg-opacity-50 center-col">
         <%-- Formato datos usuario --%>
         <div class="col mt-4">
@@ -98,6 +42,7 @@
                         <div>
                             <p class="center-row text-light">Aquí podrá editar los datos de su cuenta.</p>
                         </div>
+                        <asp:Label ID="lblSinCambios" CssClass="h3 text-light center-row" runat="server" Text="⚠️AVISO: No se detectaron cambios a realizar⚠️" Visible="false"></asp:Label>
                     </div>
                     <%-- Fin bienvenida --%>
 
@@ -106,7 +51,7 @@
                         <div class="col-6">
                             <div class="mb-3">
                                 <asp:Label ID="lblNombre" runat="server" Text="Nombre:" CssClass="form-label"></asp:Label>
-                                <asp:TextBox ID="txtNombre" runat="server" CssClass="form-control"></asp:TextBox>
+                                <asp:TextBox ID="txtNombre" runat="server" CssClass="form-control" onchange="CheckTextChanged()"></asp:TextBox>
                             </div>
                             <div class="mb-3">
                                 <asp:Label ID="lblApellido" runat="server" Text="Apellido:" CssClass="form-label"></asp:Label>
@@ -133,7 +78,7 @@
                                 </div>
                                 <%if (rdbUrl.Checked)
                                     {%>
-                                <asp:TextBox ID="txtImagenUrl" CssClass="form-control" runat="server" placeholder="Ingrese un enlace de internet"></asp:TextBox>
+                                <asp:TextBox ID="txtImagenUrl" CssClass="form-control" runat="server" placeholder="Ingrese un enlace de internet" OnTextChanged="txtNombre_TextChanged"></asp:TextBox>
                                 <%}
                                     else if (rdbLocal.Checked)
                                     {  %>
@@ -238,11 +183,11 @@
                         <%if (changePass)
                             { %>
                         <label class="card-text">Ingrese su contraseña actual:</label>
-                        <asp:TextBox ID="txtPassActual" CssClass="form-control" placeholder="Contraseña Actual" runat="server"></asp:TextBox>
+                        <asp:TextBox ID="txtPassActual" TextMode="Password" CssClass="form-control" placeholder="Contraseña Actual" runat="server"></asp:TextBox>
                         <label class="card-text">Ingrese una nueva contraseña:</label>
-                        <asp:TextBox ID="txtPassNueva" CssClass="form-control" placeholder="Nueva Contraseña" runat="server"></asp:TextBox>
+                        <asp:TextBox ID="txtPassNueva" TextMode="Password" CssClass="form-control" placeholder="Nueva Contraseña" runat="server"></asp:TextBox>
                         <label class="card-text">Repita la nueva contraseña:</label>
-                        <asp:TextBox ID="txtPassRepetir" CssClass="form-control" placeholder="Repetir Nueva Contraseña" runat="server"></asp:TextBox>
+                        <asp:TextBox ID="txtPassRepetir" TextMode="Password" CssClass="form-control" placeholder="Repetir Nueva Contraseña" runat="server"></asp:TextBox>
                         <%}  %>
                     </ContentTemplate>
                     <Triggers>

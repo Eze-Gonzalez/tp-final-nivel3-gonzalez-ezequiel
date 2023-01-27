@@ -216,7 +216,7 @@
 }
 
 .img {
-    height: 295px;
+    max-height: 295px;
     object-fit: contain;
 }
 

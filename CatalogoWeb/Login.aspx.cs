@@ -9,6 +9,7 @@ using System.Web.UI.WebControls;
 using ModeloDominio;
 using Validaciones;
 using Helpers;
+using Datos;
 
 namespace CatalogoWeb
 {
@@ -23,7 +24,7 @@ namespace CatalogoWeb
                 Session.Add("Error", "Ya hay una sesión activa, si desea iniciar sesión con otra cuenta, primero cierre esta sesión y luego inicie sesión nuevamente.");
                 Response.Redirect("Error.aspx");
             }
-            else if (Session["cont"] != null && (int)Session["cont"] >= 5)
+            else if (Session["cont"] != null && (int)Session["cont"] >= 5 && Session["usuarioEmergencia"] != null)
             {
                 Session.Add("ErrorLogin", "Alcanzó los intentos máximos para iniciar sesión, si olvidó su contraseña, puede cambiarla");
                 Response.Redirect("ChangePass.aspx");
@@ -32,10 +33,18 @@ namespace CatalogoWeb
 
         protected void btnIniciarSesion_Click(object sender, EventArgs e)
         {
+            bool status;
+            string titulo;
+            string mensaje;
+            string script;
             Page.Validate();
             if (!Page.IsValid)
             {
-                ClientScript.RegisterClientScriptBlock(GetType(), "alert", "swal('No se admiten campos vacíos', 'Debe completar ambos campos para iniciar sesión', { button: {text:'Aceptar', className: 'swal-button'}, icon: 'error', className: 'swal-bg'})", true);
+                status = false;
+                titulo = "No se admiten campos vacíos";
+                mensaje = "Debe completar ambos campos para iniciar sesión.";
+                script = string.Format("crearAlerta({0}, '{1}', '{2}');", status.ToString().ToLower(), titulo, mensaje);
+                ScriptManager.RegisterStartupScript(this, GetType(), "crearAlerta", script, true);
                 return;
             }
             int cont;
@@ -51,26 +60,54 @@ namespace CatalogoWeb
             try
             {
                 Usuario usuario = new Usuario();
-                usuario.Email = txtEmail.Text;
-                usuario.Pass = txtPassword.Text;
-                if (Validar.inicioSesion(usuario) && cont < 5)
+                if (Validar.campoEmail(txtEmail.Text))
                 {
-                    Session["cont"] = null;
-                    Session.Add("usuario", usuario);
-                    Response.Redirect("Default.aspx");
-                }
-                else if (cont <= 4)
-                {
-                    ClientScript.RegisterClientScriptBlock(GetType(), "alert", "swal('Error al iniciar sesión', 'Usuario o contraseña incorrectos, intente nuevamente', { button: {text:'Aceptar', className: 'swal-button'}, icon: 'error', className: 'swal-bg'})", true);
-                    cont++;
-                    Session.Add("cont", cont);
+                    if (Validar.email(txtEmail.Text))
+                    {
+                        usuario.Email = txtEmail.Text;
+                        usuario.Pass = txtPassword.Text;
+                        if (Validar.inicioSesion(usuario) && cont < 5)
+                        {
+                            Session["cont"] = null;
+                            Session.Add("usuario", usuario);
+                            Response.Redirect("Default.aspx");
+                        }
+                        else if (cont <= 4)
+                        {
+                            status = false;
+                            titulo = "Credenciales incorrectas";
+                            cont++;
+                            mensaje = cont < 5 ? "Email o Contraseña incorrectos, intente nuevamente. Le quedan " + (6 - cont) + " intentos." : "Email o Contraseña incorrectos, intente nuevamente. Le queda 1 intento.";
+                            script = string.Format("crearAlerta({0}, '{1}', '{2}');", status.ToString().ToLower(), titulo, mensaje);
+                            ScriptManager.RegisterStartupScript(this, GetType(), "crearAlerta", script, true);
+                            Session.Add("cont", cont);
+                        }
+                        else
+                        {
+                            DatosUsuario datos = new DatosUsuario();
+                            usuario = datos.sesionEmergencia(txtEmail.Text);
+                            Session.Add("usuarioEmergencia", usuario);
+                            Session.Add("ErrorLogin", "Alcanzó los intentos máximos para iniciar sesión, si olvidó su contraseña, puede cambiarla");
+                            Response.Redirect("ChangePass.aspx");
+                        }
+                    }
+                    else
+                    {
+                        status = false;
+                        titulo = "Email no registrado";
+                        mensaje = "El email ingresado, no se encuentra registrado, si desea registrarse, haga click en Registrarse.";
+                        script = string.Format("crearAlerta({0}, '{1}', '{2}');", status.ToString().ToLower(), titulo, mensaje);
+                        ScriptManager.RegisterStartupScript(this, GetType(), "crearAlerta", script, true);
+                    }
                 }
                 else
                 {
-                    Session.Add("ErrorLogin", "Alcanzó los intentos máximos para iniciar sesión, si olvidó su contraseña, puede cambiarla");
-                    Response.Redirect("ChangePass.aspx");
+                    status = false;
+                    titulo = "Email no válido";
+                    mensaje = "Debe introducir un email válido.";
+                    script = string.Format("crearAlerta({0}, '{1}', '{2}');", status.ToString().ToLower(), titulo, mensaje);
+                    ScriptManager.RegisterStartupScript(this, GetType(), "crearAlerta", script, true);
                 }
-
             }
             catch (ThreadAbortException) { }
             catch (SqlException ex)

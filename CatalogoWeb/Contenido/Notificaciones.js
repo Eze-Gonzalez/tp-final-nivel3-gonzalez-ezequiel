@@ -1,10 +1,10 @@
-﻿function crearAlerta(resultado, titulo, mensajeN) {
+﻿function filtro(titulo, mensajeN) {
     var modal = document.createElement("div");
-    modal.id = "notificacion";
+    modal.id = "filtro";
     modal.style.display = "block";
     modal.className = "modal-completo";
     var title = document.createElement("p");
-    title.className = "h4";
+    title.className = "h4 mt-2";
     var mensaje = document.createElement("p");
     mensaje.className = "card-text";
     var modalContent = document.createElement("div");
@@ -21,7 +21,61 @@
     boton.className = "btn btn-outline-light btn-primary w-120 mb-3 mt-4";
     boton.innerHTML = "Aceptar";
     footer.appendChild(boton);
-    if (resultado) {
+    var iconoInfo = document.createElement("div")
+    iconoInfo.className = "swal-icon swal-icon--warning";
+    var icono = document.createElement("span");
+    icono.className = "swal-icon--warning__body";
+    var iconoPunto = document.createElement("span");
+    iconoPunto.className = "swal-icon--warning__dot";
+    icono.appendChild(iconoPunto)
+    iconoInfo.appendChild(icono)
+    var closeBtn = document.createElement("span");
+    closeBtn.className = "close";
+    closeBtn.innerHTML = "&times;";
+    closeBtn.onclick = function () {
+        modal.style.display = "none";
+    };
+    boton.onclick = function () {
+        modal.style.display = "none";
+    };
+    title.innerHTML = titulo;
+    mensaje.innerText = mensajeN;
+    cardBody.appendChild(iconoInfo);
+    rowTitulo.appendChild(title);
+    rowMensaje.appendChild(mensaje);
+    cardBody.appendChild(rowTitulo);
+    cardBody.appendChild(rowMensaje);
+    cardBody.appendChild(footer);
+    modalContent.appendChild(cardBody);
+    modal.appendChild(modalContent);
+    document.body.appendChild(modal);
+}
+
+//Alertas de informacion
+function crearAlerta(status, titulo, mensajeN) {
+    var modal = document.createElement("div");
+    modal.id = "notificacion";
+    modal.style.display = "block";
+    modal.className = "modal-completo";
+    var title = document.createElement("p");
+    title.className = "h4 mt-2";
+    var mensaje = document.createElement("p");
+    mensaje.className = "card-text";
+    var modalContent = document.createElement("div");
+    modalContent.className = "m-content text-light text-center";
+    var cardBody = document.createElement("div");
+    cardBody.className = "card-body center-col";
+    var rowTitulo = document.createElement("div");
+    rowTitulo.className = "row mb-5";
+    var rowMensaje = document.createElement("div");
+    rowMensaje.className = "row";
+    var footer = document.createElement("div");
+    footer.className = "card-footer center-row";
+    var boton = document.createElement("button");
+    boton.className = "btn btn-outline-light btn-primary w-120 mb-3 mt-4";
+    boton.innerHTML = "Aceptar";
+    footer.appendChild(boton);
+    if (status) {
         var icono = document.createElement("div");
         var iconoRing = document.createElement("div");
         var iconoHideCorners = document.createElement("div");
@@ -61,6 +115,61 @@
     boton.onclick = function () {
         modal.style.display = "none";
     };
+    
+    if (mensajeN === "Debe ingresar su email, si el email ingresado es suyo, puede intentar iniciar sesión con ese email haciendo click en Iniciar Sesión, si no tiene un email registrado, haga click en Registrarse.") {
+        var login = document.createElement("button");
+        login.className = "btn btn-outline-light btn-primary w-120 mb-3 mt-4 ms-3";
+        login.innerHTML = "Iniciar Sesión";
+        footer.appendChild(login)
+        var registrarse = document.createElement("button");
+        registrarse.className = "btn btn-outline-light btn-primary w-120 mb-3 mt-4 ms-3";
+        registrarse.innerHTML = "Registrarse";
+        footer.appendChild(registrarse)
+        login.onclick = function () {
+            modal.style.display = "none";
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "Support.aspx", true);
+            xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+            xhr.send();
+            window.location.href = "Login.aspx";
+        };
+        registrarse.onclick = function () {
+            modal.style.display = "none";
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "Support.aspx", true);
+            xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+            xhr.send();
+            window.location.href = "SignUp.aspx";
+        };
+    }
+    if (titulo === "Email no registrado") {
+        var registrarse = document.createElement("button");
+        registrarse.className = "btn btn-outline-light btn-primary w-120 mb-3 mt-4 ms-3";
+        registrarse.innerHTML = "Registrarse";
+        footer.appendChild(registrarse)
+        registrarse.onclick = function () {
+            modal.style.display = "none";
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "Support.aspx", true);
+            xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+            xhr.send();
+            window.location.href = "SignUp.aspx";
+        };
+    }
+    if (titulo === "Contraseña existente") {
+        var login = document.createElement("button");
+        login.className = "btn btn-outline-light btn-primary w-120 mb-3 mt-4 ms-3";
+        login.innerHTML = "Iniciar Sesión";
+        footer.appendChild(login)
+        login.onclick = function () {
+            modal.style.display = "none";
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "Support.aspx", true);
+            xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+            xhr.send();
+            window.location.href = "Login.aspx";
+        };
+    }
     title.innerHTML = titulo;
     mensaje.innerText = mensajeN;
     rowMensaje.appendChild(mensaje);
@@ -71,8 +180,15 @@
     modalContent.appendChild(cardBody);
     modal.appendChild(modalContent);
     document.body.appendChild(modal);
+    if (mensajeN === "La contraseña fue cambiada exitosamente!") {
+        boton.onclick = function () {
+            modal.style.display = "none";
+            window.location.href = "Login.aspx";
+        };
+    }
 }
 
+//Funcion para disparar alerta de tamaño excedido en caso de ser necesario.
 function ValidateSize(file) {
     var maxFileSize = 2097152;
     if (file.files && file.files[0].size > maxFileSize) {
@@ -101,3 +217,4 @@ function mostrarModalSize() {
         }
     }
 }
+

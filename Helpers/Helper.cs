@@ -10,6 +10,7 @@ using ModeloDominio;
 using Validaciones;
 using Datos;
 using System.Configuration;
+using static System.Collections.Specialized.BitVector32;
 
 namespace Helpers
 {
@@ -109,17 +110,17 @@ namespace Helpers
             }
         }
         //Carga los datos del usuario
-        public static string cargarDatosUsuario(Usuario usuario, string nombre, string apellido, string imagenPerfil, ref string status)
+        public static string cargarDatosUsuario(Usuario usuario, string nombre, string apellido, string imagenPerfil, ref bool status, ref string titulo)
         {
             try
             {
-                status = "error";
                 string mensaje;
                 if (Validar.campo(nombre))
                 {
                     if (Validar.campo(apellido))
                     {
-                        status = "ok";
+                        status = true;
+                        titulo = "Listo!";
                         DatosUsuario datos = new DatosUsuario();
                         usuario.Nombre = nombre;
                         usuario.Apellido = apellido;
@@ -128,10 +129,17 @@ namespace Helpers
                         mensaje = "Los cambios fueron guardados exitosamente!";
                     }
                     else
-                        mensaje = "Debe completar el campo, Apellido";
+                    {
+                        titulo = "Error: Apellido vacío";
+                        mensaje = "Debe completar el campo, Apellido.";
+                    }
+
                 }
                 else
-                    mensaje = "Debe completar el campo, Nombre";
+                {
+                    titulo = "Error: Nombre vacío";
+                    mensaje = "Debe completar el campo, Nombre.";
+                }
                 return mensaje;
             }
             catch (Exception)
@@ -141,11 +149,10 @@ namespace Helpers
             }
         }
         //En caso de que haya elegido cambiar email, lo cambia
-        public static string cargarEmail(Usuario usuario, string emailActual, string emailNuevo, ref string status)
+        public static string cargarEmail(Usuario usuario, string emailActual, string emailNuevo, ref bool status, ref string titulo)
         {
             try
             {
-                status = "error";
                 string mensaje;
                 if (Validar.campoEmail(emailActual))
                 {
@@ -155,23 +162,36 @@ namespace Helpers
                         {
                             if (!Validar.email(emailNuevo))
                             {
-                                status = "ok";
+                                status = true;
+                                titulo = "Listo!";
                                 DatosUsuario datos = new DatosUsuario();
                                 usuario.Email = emailNuevo;
                                 datos.cambiarEmail(usuario.Email, usuario.Id);
                                 mensaje = "El email fue guardado exitosamente!";
                             }
                             else
+                            {
+                                titulo = "Email existente";
                                 mensaje = "El nuevo email ya se encuentra registrado, ingrese otro.";
+                            }
                         }
                         else
+                        {
+                            titulo = "Email no válido";
                             mensaje = "Debe completar el campo nuevo email, con un email válido.";
+                        }
                     }
                     else
+                    {
+                        titulo = "Email incorrecto";
                         mensaje = "El email ingresado en email actual, no coincide con su cuenta, debe ingresar su email.";
+                    }
                 }
                 else
-                    mensaje = "Debe ingresar un email válido en el campo, email actual";
+                {
+                    titulo = "Email no válido";
+                    mensaje = "Debe ingresar un email válido en el campo, email actual.";
+                }
                 return mensaje;
             }
             catch (Exception)
@@ -180,12 +200,70 @@ namespace Helpers
                 throw;
             }
         }
+        //Valida campos y cambia la contraseña al haberla olvidado.
+        public static string passOlvidada(Usuario usuario, string email, string passNueva, string passRepetir, ref bool status, ref string titulo)
+        {
+            string mensaje;
+            if (Validar.campoEmail(email))
+            {
+                if (email == usuario.Email)
+                {
+                    if (Validar.campoPass(passNueva))
+                    {
+                        if (passNueva != usuario.Pass)
+                        {
+                            if (Validar.campoPass(passRepetir))
+                            {
+                                if (passRepetir == passNueva)
+                                {
+                                    status = true;
+                                    titulo = "Listo!";
+                                    mensaje = "La contraseña fue cambiada exitosamente!";
+                                    DatosUsuario datos = new DatosUsuario();
+                                    datos.cambiarPass(passRepetir, usuario.Id);
+                                }
+                                else
+                                {
+                                    titulo = "Las contraseñas no coinciden";
+                                    mensaje = "Las contraseñas ingresadas no coinciden, deben coincidir para continuar.";
+                                }
+                            }
+                            else
+                            {
+                                titulo = "Contraseña no válida o vacía";
+                                mensaje = "Debe ingresar una contraseña de 3 a 20 dígitos, con al menos una mayúscula, una minúscula y un número.";
+                            }
+                        }
+                        else
+                        {
+                            titulo = "Contraseña existente";
+                            mensaje = "La contraseña ingresada es su contraseña actual, para iniciar sesón haga click en el boton Iniciar Sesión.";
+                        }
+                    }
+                    else
+                    {
+                        titulo = "Contraseña inválida o vacía";
+                        mensaje = "Debe ingresar una contraseña de 3 a 20 dígitos, con al menos una mayúscula, una minúscula y un número.";
+                    }
+                }
+                else
+                {
+                    titulo = "Email incorrecto";
+                    mensaje = "Debe ingresar su email, si el email ingresado es suyo, puede intentar iniciar sesión con ese email haciendo click en Iniciar Sesión, si no tiene un email registrado, haga click en Registrarse.";
+                }
+            }
+            else
+            {
+                titulo = "Email iválido";
+                mensaje = "Debe ingresar un email válido.";
+            }
+            return mensaje;
+        }
         //en caso de que haya elegido cambiar contraseña, la cambia si los campos son válidos
-        public static string cargarPass(Usuario usuario, string passActual, string passNueva, string passRepetir, ref string status)
+        public static string cargarPass(Usuario usuario, string passActual, string passNueva, string passRepetir, ref bool status, ref string titulo)
         {
             try
             {
-                status = "error";
                 string mensaje;
                 if (Validar.campo(passActual))
                 {
@@ -195,33 +273,113 @@ namespace Helpers
                         {
                             if (passNueva != usuario.Pass)
                             {
-                                if (Validar.campo(passRepetir))
+                                if (Validar.campoPass(passRepetir))
                                 {
                                     if (passRepetir == passNueva)
                                     {
-                                        status = "ok";
+                                        status = true;
+                                        titulo = "Listo!";
                                         DatosUsuario datos = new DatosUsuario();
                                         usuario.Pass = passRepetir;
                                         datos.cambiarPass(usuario.Pass, usuario.Id);
                                         mensaje = "La contraseña fue guardada exitosamente!";
                                     }
                                     else
+                                    {
+                                        titulo = "Contraseñas distintas";
                                         mensaje = "Las contraseñas no coinciden, intente nuevamente.";
+                                    }
                                 }
                                 else
-                                    mensaje = "Debe completar el campo, repetir contraseña.";
+                                {
+                                    titulo = "Contraseña no válida o vacía en el campo Repetir Contraseña";
+                                    mensaje = "Debe ingresar una nueva contraseña de al menos 6 caracteres, con al menos un número, una mayúscula y una minúscula.";
+                                }
                             }
                             else
+                            {
+                                titulo = "Contraseña sin cambios";
                                 mensaje = "La contraseña nueva, es la misma que tiene actualmente, intente cambiarla.";
+                            }
                         }
                         else
+                        {
+                            titulo = "Contraseña no válida o vacía en el campo Nueva Contraseña";
                             mensaje = "Debe ingresar una nueva contraseña de al menos 6 caracteres, con al menos un número, una mayúscula y una minúscula.";
+                        }
                     }
                     else
+                    {
+                        titulo = "Contraseña incorrecta";
                         mensaje = "La contraseña no coincide con su cuenta, debe ingresar su contraseña en Contraseña Actual.";
+                    }
                 }
                 else
+                {
+                    titulo = "Contraseña vacía";
                     mensaje = "Debe rellenar el campo, contraseña actual, con su contraseña.";
+                }
+                return mensaje;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+        //Valida campos y registra un nuevo usuario
+        public static string registro(Usuario usuario, string email, string passNueva, string passRepetir, ref bool status, ref string titulo)
+        {
+            try
+            {
+                string mensaje;
+                if (Validar.campoEmail(email))
+                {
+                    if (!Validar.email(email))
+                    {
+                        if (Validar.campoPass(passNueva))
+                        {
+                            if (Validar.campoPass(passRepetir))
+                            {
+                                if(passRepetir == passNueva)
+                                {
+                                    status = true;
+                                    titulo = "Listo!";
+                                    mensaje = "El registro fue exitoso!";
+                                    usuario.Email = email;
+                                    usuario.Pass = passRepetir;
+                                    DatosUsuario datos = new DatosUsuario();
+                                    usuario.Id = datos.nuevoUsuario(usuario);
+                                }
+                                else
+                                {
+                                    titulo = "Las contraseñas no coinciden";
+                                    mensaje = "Debe repetir las contraseñas, de manera que ambas sean iguales";
+                                }
+                            }
+                            else
+                            {
+                                titulo = "Contraseña inválida o vacía";
+                                mensaje = "Debe ingresar una contraseña de 3 a 20 dígitos con al menos una mayúscula, una minúscula y un número.";
+                            }
+                        }
+                        else
+                        {
+                            titulo = "Contraseña inválida o vacía";
+                            mensaje = "Debe ingresar una contraseña de 3 a 20 dígitos con al menos una mayúscula, una minúscula y un número.";
+                        }
+                    }
+                    else
+                    {
+                        titulo = "Email registrado";
+                        mensaje = "El email ingresado ya se encuentra registrado, intente con otro.";
+                    }
+                }
+                else
+                {
+                    titulo = "Email inválido";
+                    mensaje = "Debe ingresar un email válido";
+                }
                 return mensaje;
             }
             catch (Exception)

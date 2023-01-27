@@ -90,13 +90,13 @@
     <Content Include="Error.aspx" />
     <Content Include="Favorite.aspx" />
     <Content Include="Global.asax" />
-    <Content Include="Imagenes\Recursos\check.gif" />
     <Content Include="ListaProductos.aspx" />
     <Content Include="Login.aspx" />
     <Content Include="Modal.html" />
     <Content Include="Product.aspx" />
     <Content Include="Profile.aspx" />
     <Content Include="SignUp.aspx" />
+    <Content Include="Support.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -188,6 +188,13 @@
     </Compile>
     <Compile Include="SignUp.aspx.designer.cs">
       <DependentUpon>SignUp.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Support.aspx.cs">
+      <DependentUpon>Support.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Support.aspx.designer.cs">
+      <DependentUpon>Support.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

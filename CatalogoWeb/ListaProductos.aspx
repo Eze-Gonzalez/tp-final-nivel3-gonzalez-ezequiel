@@ -32,7 +32,7 @@
                         <asp:ListItem Text="Precio" />
                         <asp:ListItem Text="Codigo" />
                         <asp:ListItem Text="Nombre" />
-                        <asp:ListItem Text="Categoria" />
+                        <asp:ListItem Text="Categoría" />
                         <asp:ListItem Text="Marca" />
                     </asp:DropDownList>
                 </div>

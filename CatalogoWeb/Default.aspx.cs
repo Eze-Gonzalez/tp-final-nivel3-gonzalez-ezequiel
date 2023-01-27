@@ -19,6 +19,10 @@ namespace CatalogoWeb
         private int registrosPagina = 6;
         private int indicePaginaActual;
         private int indiceUltimaPagina;
+        private bool status = true;
+        private string mensaje = "No se encontró ningún artículo que corresponda con el filtro deseado.";
+        private string titulo = "No se encontraron coincidencias";
+        private string script;
         protected void Page_Load(object sender, EventArgs e)
         {
             try
@@ -35,7 +39,7 @@ namespace CatalogoWeb
                     if (listaProducto.Count <= 6)
                     {
                         if (indiceUltimaPagina > 0)
-                            indiceUltimaPagina--;     
+                            indiceUltimaPagina--;
                     }
 
                     ViewState["indicePaginaActual"] = indicePaginaActual;
@@ -169,12 +173,17 @@ namespace CatalogoWeb
             }
         }
 
-        protected void btnBuscar_Click(object sender, EventArgs e)
+        protected void ddlFiltro_SelectedIndexChanged(object sender, EventArgs e)
         {
             DatosProducto datos = new DatosProducto();
             try
             {
-                List<Producto> filtrada = datos.filtrarNombre(txtBuscar.Text);
+                List<Producto> filtrada = datos.filtroRapido(ddlTipo.SelectedItem.Text, ddlFiltro.SelectedValue.ToString(), ref status);
+                if (!status)
+                {
+                    script = string.Format("filtro('{0}', '{1}');", titulo, mensaje);
+                    ScriptManager.RegisterStartupScript(this, GetType(), "filtro", script, true);
+                }
                 foreach (Producto producto in filtrada)
                 {
                     producto.ImagenUrl = Helper.cargarImagen(producto);
@@ -189,16 +198,83 @@ namespace CatalogoWeb
             }
             catch (Exception)
             {
+
                 throw;
             }
         }
 
-        protected void txtBuscar_TextChanged(object sender, EventArgs e)
+        protected void ddlTipo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string seleccion = ddlTipo.SelectedItem.Text;
+            try
+            {
+                switch (seleccion)
+                {
+                    case "Nombre":
+                        ddlFiltro.Visible = false;
+                        txtFiltro.Visible = true;
+                        btnBuscar.Visible = true;
+                        break;
+                    case "Categoría":
+                        {
+                            DatosCategoria datos = new DatosCategoria();
+                            btnBuscar.Visible = false;
+                            txtFiltro.Visible = false;
+                            ddlFiltro.Visible = true;
+                            ddlFiltro.Items.Clear();
+                            ddlFiltro.DataSource = datos.listar();
+                            ddlFiltro.DataTextField = "Descripcion";
+                            ddlFiltro.DataValueField = "Descripcion";
+                            ddlFiltro.DataBind();
+                        }
+                        break;
+                    case "Marca":
+                        {
+                            DatosMarca datos = new DatosMarca();
+                            btnBuscar.Visible = false;
+                            txtFiltro.Visible = false;
+                            ddlFiltro.Visible = true;
+                            ddlFiltro.Items.Clear();
+                            ddlFiltro.DataSource = datos.listar();
+                            ddlFiltro.DataTextField = "Descripcion";
+                            ddlFiltro.DataValueField = "Descripcion";
+                            ddlFiltro.DataBind();
+                        }
+                        break;
+                    case "Precio":
+                        {
+                            ddlFiltro.Visible = false;
+                            txtFiltro.Visible = true;
+                            btnBuscar.Visible = true;
+                        }
+                        break;
+                    default:
+                        {
+                            ddlFiltro.Visible = false;
+                            btnBuscar.Visible = false;
+                            txtFiltro.Visible = false;
+                        }
+                        break;
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        protected void txtFiltro_TextChanged(object sender, EventArgs e)
         {
             DatosProducto datos = new DatosProducto();
             try
             {
-                List<Producto> filtrada = datos.filtrarNombre(txtBuscar.Text);
+                List<Producto> filtrada = datos.filtroRapido(ddlTipo.SelectedItem.Text, txtFiltro.Text, ref status);
+                if (!status)
+                {
+                    script = string.Format("filtro('{0}', '{1}');", titulo, mensaje);
+                    ScriptManager.RegisterStartupScript(this, GetType(), "filtro", script, true);
+                }
                 foreach (Producto producto in filtrada)
                 {
                     producto.ImagenUrl = Helper.cargarImagen(producto);
@@ -217,14 +293,33 @@ namespace CatalogoWeb
             }
         }
 
-        protected void Button1_Click(object sender, EventArgs e)
+        protected void btnBuscar_Click(object sender, EventArgs e)
         {
-            bool resultado = true;
-            string titulo = "Prueba";
-            string mensajeN = "La operación se realizó con éxito";
-            string script = string.Format("crearAlerta({0}, '{1}', '{2}');", resultado.ToString().ToLower(), titulo, mensajeN);
-            ScriptManager.RegisterStartupScript(this, GetType(), "crearAlerta", script, true);
-
+            DatosProducto datos = new DatosProducto();
+            try
+            {
+                List<Producto> filtrada = datos.filtroRapido(ddlTipo.SelectedItem.Text, txtFiltro.Text, ref status);
+                if (!status)
+                {
+                    script = string.Format("filtro('{0}', '{1}');", titulo, mensaje);
+                    ScriptManager.RegisterStartupScript(this, GetType(), "filtro", script, true);
+                }
+                foreach (Producto producto in filtrada)
+                {
+                    producto.ImagenUrl = Helper.cargarImagen(producto);
+                }
+                indiceUltimaPagina = (filtrada.Count / registrosPagina);
+                if (filtrada.Count == 0)
+                    indiceUltimaPagina--;
+                ViewState["indicePaginaActual"] = indicePaginaActual;
+                ViewState["indiceUltimaPagina"] = indiceUltimaPagina;
+                Session["productos"] = filtrada;
+                enlazarRepeater();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

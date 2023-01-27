@@ -1,10 +1,14 @@
-﻿using System;
+﻿using ModeloDominio;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Validaciones;
+using Helpers;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace CatalogoWeb
 {
@@ -12,46 +16,64 @@ namespace CatalogoWeb
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (Validar.sesion(Session["usuario"]))
+            try
             {
-                Session.Add("ErrorCode", "Ya hay una sesión iniciada");
-                Session.Add("Error", "Actualmente hay una sesión iniciada, para cambiar su contraseña, por favor, diríjase a la página Mi perfil y seleccione la opción de cambiar datos de acceso");
-                Response.Redirect("Error.aspx");
+                if (Validar.sesion(Session["usuario"]))
+                {
+                    Session.Add("ErrorCode", "Ya hay una sesión iniciada");
+                    Session.Add("Error", "Actualmente hay una sesión iniciada, para cambiar su contraseña, por favor, diríjase a la página Mi perfil y seleccione la opción de cambiar datos de acceso");
+                    Response.Redirect("Error.aspx");
+                }
+                else if (Session["ErrorLogin"] != null)
+                {
+                    lblCambiar.Visible = false;
+                    lblError.Text = (string)Session["ErrorLogin"];
+                    lblError.Visible = true;
+                }
+                else
+                {
+                    Response.Redirect("Login.aspx");
+                }
             }
-            else if (Session["ErrorLogin"] == null)
+            catch (ThreadAbortException) { }
+            catch (Exception)
             {
-                lblCambiar.Visible = true;
-                lblError.Visible = false;
-            }
-            else
-            {
-                lblCambiar.Visible = false;
-                lblError.Text = (string)Session["ErrorLogin"];
-                lblError.Visible = true;
+
+                throw;
             }
         }
 
         protected void btnAceptar_Click(object sender, EventArgs e)
         {
-            if (Validar.campoEmail(txtEmail.Text))
+            try
             {
-                lblErrorPass.Text = "Debe ingresar un email válido.";
-                lblErrorPass.Visible = true;
+                bool status = false;
+                string titulo = "";
+                string mensaje;
+                string script;
+                Usuario usuario = Session["usuarioEmergencia"] != null ? (Usuario)Session["usuarioEmergencia"] : null;
+                if (!Page.IsValid)
+                {
+                    status = false;
+                    titulo = "No se admiten campos vacíos";
+                    mensaje = "Debe completar todos los campos para continuar.";
+                    script = string.Format("crearAlerta({0}, '{1}', '{2}');", status.ToString().ToLower(), titulo, mensaje);
+                    ScriptManager.RegisterStartupScript(this, GetType(), "crearAlerta", script, true);
+                    return;
+                }
+                mensaje = Helper.passOlvidada(usuario, txtEmail.Text, txtPassword.Text, txtRepetir.Text, ref status, ref titulo);
+                script = string.Format("crearAlerta({0}, '{1}', '{2}');", status.ToString().ToLower(), titulo, mensaje);
+                ScriptManager.RegisterStartupScript(this, GetType(), "crearAlerta", script, true);
+                if (status)
+                {
+                    Session.Clear();
+                }
             }
-            else if (Validar.campo(txtPassword.Text))
+            catch (ThreadAbortException) { }
+            catch (Exception)
             {
-                lblErrorPass.Text = "Debe ingresar una contraseña.";
-                lblErrorPass.Visible = true;
 
-            }
-            else if (Validar.campo(txtPassword.Text))
-            {
-                lblErrorPass.Text = "Debe repetir la contraseña ingresada.";
-                lblErrorPass.Visible = true;
-            }
-            else
-            {
-                lblErrorPass.Visible = false;
+                throw;
             }
         }
     }

@@ -10,6 +10,7 @@ using ModeloDominio;
 using System.Data;
 using System.Threading;
 using Servicios;
+using Helpers;
 
 namespace CatalogoWeb
 {
@@ -30,46 +31,26 @@ namespace CatalogoWeb
         {
             try
             {
-                if (Validar.campoEmail(txtEmail.Text))
+                Page.Validate();
+                string script;
+                string titulo = "";
+                string mensaje;
+                bool status = false;
+                if (!Page.IsValid)
                 {
-                    if (!Validar.email(txtEmail.Text))
-                    {
-                        lblErrorEmail.Visible = false;
-                        if (Validar.campoPass(txtPassword.Text))
-                        {
-                            lblErrorPass.Visible = false;
-                            if (txtRepetir.Text == txtPassword.Text)
-                            {
-                                lblErrorRep.Visible = false;
-                                DatosUsuario datos = new DatosUsuario();
-                                Usuario usuario = new Usuario();
-                                usuario.Email = txtEmail.Text;
-                                usuario.Pass = txtRepetir.Text;
-                                usuario.Id = datos.nuevoUsuario(usuario);
-                                Session.Add("usuario", usuario);
-                                Response.Redirect("Profile.aspx?id=" + usuario.Id, false);
-                            }
-                            else
-                            {
-                                lblErrorRep.Text = "Las contraseñas no coinciden, intente nuevamente.";
-                            }
-                        }
-                        else
-                        {
-                            lblErrorPass.Text = "Debe introducir una contraseña de 3 a 20 dígitos, incluyendo al menos, una mayúscula, una minúscula y un número.";
-                            lblErrorPass.Visible = true;
-                        }
-                    }
-                    else
-                    {
-                        lblErrorEmail.Text = "El email ingresado ya se encuentra registrado, intente con otro.";
-                        lblErrorEmail.Visible = true;
-                    }
+                    titulo = "No se permiten campos vacíos";
+                    mensaje = "Debe completar todos los campos para continuar";
+                    script = string.Format("crearAlerta({0},'{1}','{2}');", status.ToString().ToLower(), titulo, mensaje);
+                    ScriptManager.RegisterStartupScript(this, GetType(), "crearAlerta", script, true);
                 }
-                else
+                Usuario usuario = new Usuario();
+                mensaje = Helper.registro(usuario, txtEmail.Text, txtPassword.Text, txtRepetir.Text, ref status, ref titulo);
+                script = string.Format("crearAlerta({0},'{1}','{2}');", status.ToString().ToLower(), titulo, mensaje);
+                ScriptManager.RegisterStartupScript(this, GetType(), "crearAlerta", script, true);
+                if (status)
                 {
-                    lblErrorEmail.Text = "Debe ingresar un email válido.";
-                    lblErrorEmail.Visible = true;
+                    Session.Add("usuario", usuario);
+                    Response.Redirect("Profile.aspx?id=" + usuario.Id);
                 }
             }
             catch (Exception ex)

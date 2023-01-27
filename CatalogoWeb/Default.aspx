@@ -3,36 +3,58 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-    <asp:Button ID="Button1" runat="server" Text="Button" OnClick="Button1_Click" />
-    <div class="row mb-4 center-row">
-        <div class="col-4">
-            <asp:TextBox ID="txtBuscar" CssClass="form-control" OnTextChanged="txtBuscar_TextChanged" AutoPostBack="true" runat="server"></asp:TextBox>
-        </div>
-        <div class="col-4">
-            <asp:Button ID="btnBuscar" CssClass="btn btn-outline btn-primary w-120" runat="server" Text="Buscar" OnClick="btnBuscar_Click" />
-        </div>
-    </div>
+    <asp:UpdatePanel ID="UpdatePanel2" runat="server">
+        <ContentTemplate>
+            <div class="row mb-4 center-row text-light">
+                <div class="col-3 center-row">
+                    <label class="h3">Filtrar</label>
+                </div>
+                <div class="col-3">
+                    <asp:DropDownList ID="ddlTipo" runat="server" CssClass="form-select"
+                        OnSelectedIndexChanged="ddlTipo_SelectedIndexChanged" AutoPostBack="true">
+                        <asp:ListItem Text="Seleccione un tipo" />
+                        <asp:ListItem Text="Nombre" />
+                        <asp:ListItem Text="Categoría" />
+                        <asp:ListItem Text="Marca" />
+                        <asp:ListItem Text="Precio" />
+                    </asp:DropDownList>
+                </div>
+                <div class="col-3">
+                    <asp:DropDownList ID="ddlFiltro" CssClass="form-select" runat="server" OnSelectedIndexChanged="ddlFiltro_SelectedIndexChanged" AutoPostBack="true" Visible="false">
+                    </asp:DropDownList>
+                    <asp:TextBox ID="txtFiltro" runat="server" OnTextChanged="txtFiltro_TextChanged" AutoPostBack="true" CssClass="form-control" Visible="false"></asp:TextBox>
+                </div>
+                <div class="col-3">
+                    <asp:Button ID="btnBuscar" runat="server" Text="Buscar" CssClass="btn btn-outline-light btn-primary w-120 ms-4" OnClick="btnBuscar_Click" Visible="false" />
+                </div>
+            </div>
+        </ContentTemplate>
+    </asp:UpdatePanel>
     <asp:UpdatePanel ID="UpdatePanel1" runat="server">
         <ContentTemplate>
             <div class="row row-cols-1 row-cols-md-3 g-4">
                 <asp:Repeater runat="server" ID="repProductos">
                     <ItemTemplate>
                         <div class="col">
-                            <div class="card mb-3 products bg-black bg-opacity-50 text-bg-dark">
+                            <div class="card mb-3 products bg-black bg-opacity-50 text-bg-dark" style="height: 420px;">
                                 <div class="row g-0 products-size">
                                     <div class="col-md-7 center-col-justify">
-                                        <asp:Image ID="imgProducto" ImageUrl='<%#Eval("imagenUrl") %>' AlternateText='<%#Eval("Id") %>' CssClass="img" runat="server" />
+                                        <asp:Image ID="imgProducto" ImageUrl='<%#Eval("imagenUrl") %>' AlternateText='<%#Eval("Id") %>' CssClass="img img-fluid" runat="server" />
                                     </div>
                                     <div class="col">
-                                        <div class="card-body">
-                                            <h5 class="card-title"><%#Eval("Nombre") %></h5>
-                                            <asp:Label CssClass="card-text" ID="lblCategoria" runat="server" Text='<%#Eval("Categoria") %>'></asp:Label>
-                                            <asp:Label CssClass="card-text" ID="lblMarca" runat="server" Text='<%#Eval("Marca") %>'></asp:Label>
-                                            <p class="card-text">$<%#Eval("Precio") %></p>
+                                        <div class="row">
+                                            <div class="card-body">
+                                                <h5 class="card-title"><%#Eval("Nombre") %></h5>
+                                                <asp:Label CssClass="card-text" ID="lblCategoria" runat="server" Text='<%#Eval("Categoria") %>'></asp:Label>
+                                                <div>
+                                                    <asp:Label CssClass="card-text" ID="lblMarca" runat="server" Text='<%#Eval("Marca") %>'></asp:Label>
+                                                </div>
+                                                <p class="card-text">$<%#Eval("Precio") %></p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="card-footer text-muted center-col">
+                                <div class="card-footer text-muted center-col position-relative" style="bottom: -30px;">
                                     <asp:Button ID="btnDetalles" runat="server" Text="Ver detalles" CssClass="btn btn-outline-light btn-primary w-120 accordion-body" OnClick="btnDetalles_Click" />
                                 </div>
                             </div>

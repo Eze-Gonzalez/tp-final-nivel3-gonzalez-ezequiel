@@ -19,7 +19,12 @@ namespace CatalogoWeb
     {
         public bool changePass { get; set; }
         public bool changeEmail { get; set; }
-        public string Status { get; set; }
+        private string mensaje;
+        private string titulo;
+        private string emailCodificado;
+        private string passCodificada;
+        private string script;
+        private bool status;
         protected void Page_Load(object sender, EventArgs e)
         {
             Title = "Mi perfil";
@@ -30,8 +35,8 @@ namespace CatalogoWeb
                     Usuario usuario = (Usuario)Session["usuario"];
                     if (!IsPostBack)
                     {
-                        string emailCodificado = usuario.Email;
-                        string passCodificada = usuario.Pass;
+                        emailCodificado = usuario.Email;
+                        passCodificada = usuario.Pass;
                         Helper.codificar(ref emailCodificado, ref passCodificada);
                         lblUsuario.Text = Helper.nombre(usuario);
                         txtNombre.Text = usuario.Nombre;
@@ -55,23 +60,14 @@ namespace CatalogoWeb
             {
                 Usuario usuario = Session["usuario"] != null ? (Usuario)Session["usuario"] : null;
                 string imagenPerfil;
-                string status = "";
                 if (rdbLocal.Checked)
                 {
                     if (fileLocal.HasFile)
                     {
-                        if (fileLocal.PostedFile.ContentLength < 2097152)
-                        {
-                            string ruta = Server.MapPath("./Imagenes/Perfil/");
-                            imagenPerfil = "profile-" + usuario.Id + ".png";
-                            fileLocal.PostedFile.SaveAs(ruta + imagenPerfil);
-                            imgPerfil.ImageUrl = Helper.cargarImagen(usuario);
-                        }
-                        else
-                        {
-                            imagenPerfil = usuario.UrlImagen;
-                            lblMensaje.Text = "El tamaño del archivo es demasiado grande, elija uno mas pequeño (2MB Máximo)";
-                        }
+                        string ruta = Server.MapPath("./Imagenes/Perfil/");
+                        imagenPerfil = "profile-" + usuario.Id + ".png";
+                        fileLocal.PostedFile.SaveAs(ruta + imagenPerfil);
+                        imgPerfil.ImageUrl = Helper.cargarImagen(usuario);
                     }
                     else
                         imagenPerfil = usuario.UrlImagen;
@@ -79,11 +75,15 @@ namespace CatalogoWeb
                 else
                     imagenPerfil = string.IsNullOrEmpty(txtImagenUrl.Text) ? usuario.UrlImagen : txtImagenUrl.Text;
 
-                if (Validar.datosPerfil(usuario, txtNombre.Text, txtApellido.Text, imagenPerfil))
+                if (Validar.datosPerfil(usuario, txtNombre.Text, txtApellido.Text, imagenPerfil) || fileLocal.HasFile)
                 {
-                    lblMensaje.Text = Helper.cargarDatosUsuario(usuario, txtNombre.Text, txtApellido.Text, imagenPerfil, ref status);
-                    Status = status;
+                    lblSinCambios.Visible = false;
+                    mensaje = Helper.cargarDatosUsuario(usuario, txtNombre.Text, txtApellido.Text, imagenPerfil, ref status, ref titulo);
+                    script = string.Format("crearAlerta({0}, '{1}', '{2}');", status.ToString().ToLower(), titulo, mensaje);
+                    ScriptManager.RegisterStartupScript(this, GetType(), "crearAlerta", script, true);
                 }
+                else
+                    lblSinCambios.Visible = true;
             }
             catch (Exception)
             {
@@ -126,27 +126,26 @@ namespace CatalogoWeb
         {
             try
             {
-                string status = "";
                 Usuario usuario = Session["usuario"] != null ? (Usuario)Session["usuario"] : null;
                 if (lblCambioAcceso.Text == "Cambiar Contraseña")
                 {
-                    lblMensaje.Text = Helper.cargarPass(usuario, txtPassActual.Text, txtPassNueva.Text, txtPassRepetir.Text, ref status);
-                    Status = status;
+                    mensaje = Helper.cargarPass(usuario, txtPassActual.Text, txtPassNueva.Text, txtPassRepetir.Text, ref status, ref titulo);
+                    script = string.Format("crearAlerta({0}, '{1}', '{2}');", status.ToString().ToLower(), titulo, mensaje);
                 }
                 else
                 {
-                    lblMensaje.Text = Helper.cargarEmail(usuario, txtEmailActual.Text, txtEmailNuevo.Text, ref status);
-                    Status = status;
+                    mensaje = Helper.cargarEmail(usuario, txtEmailActual.Text, txtEmailNuevo.Text, ref status, ref titulo);
+                    script = string.Format("crearAlerta({0}, '{1}', '{2}');", status.ToString().ToLower(), titulo, mensaje);
                 }
-                if (status == "ok")
+                if (status)
                 {
-                    string passCodificada = usuario.Pass;
-                    string emailCodificado = usuario.Email;
+                    passCodificada = usuario.Pass;
+                    emailCodificado = usuario.Email;
                     Helper.codificar(ref emailCodificado, ref passCodificada);
                     lblEmailUser.Text = emailCodificado;
                     lblPassUser.Text = passCodificada;
                 }
-                ScriptManager.RegisterStartupScript(this, GetType(), "mostrarNotificacion", "mostrarNotificacion();", true);
+                ScriptManager.RegisterStartupScript(this, GetType(), "crearAlerta", script, true);
             }
             catch (Exception)
             {
@@ -162,6 +161,11 @@ namespace CatalogoWeb
         protected void btnCerrarModal_Click(object sender, EventArgs e)
         {
             ajxModal.Hide();
+        }
+
+        protected void txtNombre_TextChanged(object sender, EventArgs e)
+        {
+            lblSinCambios.Visible = false;
         }
     }
 }

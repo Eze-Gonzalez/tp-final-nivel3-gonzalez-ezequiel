@@ -92,5 +92,32 @@ namespace Datos
                 datos.cerrarConexion();
             }
         }
+        public Usuario sesionEmergencia(string email)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            Usuario usuario = new Usuario();
+            try
+            {
+                datos.consultaEmbebida("select Id, email, pass from USERS where email COLLATE Latin1_General_CS_AS = @email");
+                datos.parametros("@email", email);
+                datos.lectura();
+                if (datos.Lector.Read())
+                {
+                    usuario.Id = (int)datos.Lector["Id"];
+                    usuario.Email = (string)datos.Lector["email"];
+                    usuario.Pass = (string)datos.Lector["pass"];
+                }
+                return usuario;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
     }
 }

@@ -10,37 +10,40 @@
                     <div class="card-header">
                         Registrarse
                     </div>
-                    <asp:UpdatePanel ID="UpdatePanel1" runat="server">
-                        <ContentTemplate>
-                            <div class="card-body text-black">
-                                <div class="form-floating mb-3">
-                                    <asp:TextBox ID="txtEmail" CssClass="form-control" runat="server" placeholder="ejemplo@ejemplo.com"></asp:TextBox>
-                                    <label for="txtEmail">Ingrese un email</label>
-                                    <div class="row">
-                                        <asp:Label ID="lblErrorEmail" CssClass="danger" Visible="false" runat="server" Text="Label"></asp:Label>
-                                    </div>
-                                </div>
-                                <div class="form-floating mb-3">
-                                    <asp:TextBox ID="txtPassword" TextMode="Password" CssClass="form-control" runat="server" placeholder="Contraseña"></asp:TextBox>
-                                    <label for="txtPassword">Ingrese una contraseña</label>
-                                    <div class="row">
-                                        <asp:Label ID="lblErrorPass" CssClass="danger" Visible="false" runat="server" Text="Label"></asp:Label>
-                                    </div>
-                                </div>
-                                <div class="form-floating mb-3">
-                                    <asp:TextBox ID="txtRepetir" TextMode="Password" CssClass="form-control" runat="server" placeholder="Repetir Contraseña"></asp:TextBox>
-                                    <label for="txtPassword">Repita la contraseña ingresada</label>
-                                    <div class="row">
-                                        <asp:Label ID="lblErrorRep" CssClass="danger" Visible="false" runat="server" Text="Label"></asp:Label>
-                                    </div>
-                                </div>
+                    <div class="card-body text-black">
+                        <div class="form-floating mb-3">
+                            <asp:TextBox ID="txtEmail" CssClass="form-control" runat="server" placeholder="ejemplo@ejemplo.com"></asp:TextBox>
+                            <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtEmail" ErrorMessage="Este campo es requerido" CssClass="danger"></asp:RequiredFieldValidator>
+                            <label for="txtEmail">Ingrese un email</label>
+                            <div class="row">
+                                <asp:Label ID="lblErrorEmail" CssClass="danger" Visible="false" runat="server" Text="Label"></asp:Label>
                             </div>
-                            <div class="card-footer">
-                                <asp:Button ID="btnAceptar" runat="server" CssClass="btn btn-outline-light btn-primary w-120" Text="Aceptar" OnClick="btnAceptar_Click" />
-                                <a href="Default.aspx" class="btn btn-outline-light btn-danger w-120">Cancelar</a>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <asp:TextBox ID="txtPassword" TextMode="Password" CssClass="form-control" runat="server" placeholder="Contraseña"></asp:TextBox>
+                            <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="txtPassword" ErrorMessage="Este campo es requerido" CssClass="danger"></asp:RequiredFieldValidator>
+                            <label for="txtPassword">Ingrese una contraseña</label>
+                            <div class="row">
+                                <asp:Label ID="lblErrorPass" CssClass="danger" Visible="false" runat="server" Text="Label"></asp:Label>
                             </div>
-                        </ContentTemplate>
-                    </asp:UpdatePanel>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <asp:TextBox ID="txtRepetir" TextMode="Password" CssClass="form-control" runat="server" placeholder="Repetir Contraseña"></asp:TextBox>
+                            <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="txtRepetir" ErrorMessage="Este campo es requerido" CssClass="danger"></asp:RequiredFieldValidator>
+                            <label for="txtPassword">Repita la contraseña ingresada</label>
+                            <div class="row">
+                                <asp:Label ID="lblErrorRep" CssClass="danger" Visible="false" runat="server" Text="Label"></asp:Label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer center-row mb-3">
+                        <asp:UpdatePanel ID="UpdatePanel1" runat="server">
+                            <ContentTemplate>
+                                <asp:Button ID="btnAceptar" runat="server" CssClass="btn btn-outline-light btn-primary w-120 me-3" Text="Aceptar" OnClick="btnAceptar_Click" />
+                            </ContentTemplate>
+                        </asp:UpdatePanel>
+                        <a href="Default.aspx" class="btn btn-outline-light btn-danger w-120">Cancelar</a>
+                    </div>
                 </div>
             </div>
         </div>

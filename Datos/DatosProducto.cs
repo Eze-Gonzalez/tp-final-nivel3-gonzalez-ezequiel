@@ -17,7 +17,7 @@ namespace Datos
             List<Producto> lista = new List<Producto>();
             try
             {
-                datos.consultaEmbebida("select A.Id Id, Codigo, Nombre, A.Descripcion Descripcion, IdMarca, IdCategoria, ImagenUrl, Precio, \r\nM.Descripcion Marca, C.Descripcion Categoria  from ARTICULOS A, MARCAS M, CATEGORIAS C \r\nwhere M.Id = IdMarca and C.Id = IdCategoria");
+                datos.consultaEmbebida("select A.Id Id, Codigo, Nombre, A.Descripcion Descripcion, IdMarca, IdCategoria, ImagenUrl, Precio, M.Descripcion Marca, C.Descripcion Categoria  from ARTICULOS A, MARCAS M, CATEGORIAS C where M.Id = IdMarca and C.Id = IdCategoria");
                 datos.lectura();
                 while (datos.Lector.Read())
                 {
@@ -221,7 +221,7 @@ namespace Datos
                                     break;
                             }
                             break;
-                        case "Categoria":
+                        case "Categoría":
                             switch (criterio)
                             {
                                 case "Comienza con":
@@ -286,16 +286,49 @@ namespace Datos
                 datos.cerrarConexion();
             }
         }
-        public List<Producto> filtrarNombre(string filtro)
+        public List<Producto> filtroRapido(string tipo, string filtro, ref bool status)
         {
             filtro = filtro.ToLower();
             List<Producto> lista = listar();
             List<Producto> filtrada = new List<Producto>();
             try
             {
-                filtrada = lista.FindAll(p => p.Nombre.ToLower().Contains(filtro) || p.Precio.ToString().Contains(filtro));
-                if (filtrada.Count == 0)
-                    filtrada = lista;
+                switch (tipo)
+                {
+                    case "Nombre":
+                        filtrada = lista.FindAll(p => p.Nombre.ToLower().Contains(filtro));
+                        if (filtrada.Count == 0)
+                        {
+                            status = false;
+                            filtrada = lista;
+                        }
+                            
+                        break;
+                    case "Precio":
+                        filtrada = lista.FindAll(p => p.Nombre.ToLower().Contains(filtro));
+                        if (filtrada.Count == 0)
+                        {
+                            status = false;
+                            filtrada = lista;
+                        }
+                        break;
+                    case "Categoría":
+                        filtrada = lista.FindAll(p => p.Categoria.Descripcion.ToLower().Contains(filtro));
+                        if(filtrada.Count == 0)
+                        {
+                            status = false;
+                            filtrada = lista;
+                        }
+                        break;
+                    case "Marca":
+                        filtrada = lista.FindAll(p => p.Marca.Descripcion.ToLower().Contains(filtro));
+                        if(filtrada.Count == 0)
+                        {
+                            status = false;
+                            filtrada = lista;
+                        }
+                        break;
+                }
                 return filtrada;
             }
             catch (Exception ex)
