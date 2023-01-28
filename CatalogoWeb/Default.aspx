@@ -6,7 +6,7 @@
     <asp:UpdatePanel ID="UpdatePanel2" runat="server">
         <ContentTemplate>
             <div class="row mb-4 center-row text-light">
-                <div class="col-3 center-row">
+                <div class="col-2 center-col">
                     <label class="h3">Filtrar</label>
                 </div>
                 <div class="col-3">
@@ -19,13 +19,42 @@
                         <asp:ListItem Text="Precio" />
                     </asp:DropDownList>
                 </div>
-                <div class="col-3">
+                <div class="col-3 center-col">
                     <asp:DropDownList ID="ddlFiltro" CssClass="form-select" runat="server" OnSelectedIndexChanged="ddlFiltro_SelectedIndexChanged" AutoPostBack="true" Visible="false">
                     </asp:DropDownList>
                     <asp:TextBox ID="txtFiltro" runat="server" OnTextChanged="txtFiltro_TextChanged" AutoPostBack="true" CssClass="form-control" Visible="false"></asp:TextBox>
+                    <%-- Paneles --%>
+                    <div class="center-row column-gap-2">
+                        <asp:Panel ID="panelRango" Visible="false" runat="server" CssClass="center-col">
+
+                            <div class="divToggleButton2 mb-1 align-center">
+                                <asp:RadioButton ID="rango1" OnCheckedChanged="rango1_CheckedChanged" runat="server" AutoPostBack="true" GroupName="Eleccion" />
+                                <asp:Label ID="Label5"
+                                    AssociatedControlID="rango1" runat="server"
+                                    ToolTip="Seleccione un rango" />
+                            </div>
+                            <div class="divToggleButton2 mb-1 align-center">
+                                <asp:RadioButton ID="rango2" OnCheckedChanged="rango1_CheckedChanged" runat="server" AutoPostBack="true" GroupName="Eleccion" />
+                                <asp:Label ID="Label4"
+                                    AssociatedControlID="rango2" runat="server"
+                                    ToolTip="Seleccione un rango" />
+                            </div>
+                            <div class="divToggleButton2 mb-1 align-center">
+                                <asp:RadioButton ID="rango3" OnCheckedChanged="rango1_CheckedChanged" runat="server" AutoPostBack="true" GroupName="Eleccion" />
+                                <asp:Label ID="Label3"
+                                    AssociatedControlID="rango3" runat="server"
+                                    ToolTip="Seleccione un rango" />
+                            </div>
+                        </asp:Panel>
+                        <asp:Panel ID="panelLabel" runat="server" CssClass="wrap-start" Visible="false">
+                            <asp:Label ID="lblRango1" runat="server" Text="$0 - $10000" CssClass="mb-1"></asp:Label>
+                            <asp:Label ID="lblRango2" runat="server" Text="$10000 - $100000" CssClass="mb-1"></asp:Label>
+                            <asp:Label ID="lblRango3" runat="server" Text="$100000 - $1000000" CssClass="mb-1"></asp:Label>
+                        </asp:Panel>
+                    </div>
                 </div>
-                <div class="col-3">
-                    <asp:Button ID="btnBuscar" runat="server" Text="Buscar" CssClass="btn btn-outline-light btn-primary w-120 ms-4" OnClick="btnBuscar_Click" Visible="false" />
+                <div class="col-3 center-col">
+                    <asp:Button ID="btnBuscar" runat="server" Text="Buscar" CssClass="btn btn-outline-light btn-primary w-120" OnClick="btnBuscar_Click" Visible="false" />
                 </div>
             </div>
         </ContentTemplate>
@@ -39,7 +68,8 @@
                             <div class="card mb-3 products bg-black bg-opacity-50 text-bg-dark" style="height: 420px;">
                                 <div class="row g-0 products-size">
                                     <div class="col-md-7 center-col-justify">
-                                        <asp:Image ID="imgProducto" ImageUrl='<%#Eval("imagenUrl") %>' AlternateText='<%#Eval("Id") %>' CssClass="img img-fluid" runat="server" />
+                                        <asp:Image ID="imgProducto" ImageUrl='<%#Eval("imagenUrl") %>' AlternateText='<%#Eval("Id") %>'
+                                            CssClass="img img-fluid" runat="server" />
                                     </div>
                                     <div class="col">
                                         <div class="row">

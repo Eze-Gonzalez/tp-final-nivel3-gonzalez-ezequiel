@@ -57,12 +57,20 @@ namespace CatalogoWeb
 
                 throw ex;
             }
+            finally
+            {
+                script = string.Format("filtro('{0}','{1}');", titulo, mensaje);
+            }
         }
         private void enlazarRepeater()
         {
             try
             {
                 List<Producto> listaProducto = (List<Producto>)Session["productos"];
+                foreach(Producto producto in listaProducto)
+                {
+                    producto.ImagenUrl = Helper.cargarImagen(producto);
+                }
                 List<Producto> listaPagina = new List<Producto>();
                 int inicio = indicePaginaActual * registrosPagina;
                 int fin = (indicePaginaActual * registrosPagina) + registrosPagina;
@@ -159,10 +167,9 @@ namespace CatalogoWeb
         {
             try
             {
-                Button btn = (Button)sender;
-                RepeaterItem item = (RepeaterItem)btn.NamingContainer;
+                RepeaterItem item = (RepeaterItem)((Button)sender).NamingContainer;
                 Image img = (Image)item.FindControl("imgProducto");
-                int id = int.Parse(img.AlternateText);
+                string id = img.AlternateText;
                 Response.Redirect("Details.aspx?id=" + id);
             }
             catch (ThreadAbortException) { }
@@ -178,12 +185,9 @@ namespace CatalogoWeb
             DatosProducto datos = new DatosProducto();
             try
             {
-                List<Producto> filtrada = datos.filtroRapido(ddlTipo.SelectedItem.Text, ddlFiltro.SelectedValue.ToString(), ref status);
+                List<Producto> filtrada = datos.filtroRapido(ddlTipo.SelectedItem.Text, ref status, ddlFiltro.SelectedValue.ToString());
                 if (!status)
-                {
-                    script = string.Format("filtro('{0}', '{1}');", titulo, mensaje);
                     ScriptManager.RegisterStartupScript(this, GetType(), "filtro", script, true);
-                }
                 foreach (Producto producto in filtrada)
                 {
                     producto.ImagenUrl = Helper.cargarImagen(producto);
@@ -205,51 +209,67 @@ namespace CatalogoWeb
 
         protected void ddlTipo_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string seleccion = ddlTipo.SelectedItem.Text;
             try
             {
-                switch (seleccion)
+                DatosProducto datosP = new DatosProducto();
+                Session["productos"] = datosP.listar();
+                enlazarRepeater();
+                switch (ddlTipo.SelectedItem.Text)
                 {
                     case "Nombre":
-                        ddlFiltro.Visible = false;
-                        txtFiltro.Visible = true;
-                        btnBuscar.Visible = true;
-                        break;
-                    case "Categoría":
                         {
-                            DatosCategoria datos = new DatosCategoria();
-                            btnBuscar.Visible = false;
-                            txtFiltro.Visible = false;
-                            ddlFiltro.Visible = true;
-                            ddlFiltro.Items.Clear();
-                            ddlFiltro.DataSource = datos.listar();
-                            ddlFiltro.DataTextField = "Descripcion";
-                            ddlFiltro.DataValueField = "Descripcion";
-                            ddlFiltro.DataBind();
-                        }
-                        break;
-                    case "Marca":
-                        {
-                            DatosMarca datos = new DatosMarca();
-                            btnBuscar.Visible = false;
-                            txtFiltro.Visible = false;
-                            ddlFiltro.Visible = true;
-                            ddlFiltro.Items.Clear();
-                            ddlFiltro.DataSource = datos.listar();
-                            ddlFiltro.DataTextField = "Descripcion";
-                            ddlFiltro.DataValueField = "Descripcion";
-                            ddlFiltro.DataBind();
-                        }
-                        break;
-                    case "Precio":
-                        {
+                            panelRango.Visible = false;
+                            panelLabel.Visible = false;
                             ddlFiltro.Visible = false;
                             txtFiltro.Visible = true;
                             btnBuscar.Visible = true;
                         }
                         break;
+                    case "Categoría":
+                        {
+                            DatosCategoria datos = new DatosCategoria();
+                            panelLabel.Visible = false;
+                            panelRango.Visible = false;
+                            btnBuscar.Visible = false;
+                            txtFiltro.Visible = false;
+                            ddlFiltro.Visible = true;
+                            ddlFiltro.Items.Clear();
+                            ddlFiltro.DataSource = datos.listar();
+                            ddlFiltro.DataTextField = "Descripcion";
+                            ddlFiltro.DataValueField = "Descripcion";
+                            ddlFiltro.DataBind();
+                            ddlFiltro_SelectedIndexChanged(sender, e);
+                        }
+                        break;
+                    case "Marca":
+                        {
+                            DatosMarca datos = new DatosMarca();
+                            panelLabel.Visible = false;
+                            panelRango.Visible = false;
+                            btnBuscar.Visible = false;
+                            txtFiltro.Visible = false;
+                            ddlFiltro.Visible = true;
+                            ddlFiltro.Items.Clear();
+                            ddlFiltro.DataSource = datos.listar();
+                            ddlFiltro.DataTextField = "Descripcion";
+                            ddlFiltro.DataValueField = "Descripcion";
+                            ddlFiltro.DataBind();
+                            ddlFiltro_SelectedIndexChanged(sender, e);
+                        }
+                        break;
+                    case "Precio":
+                        {
+                            panelLabel.Visible = true;
+                            panelRango.Visible = true;
+                            ddlFiltro.Visible = false;
+                            txtFiltro.Visible = false;
+                            btnBuscar.Visible = false;
+                        }
+                        break;
                     default:
                         {
+                            panelRango.Visible = false;
+                            panelLabel.Visible = false;
                             ddlFiltro.Visible = false;
                             btnBuscar.Visible = false;
                             txtFiltro.Visible = false;
@@ -269,12 +289,9 @@ namespace CatalogoWeb
             DatosProducto datos = new DatosProducto();
             try
             {
-                List<Producto> filtrada = datos.filtroRapido(ddlTipo.SelectedItem.Text, txtFiltro.Text, ref status);
+                List<Producto> filtrada = datos.filtroRapido(ddlTipo.SelectedItem.Text, ref status, txtFiltro.Text);
                 if (!status)
-                {
-                    script = string.Format("filtro('{0}', '{1}');", titulo, mensaje);
                     ScriptManager.RegisterStartupScript(this, GetType(), "filtro", script, true);
-                }
                 foreach (Producto producto in filtrada)
                 {
                     producto.ImagenUrl = Helper.cargarImagen(producto);
@@ -298,12 +315,9 @@ namespace CatalogoWeb
             DatosProducto datos = new DatosProducto();
             try
             {
-                List<Producto> filtrada = datos.filtroRapido(ddlTipo.SelectedItem.Text, txtFiltro.Text, ref status);
+                List<Producto> filtrada = datos.filtroRapido(ddlTipo.SelectedItem.Text, ref status, txtFiltro.Text);
                 if (!status)
-                {
-                    script = string.Format("filtro('{0}', '{1}');", titulo, mensaje);
                     ScriptManager.RegisterStartupScript(this, GetType(), "filtro", script, true);
-                }
                 foreach (Producto producto in filtrada)
                 {
                     producto.ImagenUrl = Helper.cargarImagen(producto);
@@ -319,6 +333,60 @@ namespace CatalogoWeb
             catch (Exception ex)
             {
                 throw ex;
+            }
+        }
+
+        protected void rango1_CheckedChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                DatosProducto datos = new DatosProducto();
+                string[] precios;
+                string precioMin, precioMax;
+                int min = 0, max = 0;
+                if (rango1.Checked)
+                {
+                    precios = lblRango1.Text.Split(' ');
+                    precioMin = precios[0];
+                    precioMax = precios[2];
+                    min = int.Parse(precioMin.Replace("$", ""));
+                    max = int.Parse(precioMax.Replace("$", ""));
+                }
+                else if (rango2.Checked)
+                {
+                    precios = lblRango2.Text.Split(' ');
+                    precioMin = precios[0];
+                    precioMax = precios[2];
+                    min = int.Parse(precioMin.Replace("$", ""));
+                    max = int.Parse(precioMax.Replace("$", ""));
+                }
+                else if (rango3.Checked)
+                {
+                    precios = lblRango3.Text.Split(' ');
+                    precioMin = precios[0];
+                    precioMax = precios[2];
+                    min = int.Parse(precioMin.Replace("$", ""));
+                    max = int.Parse(precioMax.Replace("$", ""));
+                }
+                List<Producto> filtrada = datos.filtroRapido(ddlTipo.SelectedItem.Text, ref status, "", min, max);
+                if (!status)
+                    ScriptManager.RegisterStartupScript(this, GetType(), "filtro", script, true);
+                foreach (Producto producto in filtrada)
+                {
+                    producto.ImagenUrl = Helper.cargarImagen(producto);
+                }
+                indiceUltimaPagina = filtrada.Count / registrosPagina;
+                if (filtrada.Count == 0)
+                    indiceUltimaPagina--;
+                ViewState["indicePaginaActual"] = indicePaginaActual;
+                ViewState["indiceUltimaPagina"] = indiceUltimaPagina;
+                Session["productos"] = filtrada;
+                enlazarRepeater();
+            }
+            catch (Exception)
+            {
+
+                throw;
             }
         }
     }

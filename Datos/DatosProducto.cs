@@ -161,7 +161,7 @@ namespace Datos
                 datos.cerrarConexion();
             }
         }
-        public List<Producto> filtroAvanzado(string tipo, string criterio, string filtro)
+        public List<Producto> filtroAvanzado(string tipo, string criterio, string filtro, ref bool status)
         {
             AccesoDatos datos = new AccesoDatos();
             try
@@ -272,7 +272,10 @@ namespace Datos
                     }
                 }
                 if (filtrada.Count == 0)
+                {
+                    status = false;
                     filtrada = lista;
+                }
                 return filtrada;
 
             }
@@ -286,7 +289,7 @@ namespace Datos
                 datos.cerrarConexion();
             }
         }
-        public List<Producto> filtroRapido(string tipo, string filtro, ref bool status)
+        public List<Producto> filtroRapido(string tipo, ref bool status, string filtro = "", int precioMin = 0, int precioMax = 0)
         {
             filtro = filtro.ToLower();
             List<Producto> lista = listar();
@@ -305,7 +308,7 @@ namespace Datos
                             
                         break;
                     case "Precio":
-                        filtrada = lista.FindAll(p => p.Nombre.ToLower().Contains(filtro));
+                        filtrada = lista.FindAll(p => p.Precio >= precioMin && p.Precio <= precioMax);
                         if (filtrada.Count == 0)
                         {
                             status = false;
@@ -337,7 +340,7 @@ namespace Datos
                 throw ex;
             }
         }
-        public List<Producto> filtroRapido(string filtro)
+        public List<Producto> filtroRapido(string filtro, ref bool status)
         {
             filtro = filtro.ToLower();
             List<Producto> lista = listar();
@@ -348,7 +351,10 @@ namespace Datos
                     filtro = filtro.Replace(".", ",");
                 filtrada = lista.FindAll(p => p.Nombre.ToLower().Contains(filtro) || p.Codigo.ToLower().Contains(filtro) || p.Categoria.Descripcion.ToLower().Contains(filtro) || p.Marca.Descripcion.ToLower().Contains(filtro) || p.Precio.ToString().Contains(filtro));
                 if (filtrada.Count == 0)
+                {
+                    status = false;
                     filtrada = lista;
+                }
                 return filtrada;
             }
             catch (Exception ex)

@@ -2,6 +2,20 @@
     background-image: url("https://i.imgur.com/hsR4LZx.png");
 }
 
+.panel-filtro {
+    display: flex;
+    position: relative;
+    left: 37%;
+}
+
+.wrap-start {
+    display: flex;
+    flex-direction: column;
+    align-content: flex-start;
+    flex-wrap: wrap;
+}
+
+
 .w-155 {
     width: 155px;
 }
@@ -376,6 +390,17 @@ div.divToggleButton label {
     cursor: pointer;
 }
 
+div.divToggleButton2 input[type=radio] {
+    display: none;
+    white-space: nowrap;
+}
+
+div.divToggleButton2 label {
+    display: block;
+    float: left;
+    cursor: pointer;
+}
+
 /* set the size of the pseudo-toggle button control */
 div.divToggleButton input[type=radio]:checked + label::before,
 div.divToggleButton input[type=radio]:not(:checked) + label::before,
@@ -383,6 +408,14 @@ div.divToggleButton input[type=radio] + label {
     width: 25px;
     height: 25px;
     line-height: 18px;
+}
+
+div.divToggleButton2 input[type=radio]:checked + label::before,
+div.divToggleButton2 input[type=radio]:not(:checked) + label::before,
+div.divToggleButton2 input[type=radio] + label {
+    width: 25px;
+    height: 25px;
+    line-height: 20px;
 }
 
 /* additional styling: rounded border, gradient */
@@ -394,14 +427,30 @@ div.divToggleButton input[type=radio] + label {
     border: 2px solid #bdbdbd;
     border-radius: 50px;
     background: #f0f0f0;
-    /* gradient style (optional)*/
-    /*    background-image: -moz-linear-gradient(top, #fdfdfd, #f9f9f9 50%, #e5e5e5 50%, #fdfdfd);
-    background-image: -webkit-gradient(linear, center top, center bottom, from(#fdfdfd), color-stop(0.5, #f9f9f9), color-stop(0.5, #e5e5e5 ), to(#fdfdfd));
-    background-image: linear-gradient(to bottom, #fdfdfd, #f9f9f9 50%, #e5e5e5 50%, #fdfdfd);*/
+}
+
+div.divToggleButton2 input[type=radio] + label {
+    vertical-align: middle;
+    text-align: center;
+    font-size: 10px;
+    font-family: Arial, Calibri;
+    border: 2px solid #bdbdbd;
+    border-radius: 50px;
+    background: #f0f0f0;
 }
 
 /* content to display and style pertinent to checked state*/
 div.divToggleButton input[type=radio]:checked + label::before {
+    content: "◉";
+    color: #2196F3;
+    font-size: 25px;
+    font-weight: bold;
+    position: relative;
+    left: -2%;
+    top: 2%;
+}
+
+div.divToggleButton2 input[type=radio]:checked + label::before {
     content: "◉";
     color: #2196F3;
     font-size: 25px;

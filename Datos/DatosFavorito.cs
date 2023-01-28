@@ -67,7 +67,7 @@ namespace Datos
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.consultaEmbebida("delete from FAVORITOS where iduser = @iduser and IdArticulo = idprod");
+                datos.consultaEmbebida("delete from FAVORITOS where idUser = @iduser and IdArticulo = @idprod");
                 datos.parametros("@iduser", idUser);
                 datos.parametros("@idprod", idProd);
                 datos.ejecutar();
