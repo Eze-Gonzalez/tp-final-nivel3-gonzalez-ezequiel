@@ -130,14 +130,14 @@ namespace Helpers
                     }
                     else
                     {
-                        titulo = "Error: Apellido vacío";
+                        titulo = "Apellido vacío";
                         mensaje = "Debe completar el campo, Apellido.";
                     }
 
                 }
                 else
                 {
-                    titulo = "Error: Nombre vacío";
+                    titulo = "Nombre vacío";
                     mensaje = "Debe completar el campo, Nombre.";
                 }
                 return mensaje;

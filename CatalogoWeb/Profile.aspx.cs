@@ -32,13 +32,13 @@ namespace CatalogoWeb
             {
                 if (Validar.sesion((Usuario)Session["usuario"]))
                 {
+                    lblUsuario.Text = Helper.nombre(usuario);
                     Usuario usuario = (Usuario)Session["usuario"];
                     if (!IsPostBack)
                     {
                         emailCodificado = usuario.Email;
                         passCodificada = usuario.Pass;
                         Helper.codificar(ref emailCodificado, ref passCodificada);
-                        lblUsuario.Text = Helper.nombre(usuario);
                         txtNombre.Text = usuario.Nombre;
                         txtApellido.Text = usuario.Apellido;
                         lblEmailUser.Text = emailCodificado;
@@ -81,6 +81,8 @@ namespace CatalogoWeb
                     mensaje = Helper.cargarDatosUsuario(usuario, txtNombre.Text, txtApellido.Text, imagenPerfil, ref status, ref titulo);
                     script = string.Format("crearAlerta({0}, '{1}', '{2}');", status.ToString().ToLower(), titulo, mensaje);
                     ScriptManager.RegisterStartupScript(this, GetType(), "crearAlerta", script, true);
+                    txtNombre.Text = usuario.Nombre;
+                    txtApellido.Text = usuario.Apellido;
                 }
                 else
                     lblSinCambios.Visible = true;
