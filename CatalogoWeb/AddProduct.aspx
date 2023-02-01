@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Catalogo.Master" AutoEventWireup="true" CodeBehind="Product.aspx.cs" Inherits="CatalogoWeb.Product" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Catalogo.Master" AutoEventWireup="true" CodeBehind="AddProduct.aspx.cs" Inherits="CatalogoWeb.AddProduct" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
@@ -93,7 +93,7 @@
             <asp:Button ID="btnAgregar" runat="server" Text="Agregar" CssClass="w-120 btn btn-outline-light btn-primary" OnClick="btnAgregar_Click" />
         </div>
         <div class="col-6">
-            <a href="ListaProductos.aspx" class="w-120 btn btn-outline-light btn-danger">Cancelar</a>
+            <a href="ProductList.aspx" class="w-120 btn btn-outline-light btn-danger">Cancelar</a>
         </div>
     </div>
 </asp:Content>

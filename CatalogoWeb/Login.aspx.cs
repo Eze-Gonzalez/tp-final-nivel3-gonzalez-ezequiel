@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Datos;
+using ModeloDominio;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
@@ -6,10 +8,7 @@ using System.Threading;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using ModeloDominio;
 using Validaciones;
-using Helpers;
-using Datos;
 
 namespace CatalogoWeb
 {

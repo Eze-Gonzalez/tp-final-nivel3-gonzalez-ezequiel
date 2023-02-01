@@ -1,13 +1,13 @@
-﻿using System;
+﻿using Datos;
+using Helpers;
+using ModeloDominio;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using Datos;
-using ModeloDominio;
 using Validaciones;
-using Helpers;
 
 namespace CatalogoWeb
 {
@@ -61,7 +61,7 @@ namespace CatalogoWeb
         }
         protected void btnModificar_Click(object sender, EventArgs e)
         {
-            Response.Redirect("Product.aspx?id=" + Session["id"], false);
+            Response.Redirect("AddProduct.aspx?id=" + Session["id"], false);
         }
         protected void btnEliminar_Click(object sender, EventArgs e)
         {
@@ -74,7 +74,7 @@ namespace CatalogoWeb
             try
             {
                 DatosProducto.eliminar(int.Parse(Request.QueryString["id"]));
-                Response.Redirect("ListaProductos.aspx", false);
+                Response.Redirect("ProductList.aspx", false);
             }
             catch (Exception)
             {
@@ -90,7 +90,7 @@ namespace CatalogoWeb
         protected void btnRegresar_Click(object sender, EventArgs e)
         {
             if (Validar.admin(Session["usuario"]))
-                Response.Redirect("ListaProductos.aspx");
+                Response.Redirect("ProductList.aspx");
             else
                 Response.Redirect("Default.aspx");
             //string page = Request.QueryString["page"] != null ? Request.QueryString["page"] : "";
@@ -141,9 +141,5 @@ namespace CatalogoWeb
             }
         }
 
-        protected void Button1_Click(object sender, EventArgs e)
-        {
-
-        }
     }
 }

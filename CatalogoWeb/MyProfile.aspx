@@ -1,8 +1,5 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Catalogo.Master" AutoEventWireup="true" CodeBehind="Profile.aspx.cs" Inherits="CatalogoWeb.Profile" %>
-
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Catalogo.Master" AutoEventWireup="true" CodeBehind="MyProfile.aspx.cs" Inherits="CatalogoWeb.MyProfile" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-    <script>
-</script>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <%-- Notificacion tamaño máximo --%>

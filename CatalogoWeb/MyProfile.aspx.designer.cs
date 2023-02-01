@@ -11,7 +11,7 @@ namespace CatalogoWeb
 {
 
 
-    public partial class Profile
+    public partial class MyProfile
     {
 
         /// <summary>

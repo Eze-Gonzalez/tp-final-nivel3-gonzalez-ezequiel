@@ -1,18 +1,17 @@
-﻿using System;
+﻿using Datos;
+using Helpers;
+using ModeloDominio;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using ModeloDominio;
-using Datos;
 using Validaciones;
-using System.Windows.Forms;
-using Helpers;
 
 namespace CatalogoWeb
 {
-    public partial class Product : System.Web.UI.Page
+    public partial class AddProduct : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -58,10 +57,11 @@ namespace CatalogoWeb
                     imgProducto.ImageUrl = "https://i.imgur.com/yzczBvI.png";
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                Session.Add("ErrorCode", "Hubo un problema al ingresar a la página");
+                Session.Add("Error", ex.Message);
+                Response.Redirect("Error.aspx");
             }
         }
 
@@ -86,7 +86,7 @@ namespace CatalogoWeb
                 {
                     if (Request.QueryString["id"] != null)
                     {
-                        if(txtImagenLocal.Value != null)
+                        if (txtImagenLocal.Value != null)
                         {
                             producto.Id = int.Parse(Request.QueryString["id"]);
                             string ruta = Server.MapPath("./Imagenes/Productos/");
@@ -97,7 +97,7 @@ namespace CatalogoWeb
                     }
                     else
                     {
-                        if(txtImagenLocal.Value != null)
+                        if (txtImagenLocal.Value != null)
                         {
                             DatosProducto datos = new DatosProducto();
                             string ruta = Server.MapPath("./Imagenes/Productos/");
@@ -135,7 +135,7 @@ namespace CatalogoWeb
                         lblErrorCodigo.Visible = false;
                         lblErrorNombre.Visible = false;
                         DatosProducto.agregar(producto);
-                        Response.Redirect("ListaProductos.aspx", false);
+                        Response.Redirect("ProductList.aspx", false);
                     }
                 }
             }
@@ -144,19 +144,28 @@ namespace CatalogoWeb
                 lblErrorPrecio.Text = "Debe completar este campo solo con números y sin separacion de mil";
                 lblErrorPrecio.Visible = true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                throw;
+                Session.Add("ErrorCode", "Hubo un problema al ingresar a la página");
+                Session.Add("Error", ex.Message);
+                Response.Redirect("Error.aspx");
             }
         }
 
         protected void txtImagenUrl_TextChanged(object sender, EventArgs e)
         {
-            if (Validar.imagen(txtImagenUrl.Text))
-                imgProducto.ImageUrl = txtImagenUrl.Text;
-            else
-                imgProducto.ImageUrl = "https://i.imgur.com/yzczBvI.png";
+            try
+            {
+
+            }
+            catch (Exception ex)
+            {
+                Session.Add("ErrorCode", "Hubo un problema al ingresar a la página");
+                Session.Add("Error", ex.Message);
+                Response.Redirect("Error.aspx");
+            }
         }
     }
+
 }

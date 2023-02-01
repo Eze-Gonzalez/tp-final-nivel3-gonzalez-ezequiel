@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Catalogo.Master" AutoEventWireup="true" CodeBehind="ListaProductos.aspx.cs" Inherits="CatalogoWeb.ListaProductos" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Catalogo.Master" AutoEventWireup="true" CodeBehind="ProductList.aspx.cs" Inherits="CatalogoWeb.ProductList" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
@@ -76,7 +76,7 @@
     </asp:UpdatePanel>
     <div class="row">
         <div class="col center-row">
-            <a href="Product.aspx" class="btn btn-outline-light btn-primary w-120">Agregar</a>
+            <a href="AddProduct.aspx" class="btn btn-outline-light btn-primary w-120">Agregar</a>
         </div>
     </div>
 </asp:Content>

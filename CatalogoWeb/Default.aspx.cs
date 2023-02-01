@@ -1,15 +1,13 @@
-﻿using System;
+﻿using Datos;
+using Helpers;
+using ModeloDominio;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using Datos;
-using ModeloDominio;
-using Helpers;
-using System.Threading;
-using System.Text.RegularExpressions;
-using System.Configuration;
 
 namespace CatalogoWeb
 {
@@ -67,7 +65,7 @@ namespace CatalogoWeb
             try
             {
                 List<Producto> listaProducto = (List<Producto>)Session["productos"];
-                foreach(Producto producto in listaProducto)
+                foreach (Producto producto in listaProducto)
                 {
                     producto.ImagenUrl = Helper.cargarImagen(producto);
                 }
@@ -364,9 +362,7 @@ namespace CatalogoWeb
                 {
                     precios = lblRango3.Text.Split(' ');
                     precioMin = precios[0];
-                    precioMax = precios[2];
                     min = int.Parse(precioMin.Replace("$", ""));
-                    max = int.Parse(precioMax.Replace("$", ""));
                 }
                 List<Producto> filtrada = datos.filtroRapido(ddlTipo.SelectedItem.Text, ref status, "", min, max);
                 if (!status)
@@ -390,4 +386,5 @@ namespace CatalogoWeb
             }
         }
     }
+
 }

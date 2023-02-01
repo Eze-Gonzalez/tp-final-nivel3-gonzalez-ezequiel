@@ -11,7 +11,7 @@ namespace CatalogoWeb
 {
 
 
-    public partial class Favorite
+    public partial class MyFavorites
     {
 
         /// <summary>

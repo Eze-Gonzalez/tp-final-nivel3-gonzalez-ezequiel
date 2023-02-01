@@ -308,11 +308,23 @@ namespace Datos
                             
                         break;
                     case "Precio":
-                        filtrada = lista.FindAll(p => p.Precio >= precioMin && p.Precio <= precioMax);
-                        if (filtrada.Count == 0)
+                        if(precioMax != 0)
                         {
-                            status = false;
-                            filtrada = lista;
+                            filtrada = lista.FindAll(p => p.Precio >= precioMin && p.Precio <= precioMax);
+                            if (filtrada.Count == 0)
+                            {
+                                status = false;
+                                filtrada = lista;
+                            }
+                        }
+                        else
+                        {
+                            filtrada = lista.FindAll(p => p.Precio >= precioMin);
+                            if(filtrada.Count == 0)
+                            {
+                                status = false;
+                                filtrada = lista;
+                            }
                         }
                         break;
                     case "Categoría":

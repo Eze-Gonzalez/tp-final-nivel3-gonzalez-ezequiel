@@ -3,7 +3,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-    <asp:UpdatePanel ID="UpdatePanel2" runat="server">
+     <asp:UpdatePanel ID="UpdatePanel2" runat="server">
         <ContentTemplate>
             <div class="row mb-4 center-row text-light">
                 <div class="col-2 center-col">
@@ -49,7 +49,7 @@
                         <asp:Panel ID="panelLabel" runat="server" CssClass="wrap-start" Visible="false">
                             <asp:Label ID="lblRango1" runat="server" Text="$0 - $10000" CssClass="mb-1"></asp:Label>
                             <asp:Label ID="lblRango2" runat="server" Text="$10000 - $100000" CssClass="mb-1"></asp:Label>
-                            <asp:Label ID="lblRango3" runat="server" Text="$100000 - $1000000" CssClass="mb-1"></asp:Label>
+                            <asp:Label ID="lblRango3" runat="server" Text="$100000 - O más" CssClass="mb-1"></asp:Label>
                         </asp:Panel>
                     </div>
                 </div>

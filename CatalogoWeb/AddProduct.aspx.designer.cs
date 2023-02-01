@@ -11,7 +11,7 @@ namespace CatalogoWeb
 {
 
 
-    public partial class Product
+    public partial class AddProduct
     {
 
         /// <summary>

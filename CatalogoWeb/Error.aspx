@@ -32,7 +32,7 @@
 
                         %>
                         <a href="Login.aspx" class="btn btn-outline-light btn-primary w-170">Iniciar Sesión</a>
-                        <a href="SignUp.aspx" class="btn btn-outline-light btn-primary w-170">Registrarse</a>
+                        <a href="Register.aspx" class="btn btn-outline-light btn-primary w-170">Registrarse</a>
                         <%}
                             else
                             {  %>

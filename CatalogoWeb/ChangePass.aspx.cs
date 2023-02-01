@@ -1,4 +1,5 @@
-﻿using ModeloDominio;
+﻿using Helpers;
+using ModeloDominio;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,8 +8,6 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Validaciones;
-using Helpers;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace CatalogoWeb
 {
@@ -31,9 +30,7 @@ namespace CatalogoWeb
                     lblError.Visible = true;
                 }
                 else
-                {
                     Response.Redirect("Login.aspx");
-                }
             }
             catch (ThreadAbortException) { }
             catch (Exception)

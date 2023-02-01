@@ -1,15 +1,14 @@
-﻿using System;
+﻿using Datos;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using ModeloDominio;
-using Datos;
 
 namespace CatalogoWeb
 {
-    public partial class ListaProductos : System.Web.UI.Page
+    public partial class ProductList : System.Web.UI.Page
     {
         public bool Avanzada { get; set; }
         private bool status = true;
@@ -103,7 +102,7 @@ namespace CatalogoWeb
                 dgvProductos.DataSource = Session["productos"];
                 dgvProductos.DataBind();
             }
-            catch(FormatException)
+            catch (FormatException)
             {
                 txtBuscar.Text = "Debe ingresar solo numeros sin separacion de mil.";
             }

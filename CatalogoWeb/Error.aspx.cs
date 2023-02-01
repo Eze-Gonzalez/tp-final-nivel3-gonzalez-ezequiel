@@ -16,6 +16,8 @@ namespace CatalogoWeb
                 lblErrorTitulo.Text = Session["ErrorCode"].ToString();
                 lblError.Text = Session["Error"].ToString();
             }
+            else
+                Response.Redirect("Default.aspx");
         }
 
         protected void btnCerrarSesion_Click(object sender, EventArgs e)

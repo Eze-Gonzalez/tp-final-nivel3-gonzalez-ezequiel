@@ -7,11 +7,10 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using Validaciones;
 
 namespace CatalogoWeb
 {
-    public partial class Favorite : System.Web.UI.Page
+    public partial class MyFavorites : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {

@@ -1,28 +1,27 @@
-﻿using System;
+﻿using Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Validaciones;
-using Helpers;
 using ModeloDominio;
 
 namespace CatalogoWeb
 {
     public partial class Catalogo : System.Web.UI.MasterPage
     {
-        public string Status { get; set; }
         protected void Page_Load(object sender, EventArgs e)
         {
             //Valida si esta iniciada una sesion en las paginas necesarias
-            if (!(Page is Login || Page is SignUp || Page is ChangePass || Page is Default || Page is Details))
+            if (!(Page is Login || Page is Register || Page is ChangePass || Page is Default || Page is Details))
             {
                 if (!Validar.sesion(Session["usuario"]))
                     Response.Redirect("Login.aspx");
             }
             //Valida si el usuario es admin para ingresar a ciertas paginas
-            if (Page is ListaProductos || Page is Product)
+            if (Page is ProductList || Page is AddProduct)
             {
                 if (!Validar.admin(Session["usuario"]))
                 {
@@ -55,11 +54,5 @@ namespace CatalogoWeb
             Session.Clear();
             Response.Redirect("Default.aspx");
         }
-
-        //protected void btnAceptarN_Click(object sender, EventArgs e)
-        //{
-        //    Status = 
-        //    ajxNotificacion.Hide();
-        //}
     }
 }

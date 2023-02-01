@@ -57,7 +57,7 @@
 }
 
 .close {
-    display:none;
+    display: none;
     position: relative;
     color: #aaa;
     float: right;
@@ -86,11 +86,11 @@
 
 @keyframes notificar {
     from {
-        transform:scale(0);
+        transform: scale(0);
     }
 
     to {
-        transform:scale(1);
+        transform: scale(1);
     }
 }
 

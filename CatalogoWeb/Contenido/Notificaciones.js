@@ -115,7 +115,7 @@ function crearAlerta(status, titulo, mensajeN) {
     boton.onclick = function () {
         modal.style.display = "none";
     };
-    
+
     if (mensajeN === "Debe ingresar su email, si el email ingresado es suyo, puede intentar iniciar sesión con ese email haciendo click en Iniciar Sesión, si no tiene un email registrado, haga click en Registrarse.") {
         var login = document.createElement("button");
         login.className = "btn btn-outline-light btn-primary w-120 mb-3 mt-4 ms-3";
@@ -139,7 +139,7 @@ function crearAlerta(status, titulo, mensajeN) {
             xhr.open("POST", "Support.aspx", true);
             xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
             xhr.send();
-            window.location.href = "SignUp.aspx";
+            window.location.href = "Register.aspx";
         };
     }
     if (titulo === "Email no registrado") {
@@ -153,7 +153,7 @@ function crearAlerta(status, titulo, mensajeN) {
             xhr.open("POST", "Support.aspx", true);
             xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
             xhr.send();
-            window.location.href = "SignUp.aspx";
+            window.location.href = "Register.aspx";
         };
     }
     if (titulo === "Contraseña existente") {
@@ -217,4 +217,3 @@ function mostrarModalSize() {
         }
     }
 }
-

@@ -1,21 +1,16 @@
-﻿using Datos;
-using Helpers;
+﻿using Helpers;
 using ModeloDominio;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Validaciones;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace CatalogoWeb
 {
-    public partial class Profile : System.Web.UI.Page
+    public partial class MyProfile : System.Web.UI.Page
     {
         public bool changePass { get; set; }
         public bool changeEmail { get; set; }
@@ -32,8 +27,8 @@ namespace CatalogoWeb
             {
                 if (Validar.sesion((Usuario)Session["usuario"]))
                 {
-                    lblUsuario.Text = Helper.nombre(usuario);
                     Usuario usuario = (Usuario)Session["usuario"];
+                    lblUsuario.Text = Helper.nombre(usuario);
                     if (!IsPostBack)
                     {
                         emailCodificado = usuario.Email;

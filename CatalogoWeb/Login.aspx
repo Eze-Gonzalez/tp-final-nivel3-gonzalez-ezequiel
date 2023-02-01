@@ -35,7 +35,7 @@
             </div>
             <div class="center-col">
                 <div class="row mt-3">
-                    <a href="SignUp.aspx" class="text-decoration-none text-light">¿No tiene cuenta? Registrese aquí.</a>
+                    <a href="Register.aspx" class="text-decoration-none text-light">¿No tiene cuenta? Registrese aquí.</a>
                 </div>
             </div>
         </div>

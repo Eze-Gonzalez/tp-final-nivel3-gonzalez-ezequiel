@@ -5,7 +5,7 @@
 <html>
 <head runat="server">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Catalogo Web</title>
+    <title></title>
     <asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>
     <script src="Contenido/Notificaciones.js"></script>
@@ -15,7 +15,7 @@
 </head>
 <body>
     <form id="form1" runat="server">
-        <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
+        <asp:ScriptManager runat="server"></asp:ScriptManager>
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4 nav-fixed">
             <div class="container-fluid">
                 <a class="navbar-brand" href="Default.aspx">Catalogo Web</a>
@@ -30,10 +30,10 @@
                         <%if (Validaciones.Validar.admin(Session["usuario"]))
                             { %>
                         <li class="nav-item">
-                            <a class="nav-link" href="ListaProductos.aspx">Lista de Productos</a>
+                            <a class="nav-link" href="ProductList.aspx">Lista de Productos</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="Product.aspx">Agregar un producto</a>
+                            <a class="nav-link" href="AddProduct.aspx">Agregar un producto</a>
                         </li>
                         <%}  %>
                         <li class="nav-item">
@@ -49,7 +49,7 @@
                                 <div class="col">
                                     <div class="nav-item">
                                         <a href="Login.aspx" class="btn btn-outline-light me-3 w-120">Iniciar Sesión</a>
-                                        <a href="SignUp.aspx" class="btn btn-outline-primary me-2 w-120 bg-black">Registrarse</a>
+                                        <a href="Register.aspx" class="btn btn-outline-primary me-2 w-120 bg-black">Registrarse</a>
                                     </div>
                                 </div>
                                 <%}
@@ -73,10 +73,10 @@
                                                             </div>
                                                             <div class="row row-cols-2">
                                                                 <div class="col-6">
-                                                                    <a href="Profile.aspx" class="form-label text-decoration-none link-profile">Mi perfil</a>
+                                                                    <a href="MyProfile.aspx" class="form-label text-decoration-none link-profile">Mi perfil</a>
                                                                 </div>
                                                                 <div class="col-6">
-                                                                    <a href="Favorite.aspx" class="form-label text-decoration-none link-profile position-relative start-50">Favoritos</a>
+                                                                    <a href="MyFavorites.aspx" class="form-label text-decoration-none link-profile position-relative start-50">Favoritos</a>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -91,7 +91,7 @@
                                     </div>
                                 </div>
                                 <div class="col flex-bottom">
-                                    <a class="nav-link" href="Favorite.aspx">Favoritos</a>
+                                    <a class="nav-link" href="MyFavorites.aspx">Favoritos</a>
                                 </div>
                                 <div class="col flex-bottom">
                                     <asp:LinkButton ID="lbtnCerrarSesion" CssClass="nav-link dropdown-item" runat="server" OnClick="btnCerrarSesion_Click">Cerrar Sesion</asp:LinkButton>
