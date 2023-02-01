@@ -19,7 +19,7 @@ namespace Validaciones
             Usuario usuario = user != null ? (Usuario)user : null;
             try
             {
-                datos.consultaEmbebida("Select Id, email, pass, admin, urlImagenPerfil, nombre, apellido from USERS where email COLLATE Latin1_General_CS_AS = @email and pass COLLATE Latin1_General_CS_AS = @pass");
+                datos.consultaEmbebida("Select Id, email, pass, admin, urlImagenPerfil, nombre, apellido from USERS where email = @email and pass COLLATE Latin1_General_CS_AS = @pass");
                 datos.parametros("@email", usuario.Email);
                 datos.parametros("@pass", usuario.Pass);
                 datos.lectura();
@@ -84,7 +84,7 @@ namespace Validaciones
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.consultaEmbebida("Select Id from USERS where email COLLATE Latin1_General_CS_AS = @email");
+                datos.consultaEmbebida("Select Id from USERS where email = @email");
                 datos.parametros("@email", email);
                 datos.lectura();
                 if (datos.Lector.Read())

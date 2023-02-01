@@ -46,7 +46,7 @@ namespace CatalogoWeb
                 if (status)
                 {
                     Session.Add("usuario", usuario);
-                    Response.Redirect("Profile.aspx?id=" + usuario.Id);
+                    Response.Redirect("MyProfile.aspx?id=" + usuario.Id);
                 }
             }
             catch (Exception ex)

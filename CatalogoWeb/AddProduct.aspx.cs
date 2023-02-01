@@ -4,6 +4,7 @@ using ModeloDominio;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -113,7 +114,7 @@ namespace CatalogoWeb
                 {
                     producto.Id = int.Parse(Request.QueryString["id"]);
                     DatosProducto.agregar(producto, false);
-                    Response.Redirect("Details.aspx?id=" + producto.Id + "&page=lp");
+                    Response.Redirect("Details.aspx?id=" + producto.Id, false);
                 }
                 else
                 {
@@ -135,10 +136,11 @@ namespace CatalogoWeb
                         lblErrorCodigo.Visible = false;
                         lblErrorNombre.Visible = false;
                         DatosProducto.agregar(producto);
-                        Response.Redirect("ProductList.aspx", false);
+                        Response.Redirect("ProductList.aspx");
                     }
                 }
             }
+            catch (ThreadAbortException) { }
             catch (FormatException)
             {
                 lblErrorPrecio.Text = "Debe completar este campo solo con números y sin separacion de mil";
