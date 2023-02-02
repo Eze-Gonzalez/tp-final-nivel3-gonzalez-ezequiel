@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -17,67 +18,125 @@ namespace CatalogoWeb
         private string mensaje = "No se encontro ningun artículo que coincida con el filtro deseado.";
         protected void Page_Load(object sender, EventArgs e)
         {
-            script = string.Format("filtro('{0}', '{1}');", titulo, mensaje);
             Title = "Listado de productos";
-            if (!IsPostBack)
+            try
             {
-                DatosProducto datos = new DatosProducto();
-                Session.Add("productos", datos.listar());
-                dgvProductos.DataSource = Session["productos"];
-                dgvProductos.DataBind();
+                if (!IsPostBack)
+                {
+                    DatosProducto datos = new DatosProducto();
+                    Session.Add("productos", datos.listar());
+                    dgvProductos.DataSource = Session["productos"];
+                    dgvProductos.DataBind();
+                }
+            }
+            catch (Exception ex)
+            {
+                Session.Add("ErrorCode", "Hubo un problema al cargar la página");
+                Session.Add("Error", ex.Message);
+                Response.Redirect("Error.aspx", false);
+            }
+            finally
+            {
+                script = string.Format("filtro('{0}', '{1}');", titulo, mensaje);
             }
         }
 
         protected void dgvProductos_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
-            dgvProductos.DataSource = Session["productos"];
-            dgvProductos.PageIndex = e.NewPageIndex;
-            dgvProductos.DataBind();
+            try
+            {
+                dgvProductos.DataSource = Session["productos"];
+                dgvProductos.PageIndex = e.NewPageIndex;
+                dgvProductos.DataBind();
+            }
+            catch (Exception ex)
+            {
+                Session.Add("ErrorCode", "Hubo un problema al cargar la página");
+                Session.Add("Error", ex.Message);
+                Response.Redirect("Error.aspx", false);
+            }
         }
 
         protected void dgvProductos_SelectedIndexChanged(object sender, EventArgs e)
         {
-            int id = (int)dgvProductos.SelectedDataKey.Value;
-            DatosProducto datos = new DatosProducto();
-            Session.Add("producto", datos.traerProducto(id));
-            Response.Redirect("Details.aspx?id=" + id);
+            try
+            {
+                int id = (int)dgvProductos.SelectedDataKey.Value;
+                DatosProducto datos = new DatosProducto();
+                Session.Add("producto", datos.traerProducto(id));
+                Response.Redirect("Details.aspx?id=" + id);
+            }
+            catch (ThreadAbortException) { }
+            catch (Exception ex)
+            {
+                Session.Add("ErrorCode", "Hubo un problema al cargar la página");
+                Session.Add("Error", ex.Message);
+                Response.Redirect("Error.aspx", false);
+            }
         }
 
         protected void btnFiltro_Click(object sender, EventArgs e)
         {
-            DatosProducto datos = new DatosProducto();
-            dgvProductos.DataSource = datos.filtroRapido(txtFiltro.Text, ref status);
-            if (!status)
-                ScriptManager.RegisterStartupScript(this, GetType(), "filtro", script, true);
-            dgvProductos.DataBind();
+            try
+            {
+                DatosProducto datos = new DatosProducto();
+                dgvProductos.DataSource = datos.filtroRapido(txtFiltro.Text, ref status);
+                if (!status)
+                    ScriptManager.RegisterStartupScript(this, GetType(), "filtro", script, true);
+                dgvProductos.DataBind();
+            }
+            catch (Exception ex)
+            {
+                Session.Add("ErrorCode", "Hubo un problema al cargar la página");
+                Session.Add("Error", ex.Message);
+                Response.Redirect("Error.aspx");
+            }
         }
 
         protected void txtFiltro_TextChanged(object sender, EventArgs e)
         {
-            DatosProducto datos = new DatosProducto();
-            dgvProductos.DataSource = datos.filtroRapido(txtFiltro.Text, ref status);
-            if (!status)
-                ScriptManager.RegisterStartupScript(this, GetType(), "filtro", script, true);
-            dgvProductos.DataBind();
+            try
+            {
+                DatosProducto datos = new DatosProducto();
+                dgvProductos.DataSource = datos.filtroRapido(txtFiltro.Text, ref status);
+                if (!status)
+                    ScriptManager.RegisterStartupScript(this, GetType(), "filtro", script, true);
+                dgvProductos.DataBind();
+            }
+            catch (Exception ex)
+            {
+                Session.Add("ErrorCode", "Hubo un problema al cargar la página");
+                Session.Add("Error", ex.Message);
+                Response.Redirect("Error.aspx");
+            }
         }
 
         protected void btnAvanzada_Click(object sender, EventArgs e)
         {
-            DatosProducto datos = new DatosProducto();
-            if (btnAvanzada.Text == "Búsqueda avanzada")
+            try
             {
-                btnAvanzada.Text = "Mostrar todo";
-                Avanzada = true;
+                DatosProducto datos = new DatosProducto();
+                if (btnAvanzada.Text == "Búsqueda avanzada")
+                {
+                    btnAvanzada.Text = "Mostrar todo";
+                    Avanzada = true;
+                }
+                else
+                {
+                    btnAvanzada.Text = "Búsqueda avanzada";
+                    Session.Add("productos", datos.listar());
+                    dgvProductos.DataSource = Session["productos"];
+                    dgvProductos.DataBind();
+                    ddlTipo.ClearSelection();
+                    ddlCriterio.Items.Clear();
+                    Avanzada = false;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                btnAvanzada.Text = "Búsqueda avanzada";
-                Session.Add("productos", datos.listar());
-                dgvProductos.DataSource = Session["productos"];
-                dgvProductos.DataBind();
-                ddlTipo.ClearSelection();
-                ddlCriterio.Items.Clear();
-                Avanzada = false;
+                Session.Add("ErrorCode", "Hubo un problema al cargar la página");
+                Session.Add("Error", ex.Message);
+                Response.Redirect("Error.aspx");
             }
         }
 
@@ -106,29 +165,39 @@ namespace CatalogoWeb
             {
                 txtBuscar.Text = "Debe ingresar solo numeros sin separacion de mil.";
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                Session.Add("ErrorCode", "Hubo un problema al cargar la página");
+                Session.Add("Error", ex.Message);
+                Response.Redirect("Error.aspx");
             }
         }
 
         protected void ddlTipo_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Avanzada = true;
-            if (ddlTipo.SelectedItem.Text == "Precio")
+            try
             {
-                ddlCriterio.Items.Clear();
-                ddlCriterio.Items.Add("Igual a");
-                ddlCriterio.Items.Add("Menor a");
-                ddlCriterio.Items.Add("Mayor a");
+                Avanzada = true;
+                if (ddlTipo.SelectedItem.Text == "Precio")
+                {
+                    ddlCriterio.Items.Clear();
+                    ddlCriterio.Items.Add("Igual a");
+                    ddlCriterio.Items.Add("Menor a");
+                    ddlCriterio.Items.Add("Mayor a");
+                }
+                else
+                {
+                    ddlCriterio.Items.Clear();
+                    ddlCriterio.Items.Add("Comienza con");
+                    ddlCriterio.Items.Add("Termina con");
+                    ddlCriterio.Items.Add("Contiene");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                ddlCriterio.Items.Clear();
-                ddlCriterio.Items.Add("Comienza con");
-                ddlCriterio.Items.Add("Termina con");
-                ddlCriterio.Items.Add("Contiene");
+                Session.Add("ErrorCode", "Hubo un problema al cargar la página");
+                Session.Add("Error", ex.Message);
+                Response.Redirect("Error.aspx");
             }
         }
     }

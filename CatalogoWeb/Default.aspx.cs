@@ -13,7 +13,6 @@ namespace CatalogoWeb
 {
     public partial class Default : System.Web.UI.Page
     {
-        private List<Producto> listaProducto;
         private int registrosPagina = 6;
         private int indicePaginaActual;
         private int indiceUltimaPagina;
@@ -28,22 +27,9 @@ namespace CatalogoWeb
                 if (!Page.IsPostBack)
                 {
                     DatosProducto datos = new DatosProducto();
-                    listaProducto = datos.listar();
-                    foreach (Producto producto in listaProducto)
-                    {
-                        producto.ImagenUrl = Helper.cargarImagen(producto);
-                    }
-                    indiceUltimaPagina = (listaProducto.Count / registrosPagina);
-                    if (listaProducto.Count <= 6)
-                    {
-                        if (indiceUltimaPagina > 0)
-                            indiceUltimaPagina--;
-                    }
-
-                    ViewState["indicePaginaActual"] = indicePaginaActual;
-                    ViewState["indiceUltimaPagina"] = indiceUltimaPagina;
-                    Session.Add("productos", listaProducto);
-                    enlazarRepeater();
+                    List<Producto> listaProducto = datos.listar();
+                    Helper.cargarImgRep(listaProducto);
+                    crearPaginacion(listaProducto);
                 }
                 else
                 {
@@ -52,46 +38,16 @@ namespace CatalogoWeb
             }
             catch (Exception ex)
             {
-
-                throw ex;
+                Session.Add("ErrorCode", "Hubo un problema al cargar la página");
+                Session.Add("Error", ex.Message);
+                Response.Redirect("Error.aspx", false);
             }
             finally
             {
                 script = string.Format("filtro('{0}','{1}');", titulo, mensaje);
             }
         }
-        private void enlazarRepeater()
-        {
-            try
-            {
-                List<Producto> listaProducto = (List<Producto>)Session["productos"];
-                foreach (Producto producto in listaProducto)
-                {
-                    producto.ImagenUrl = Helper.cargarImagen(producto);
-                }
-                List<Producto> listaPagina = new List<Producto>();
-                int inicio = indicePaginaActual * registrosPagina;
-                int fin = (indicePaginaActual * registrosPagina) + registrosPagina;
-                for (int i = inicio; i < fin; i++)
-                {
-                    if (i < listaProducto.Count)
-                        listaPagina.Add(listaProducto[i]);
-                    else
-                        break;
-                }
-                repProductos.DataSource = listaPagina;
-                repProductos.DataBind();
 
-                indicePaginaActual = (int)ViewState["indicePaginaActual"];
-                indiceUltimaPagina = (int)ViewState["indiceUltimaPagina"];
-                txtPosicion.Text = String.Format("{0} de {1}", indicePaginaActual + 1, indiceUltimaPagina + 1);
-            }
-            catch (Exception ex)
-            {
-
-                throw ex;
-            }
-        }
         protected void btnPrimero_Click(object sender, EventArgs e)
         {
             try
@@ -102,8 +58,9 @@ namespace CatalogoWeb
             }
             catch (Exception ex)
             {
-
-                throw ex;
+                Session.Add("ErrorCode", "Hubo un problema al cargar la página");
+                Session.Add("Error", ex.Message);
+                Response.Redirect("Error.aspx", false);
             }
         }
 
@@ -121,8 +78,9 @@ namespace CatalogoWeb
             }
             catch (Exception ex)
             {
-
-                throw ex;
+                Session.Add("ErrorCode", "Hubo un problema al cargar la página");
+                Session.Add("Error", ex.Message);
+                Response.Redirect("Error.aspx", false);
             }
         }
 
@@ -141,8 +99,9 @@ namespace CatalogoWeb
             }
             catch (Exception ex)
             {
-
-                throw ex;
+                Session.Add("ErrorCode", "Hubo un problema al cargar la página");
+                Session.Add("Error", ex.Message);
+                Response.Redirect("Error.aspx", false);
             }
         }
 
@@ -157,8 +116,9 @@ namespace CatalogoWeb
             }
             catch (Exception ex)
             {
-
-                throw ex;
+                Session.Add("ErrorCode", "Hubo un problema al cargar la página");
+                Session.Add("Error", ex.Message);
+                Response.Redirect("Error.aspx", false);
             }
         }
         protected void btnDetalles_Click(object sender, EventArgs e)
@@ -173,8 +133,9 @@ namespace CatalogoWeb
             catch (ThreadAbortException) { }
             catch (Exception ex)
             {
-
-                throw ex;
+                Session.Add("ErrorCode", "Hubo un problema al cargar la página");
+                Session.Add("Error", ex.Message);
+                Response.Redirect("Error.aspx", false);
             }
         }
 
@@ -186,22 +147,15 @@ namespace CatalogoWeb
                 List<Producto> filtrada = datos.filtroRapido(ddlTipo.SelectedItem.Text, ref status, ddlFiltro.SelectedValue.ToString());
                 if (!status)
                     ScriptManager.RegisterStartupScript(this, GetType(), "filtro", script, true);
-                foreach (Producto producto in filtrada)
-                {
-                    producto.ImagenUrl = Helper.cargarImagen(producto);
-                }
+                Helper.cargarImgRep(filtrada);
                 indiceUltimaPagina = (filtrada.Count / registrosPagina);
-                if (filtrada.Count == 0)
-                    indiceUltimaPagina--;
-                ViewState["indicePaginaActual"] = indicePaginaActual;
-                ViewState["indiceUltimaPagina"] = indiceUltimaPagina;
-                Session["productos"] = filtrada;
-                enlazarRepeater();
+                crearPaginacion(filtrada);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                Session.Add("ErrorCode", "Hubo un problema al cargar la página");
+                Session.Add("Error", ex.Message);
+                Response.Redirect("Error.aspx", false);
             }
         }
 
@@ -210,8 +164,8 @@ namespace CatalogoWeb
             try
             {
                 DatosProducto datosP = new DatosProducto();
-                Session["productos"] = datosP.listar();
-                enlazarRepeater();
+                List<Producto> listaProductos = datosP.listar();
+                crearPaginacion(listaProductos);
                 switch (ddlTipo.SelectedItem.Text)
                 {
                     case "Nombre":
@@ -275,10 +229,11 @@ namespace CatalogoWeb
                         break;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                Session.Add("ErrorCode", "Hubo un problema al cargar la página");
+                Session.Add("Error", ex.Message);
+                Response.Redirect("Error.aspx", false);
             }
         }
 
@@ -290,21 +245,14 @@ namespace CatalogoWeb
                 List<Producto> filtrada = datos.filtroRapido(ddlTipo.SelectedItem.Text, ref status, txtFiltro.Text);
                 if (!status)
                     ScriptManager.RegisterStartupScript(this, GetType(), "filtro", script, true);
-                foreach (Producto producto in filtrada)
-                {
-                    producto.ImagenUrl = Helper.cargarImagen(producto);
-                }
-                indiceUltimaPagina = (filtrada.Count / registrosPagina);
-                if (filtrada.Count == 0)
-                    indiceUltimaPagina--;
-                ViewState["indicePaginaActual"] = indicePaginaActual;
-                ViewState["indiceUltimaPagina"] = indiceUltimaPagina;
-                Session["productos"] = filtrada;
-                enlazarRepeater();
+                Helper.cargarImgRep(filtrada);
+                crearPaginacion(filtrada);
             }
             catch (Exception ex)
             {
-                throw ex;
+                Session.Add("ErrorCode", "Hubo un problema al cargar la página");
+                Session.Add("Error", ex.Message);
+                Response.Redirect("Error.aspx", false);
             }
         }
 
@@ -316,21 +264,14 @@ namespace CatalogoWeb
                 List<Producto> filtrada = datos.filtroRapido(ddlTipo.SelectedItem.Text, ref status, txtFiltro.Text);
                 if (!status)
                     ScriptManager.RegisterStartupScript(this, GetType(), "filtro", script, true);
-                foreach (Producto producto in filtrada)
-                {
-                    producto.ImagenUrl = Helper.cargarImagen(producto);
-                }
-                indiceUltimaPagina = (filtrada.Count / registrosPagina);
-                if (filtrada.Count == 0)
-                    indiceUltimaPagina--;
-                ViewState["indicePaginaActual"] = indicePaginaActual;
-                ViewState["indiceUltimaPagina"] = indiceUltimaPagina;
-                Session["productos"] = filtrada;
-                enlazarRepeater();
+                Helper.cargarImgRep(filtrada);
+                crearPaginacion(filtrada);
             }
             catch (Exception ex)
             {
-                throw ex;
+                Session.Add("ErrorCode", "Hubo un problema al cargar la página");
+                Session.Add("Error", ex.Message);
+                Response.Redirect("Error.aspx", false);
             }
         }
 
@@ -367,22 +308,87 @@ namespace CatalogoWeb
                 List<Producto> filtrada = datos.filtroRapido(ddlTipo.SelectedItem.Text, ref status, "", min, max);
                 if (!status)
                     ScriptManager.RegisterStartupScript(this, GetType(), "filtro", script, true);
-                foreach (Producto producto in filtrada)
+                Helper.cargarImgRep(filtrada);
+                crearPaginacion(filtrada);
+            }
+            catch (Exception ex)
+            {
+                Session.Add("ErrorCode", "Hubo un problema al cargar la página");
+                Session.Add("Error", ex.Message);
+                Response.Redirect("Error.aspx", false);
+            }
+        }
+        private void crearPaginacion(List<Producto> lista)
+        {
+            try
+            {
+                indiceUltimaPagina = (lista.Count / registrosPagina);
+                if (lista.Count <= 6)
                 {
-                    producto.ImagenUrl = Helper.cargarImagen(producto);
+                    if (indiceUltimaPagina > 0)
+                        indiceUltimaPagina--;
                 }
-                indiceUltimaPagina = filtrada.Count / registrosPagina;
-                if (filtrada.Count == 0)
-                    indiceUltimaPagina--;
+
                 ViewState["indicePaginaActual"] = indicePaginaActual;
                 ViewState["indiceUltimaPagina"] = indiceUltimaPagina;
-                Session["productos"] = filtrada;
+                Session.Add("productos", lista);
                 enlazarRepeater();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Session.Add("ErrorCode", "Hubo un problema al cargar la página");
+                Session.Add("Error", ex.Message);
+                Response.Redirect("Error.aspx", false);
+            }
+        }
+        private void enlazarRepeater()
+        {
+            try
+            {
+                List<Producto> listaProducto = (List<Producto>)Session["productos"];
+                Helper.cargarImgRep(listaProducto);
+                List<Producto> listaPagina = new List<Producto>();
+                int inicio = indicePaginaActual * registrosPagina;
+                int fin = (indicePaginaActual * registrosPagina) + registrosPagina;
+                for (int i = inicio; i < fin; i++)
+                {
+                    if (i < listaProducto.Count)
+                        listaPagina.Add(listaProducto[i]);
+                    else
+                        break;
+                }
+                repProductos.DataSource = listaPagina;
+                repProductos.DataBind();
 
-                throw;
+                indicePaginaActual = (int)ViewState["indicePaginaActual"];
+                indiceUltimaPagina = (int)ViewState["indiceUltimaPagina"];
+                txtPosicion.Text = (indicePaginaActual + 1) + " de " + (indiceUltimaPagina + 1);
+                habilitarPaginacion(txtPosicion.Text);
+            }
+            catch (Exception ex)
+            {
+                Session.Add("ErrorCode", "Hubo un problema al cargar la página");
+                Session.Add("Error", ex.Message);
+                Response.Redirect("Error.aspx", false);
+            }
+        }
+        private void habilitarPaginacion(string posicion)
+        {
+            if (posicion == "1 de 1")
+            {
+                txtPosicion.Visible = false;
+                btnPrimero.Visible = false;
+                btnAnterior.Visible = false;
+                btnSiguiente.Visible = false;
+                btnUltimo.Visible = false;
+            }
+            else
+            {
+                txtPosicion.Visible = true;
+                btnPrimero.Visible = true;
+                btnAnterior.Visible = true;
+                btnSiguiente.Visible = true;
+                btnUltimo.Visible = true;
             }
         }
     }

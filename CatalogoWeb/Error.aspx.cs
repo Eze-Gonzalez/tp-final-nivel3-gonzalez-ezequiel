@@ -17,13 +17,13 @@ namespace CatalogoWeb
                 lblError.Text = Session["Error"].ToString();
             }
             else
-                Response.Redirect("Default.aspx");
+                Response.Redirect("Default.aspx", false);
         }
 
         protected void btnCerrarSesion_Click(object sender, EventArgs e)
         {
             Session.Clear();
-            Response.Redirect("Default.aspx");
+            Response.Redirect("Default.aspx", false);
         }
     }
 }

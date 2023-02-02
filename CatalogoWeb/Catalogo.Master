@@ -61,32 +61,10 @@
                                             <asp:Image ID="imgPerfil" runat="server" CssClass="me-2 img-perfil rounded-circle" />
                                             <asp:Label ID="lblPerfil" runat="server" Text="" CssClass="alert-link me-2 text-light"></asp:Label>
                                         </div>
-                                        <ul class="dropdown-menu dropdown-menu-end bg-dark">
-                                            <li>
-                                                <div class="col">
-                                                    <div class="card h-100 profile-card border-0 bg-dark text-light">
-                                                        <asp:Image ID="imgProfileCard" ImageUrl="https://i.imgur.com/B54N8kw.png" CssClass="card-img-top img-profile-card" runat="server" />
-                                                        <div class="card-body">
-                                                            <div class="mb-2 center-col">
-                                                                <asp:Label ID="lblUsuario" CssClass="card-tittle grande" runat="server" Text="Label"></asp:Label>
-                                                                <asp:Label ID="lblTipoUsuario" CssClass="card-tittle pequeña admin" runat="server" Text="Admin" Visible="false"></asp:Label>
-                                                            </div>
-                                                            <div class="row row-cols-2">
-                                                                <div class="col-6">
-                                                                    <a href="MyProfile.aspx" class="form-label text-decoration-none link-profile">Mi perfil</a>
-                                                                </div>
-                                                                <div class="col-6">
-                                                                    <a href="MyFavorites.aspx" class="form-label text-decoration-none link-profile position-relative start-50">Favoritos</a>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <hr />
-                                                        <div class="align-self-center">
-                                                            <asp:Button ID="btnCerrarSesion" CssClass="btn text-danger profile-card" runat="server" Text="Cerrar Sesión" OnClick="btnCerrarSesion_Click" />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li>
+                                        <ul class="dropdown-menu dropdown-menu-dark text-center">
+                                            <li><a class="dropdown-item" href="MyProfile.aspx">Mi Perfil</a></li>
+                                            <li><a class="dropdown-item" href="MyFavorites.aspx">Mis Favoritos</a></li>
+                                            <li><asp:LinkButton ID="btnCerrarSesion" OnClick="btnCerrarSesion_Click" CssClass="dropdown-item text-danger" runat="server">Cerrar Sesión</asp:LinkButton></li>
                                         </ul>
                                     </div>
                                 </div>

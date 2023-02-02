@@ -28,9 +28,9 @@ namespace CatalogoWeb
                 if (Validar.sesion((Usuario)Session["usuario"]))
                 {
                     Usuario usuario = (Usuario)Session["usuario"];
-                    lblUsuario.Text = Helper.nombre(usuario);
                     if (!IsPostBack)
                     {
+                        lblUsuario.Text = Helper.nombre(usuario);
                         emailCodificado = usuario.Email;
                         passCodificada = usuario.Pass;
                         Helper.codificar(ref emailCodificado, ref passCodificada);
@@ -39,14 +39,14 @@ namespace CatalogoWeb
                         lblEmailUser.Text = emailCodificado;
                         lblPassUser.Text = passCodificada;
                         imgPerfil.ImageUrl = Helper.cargarImagen(usuario);
-
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                Session.Add("ErrorCode", "Hubo un problema al cargar la página");
+                Session.Add("Error", ex.Message);
+                Response.Redirect("Error.aspx", false);
             }
         }
         protected void btnAceptar_Click(object sender, EventArgs e)
@@ -65,7 +65,10 @@ namespace CatalogoWeb
                         imgPerfil.ImageUrl = Helper.cargarImagen(usuario);
                     }
                     else
+                    {
                         imagenPerfil = usuario.UrlImagen;
+                        imgPerfil.ImageUrl = Helper.cargarImagen(usuario);
+                    }
                 }
                 else
                     imagenPerfil = string.IsNullOrEmpty(txtImagenUrl.Text) ? usuario.UrlImagen : txtImagenUrl.Text;
@@ -81,11 +84,21 @@ namespace CatalogoWeb
                 }
                 else
                     lblSinCambios.Visible = true;
+                if (status)
+                {
+                    lblUsuario.Text = Helper.nombre(usuario);
+                    Label lblMaster = (Label)Master.FindControl("lblPerfil");
+                    Image imgMaster = (Image)Master.FindControl("imgPerfil");
+                    lblMaster.Text = lblUsuario.Text;
+                    imgMaster.ImageUrl = imgPerfil.ImageUrl;
+                }
+                    
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                Session.Add("ErrorCode", "Hubo un problema al cargar la página");
+                Session.Add("Error", ex.Message);
+                Response.Redirect("Error.aspx", false);
             }
         }
 
@@ -97,10 +110,11 @@ namespace CatalogoWeb
                 lblCambioAcceso.Text = "Cambiar Email";
                 ajxModal.Show();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                Session.Add("ErrorCode", "Hubo un problema al cargar la página");
+                Session.Add("Error", ex.Message);
+                Response.Redirect("Error.aspx");
             }
         }
 
@@ -112,10 +126,11 @@ namespace CatalogoWeb
                 lblCambioAcceso.Text = "Cambiar Contraseña";
                 ajxModal.Show();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                Session.Add("ErrorCode", "Hubo un problema al cargar la página");
+                Session.Add("Error", ex.Message);
+                Response.Redirect("Error.aspx", false);
             }
         }
 
@@ -144,10 +159,11 @@ namespace CatalogoWeb
                 }
                 ScriptManager.RegisterStartupScript(this, GetType(), "crearAlerta", script, true);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                Session.Add("ErrorCode", "Hubo un problema al cargar la página");
+                Session.Add("Error", ex.Message);
+                Response.Redirect("Error.aspx", false);
             }
             finally
             {

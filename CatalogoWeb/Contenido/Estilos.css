@@ -1,5 +1,6 @@
 ﻿body {
     background-image: url("https://i.imgur.com/hsR4LZx.png");
+    object-fit: contain;
 }
 
 .panel-filtro {

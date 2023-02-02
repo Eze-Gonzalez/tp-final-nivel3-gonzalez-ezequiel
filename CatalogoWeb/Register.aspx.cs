@@ -3,6 +3,7 @@ using ModeloDominio;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -14,12 +15,22 @@ namespace CatalogoWeb
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            Title = "Registrarse";
-            if (Validar.sesion(Session["usuario"]))
+            try
             {
-                Session.Add("ErrorCode", "Ya hay una sesión iniciada");
-                Session.Add("Error", "Actualmente ya hay una sesión activa, para registrarse, no debe tener una cuenta en el sitio, si desea crear otra cuenta, primero cierre sesión y luego vaya a la pagina registro.");
-                Response.Redirect("Error.aspx");
+                Title = "Registrarse";
+                if (Validar.sesion(Session["usuario"]))
+                {
+                    Session.Add("ErrorCode", "Ya hay una sesión iniciada");
+                    Session.Add("Error", "Actualmente ya hay una sesión activa, para registrarse, no debe tener una cuenta en el sitio, si desea crear otra cuenta, primero cierre sesión y luego vaya a la pagina registro.");
+                    Response.Redirect("Error.aspx");
+                }
+            }
+            catch (ThreadAbortException) { }
+            catch (Exception ex)
+            {
+                Session.Add("ErrorCode", "Hubo un problema al cargar la página");
+                Session.Add("Error", ex.Message);
+                Response.Redirect("Error.aspx", false);
             }
         }
 
@@ -49,10 +60,12 @@ namespace CatalogoWeb
                     Response.Redirect("MyProfile.aspx?id=" + usuario.Id);
                 }
             }
+            catch (ThreadAbortException) { }
             catch (Exception ex)
             {
-
-                throw ex;
+                Session.Add("ErrorCode", "Hubo un problema al cargar la página");
+                Session.Add("Error", ex.Message);
+                Response.Redirect("Error.aspx", false);
             }
         }
     }

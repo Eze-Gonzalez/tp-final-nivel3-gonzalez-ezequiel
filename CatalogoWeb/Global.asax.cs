@@ -23,5 +23,12 @@ namespace CatalogoWeb
                 LoadSuccessExpression = "window.jQuery"
             });
         }
+        void Application_Error(object sender, EventArgs e)
+        {
+            Exception ex = Server.GetLastError();
+            Session.Add("ErrorCode", "Hubo un problema al cargar la página");
+            Session.Add("Error", ex.Message);
+            Server.Transfer("Error.aspx");
+        }
     }
 }

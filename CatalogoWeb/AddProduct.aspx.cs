@@ -114,7 +114,7 @@ namespace CatalogoWeb
                 {
                     producto.Id = int.Parse(Request.QueryString["id"]);
                     DatosProducto.agregar(producto, false);
-                    Response.Redirect("Details.aspx?id=" + producto.Id, false);
+                    Response.Redirect("Details.aspx?id=" + producto.Id);
                 }
                 else
                 {
@@ -140,12 +140,12 @@ namespace CatalogoWeb
                     }
                 }
             }
-            catch (ThreadAbortException) { }
             catch (FormatException)
             {
                 lblErrorPrecio.Text = "Debe completar este campo solo con números y sin separacion de mil";
                 lblErrorPrecio.Visible = true;
             }
+            catch (ThreadAbortException) { }
             catch (Exception ex)
             {
 
@@ -159,7 +159,7 @@ namespace CatalogoWeb
         {
             try
             {
-
+               imgProducto.ImageUrl = txtImagenUrl.Text;
             }
             catch (Exception ex)
             {

@@ -3,7 +3,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-     <asp:UpdatePanel ID="UpdatePanel2" runat="server">
+    <asp:UpdatePanel ID="UpdatePanel2" runat="server">
         <ContentTemplate>
             <div class="row mb-4 center-row text-light">
                 <div class="col-2 center-col">
@@ -100,18 +100,30 @@
             <asp:AsyncPostBackTrigger ControlID="btnUltimo" EventName="Click" />
         </Triggers>
     </asp:UpdatePanel>
-    <nav class="center-row">
-        <ul class="pagination" style="text-align: center">
-            <li class="page-item">
-                <asp:Button ID="btnPrimero" Text="<<" Width="50" CssClass="page-link bg-black bg-opacity-25 border-primary text-bg-danger" runat="server" OnClick="btnPrimero_Click" /></li>
-            <li class="page-item">
-                <asp:Button ID="btnAnterior" Text="<" Width="50" CssClass="page-link bg-black bg-opacity-25 border-primary text-bg-danger" runat="server" OnClick="btnAnterior_Click" /></li>
-            <li class="page-item">
-                <asp:TextBox ID="txtPosicion" Width="100" ReadOnly="true" CssClass="page-link text-center bg-black bg-opacity-25 border-primary text-bg-danger" runat="server" /></li>
-            <li class="page-item">
-                <asp:Button ID="btnSiguiente" Text=">" Width="50" CssClass="page-link bg-black bg-opacity-25 border-primary text-bg-danger" runat="server" OnClick="btnSiguiente_Click" /></li>
-            <li class="page-item">
-                <asp:Button ID="btnUltimo" Text=">>" Width="50" CssClass="page-link bg-black bg-opacity-25 border-primary text-bg-danger" runat="server" OnClick="btnUltimo_Click" /></li>
-        </ul>
-    </nav>
+    <asp:UpdatePanel ID="UpdatePanel3" runat="server">
+        <ContentTemplate>
+            <nav class="center-row">
+                <ul class="pagination" style="text-align: center">
+                    <li class="page-item">
+                        <asp:Button ID="btnPrimero" Text="<<" Width="50" CssClass="page-link bg-black bg-opacity-25 border-primary text-bg-danger" runat="server" OnClick="btnPrimero_Click" /></li>
+                    <li class="page-item">
+                        <asp:Button ID="btnAnterior" Text="<" Width="50" CssClass="page-link bg-black bg-opacity-25 border-primary text-bg-danger" runat="server" OnClick="btnAnterior_Click" /></li>
+                    <li class="page-item">
+                        <asp:TextBox ID="txtPosicion" Width="100" ReadOnly="true" CssClass="page-link text-center bg-black bg-opacity-25 border-primary text-bg-danger" runat="server" /></li>
+                    <li class="page-item">
+                        <asp:Button ID="btnSiguiente" Text=">" Width="50" CssClass="page-link bg-black bg-opacity-25 border-primary text-bg-danger" runat="server" OnClick="btnSiguiente_Click" /></li>
+                    <li class="page-item">
+                        <asp:Button ID="btnUltimo" Text=">>" Width="50" CssClass="page-link bg-black bg-opacity-25 border-primary text-bg-danger" runat="server" OnClick="btnUltimo_Click" /></li>
+                </ul>
+            </nav>
+        </ContentTemplate>
+        <Triggers>
+            <asp:AsyncPostBackTrigger ControlID="ddlTipo" EventName="SelectedIndexChanged" />
+            <asp:AsyncPostBackTrigger ControlID="ddlFiltro" EventName="SelectedIndexChanged" />
+            <asp:AsyncPostBackTrigger ControlID="txtFiltro" EventName="TextChanged" />
+            <asp:AsyncPostBackTrigger ControlID="rango1" EventName="CheckedChanged" />
+            <asp:AsyncPostBackTrigger ControlID="rango2" EventName="CheckedChanged" />
+            <asp:AsyncPostBackTrigger ControlID="rango3" EventName="CheckedChanged" />
+        </Triggers>
+    </asp:UpdatePanel>
 </asp:Content>

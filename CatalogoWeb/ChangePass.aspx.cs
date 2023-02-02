@@ -33,10 +33,11 @@ namespace CatalogoWeb
                     Response.Redirect("Login.aspx");
             }
             catch (ThreadAbortException) { }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                Session.Add("ErrorCode", "Hubo un problema al cargar la página");
+                Session.Add("Error", ex.Message);
+                Response.Redirect("Error.aspx", false);
             }
         }
 
@@ -66,11 +67,11 @@ namespace CatalogoWeb
                     Session.Clear();
                 }
             }
-            catch (ThreadAbortException) { }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                Session.Add("ErrorCode", "Hubo un problema al cargar la página");
+                Session.Add("Error", ex.Message);
+                Response.Redirect("Error.aspx", false);
             }
         }
     }

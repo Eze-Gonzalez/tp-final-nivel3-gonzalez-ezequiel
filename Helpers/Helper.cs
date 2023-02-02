@@ -10,6 +10,7 @@ using ModeloDominio;
 using Validaciones;
 using Datos;
 using System.Configuration;
+using System.Web.UI.WebControls;
 using static System.Collections.Specialized.BitVector32;
 
 namespace Helpers
@@ -212,26 +213,18 @@ namespace Helpers
                     {
                         if (passNueva != usuario.Pass)
                         {
-                            if (Validar.campoPass(passRepetir))
+                            if (passRepetir == passNueva)
                             {
-                                if (passRepetir == passNueva)
-                                {
-                                    status = true;
-                                    titulo = "Listo!";
-                                    mensaje = "La contraseña fue cambiada exitosamente!";
-                                    DatosUsuario datos = new DatosUsuario();
-                                    datos.cambiarPass(passRepetir, usuario.Id);
-                                }
-                                else
-                                {
-                                    titulo = "Las contraseñas no coinciden";
-                                    mensaje = "Las contraseñas ingresadas no coinciden, deben coincidir para continuar.";
-                                }
+                                status = true;
+                                titulo = "Listo!";
+                                mensaje = "La contraseña fue cambiada exitosamente!";
+                                DatosUsuario datos = new DatosUsuario();
+                                datos.cambiarPass(passRepetir, usuario.Id);
                             }
                             else
                             {
-                                titulo = "Contraseña no válida o vacía";
-                                mensaje = "Debe ingresar una contraseña de 3 a 20 dígitos, con al menos una mayúscula, una minúscula y un número.";
+                                titulo = "Las contraseñas no coinciden";
+                                mensaje = "Las contraseñas ingresadas no coinciden, deben coincidir para continuar.";
                             }
                         }
                         else
@@ -242,7 +235,7 @@ namespace Helpers
                     }
                     else
                     {
-                        titulo = "Contraseña inválida o vacía";
+                        titulo = "Contraseña inválida";
                         mensaje = "Debe ingresar una contraseña de 3 a 20 dígitos, con al menos una mayúscula, una minúscula y un número.";
                     }
                 }
@@ -273,27 +266,19 @@ namespace Helpers
                         {
                             if (passNueva != usuario.Pass)
                             {
-                                if (Validar.campoPass(passRepetir))
+                                if (passRepetir == passNueva)
                                 {
-                                    if (passRepetir == passNueva)
-                                    {
-                                        status = true;
-                                        titulo = "Listo!";
-                                        DatosUsuario datos = new DatosUsuario();
-                                        usuario.Pass = passRepetir;
-                                        datos.cambiarPass(usuario.Pass, usuario.Id);
-                                        mensaje = "La contraseña fue guardada exitosamente!";
-                                    }
-                                    else
-                                    {
-                                        titulo = "Contraseñas distintas";
-                                        mensaje = "Las contraseñas no coinciden, intente nuevamente.";
-                                    }
+                                    status = true;
+                                    titulo = "Listo!";
+                                    DatosUsuario datos = new DatosUsuario();
+                                    usuario.Pass = passRepetir;
+                                    datos.cambiarPass(usuario.Pass, usuario.Id);
+                                    mensaje = "La contraseña fue guardada exitosamente!";
                                 }
                                 else
                                 {
-                                    titulo = "Contraseña no válida o vacía en el campo Repetir Contraseña";
-                                    mensaje = "Debe ingresar una nueva contraseña de al menos 6 caracteres, con al menos un número, una mayúscula y una minúscula.";
+                                    titulo = "Contraseñas distintas";
+                                    mensaje = "Las contraseñas no coinciden, intente nuevamente.";
                                 }
                             }
                             else
@@ -304,7 +289,7 @@ namespace Helpers
                         }
                         else
                         {
-                            titulo = "Contraseña no válida o vacía en el campo Nueva Contraseña";
+                            titulo = "Contraseña no válida";
                             mensaje = "Debe ingresar una nueva contraseña de al menos 6 caracteres, con al menos un número, una mayúscula y una minúscula.";
                         }
                     }
@@ -339,33 +324,25 @@ namespace Helpers
                     {
                         if (Validar.campoPass(passNueva))
                         {
-                            if (Validar.campoPass(passRepetir))
+                            if (passRepetir == passNueva)
                             {
-                                if(passRepetir == passNueva)
-                                {
-                                    status = true;
-                                    titulo = "Listo!";
-                                    mensaje = "El registro fue exitoso!";
-                                    usuario.Email = email;
-                                    usuario.Pass = passRepetir;
-                                    DatosUsuario datos = new DatosUsuario();
-                                    usuario.Id = datos.nuevoUsuario(usuario);
-                                }
-                                else
-                                {
-                                    titulo = "Las contraseñas no coinciden";
-                                    mensaje = "Debe repetir las contraseñas, de manera que ambas sean iguales";
-                                }
+                                status = true;
+                                titulo = "Listo!";
+                                mensaje = "El registro fue exitoso!";
+                                usuario.Email = email;
+                                usuario.Pass = passRepetir;
+                                DatosUsuario datos = new DatosUsuario();
+                                usuario.Id = datos.nuevoUsuario(usuario);
                             }
                             else
                             {
-                                titulo = "Contraseña inválida o vacía";
-                                mensaje = "Debe ingresar una contraseña de 3 a 20 dígitos con al menos una mayúscula, una minúscula y un número.";
+                                titulo = "Las contraseñas no coinciden";
+                                mensaje = "Debe repetir las contraseñas, de manera que ambas sean iguales";
                             }
                         }
                         else
                         {
-                            titulo = "Contraseña inválida o vacía";
+                            titulo = "Contraseña inválida";
                             mensaje = "Debe ingresar una contraseña de 3 a 20 dígitos con al menos una mayúscula, una minúscula y un número.";
                         }
                     }
@@ -414,6 +391,14 @@ namespace Helpers
             {
 
                 throw;
+            }
+        }
+        //Carga imagen de repeater
+        public static void cargarImgRep(List<Producto> lista)
+        {
+            foreach (Producto producto in lista)
+            {
+                producto.ImagenUrl = cargarImagen(producto);
             }
         }
     }

@@ -4,6 +4,7 @@ using ModeloDominio;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -39,10 +40,11 @@ namespace CatalogoWeb
                     repFav.DataBind();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                Session.Add("ErrorCode", "Hubo un problema al cargar la página");
+                Session.Add("Error", ex.Message);
+                Response.Redirect("Error.aspx", false);
             }
         }
 
@@ -57,16 +59,12 @@ namespace CatalogoWeb
                 int idUser = Session["usuario"] != null ? ((Usuario)Session["usuario"]).Id : 0;
                 DatosFavorito.eliminarFav(idProd, idUser);
                 DatosProducto datos = new DatosProducto();
-                int id = Session["usuario"] != null ? ((Usuario)Session["usuario"]).Id : 0;
-                List<Favorito> lista = DatosFavorito.listar(id);
+                List<Favorito> lista = DatosFavorito.listar(idUser);
                 List<Producto> favoritos = new List<Producto>();
                 foreach (Favorito fav in lista)
                 {
                     favoritos.Add(datos.traerProducto(fav.Producto.Id));
-                    foreach (Producto producto in favoritos)
-                    {
-                        producto.ImagenUrl = Helper.cargarImagen(producto);
-                    }
+                    Helper.cargarImgRep(favoritos);
                 }
                 repFav.DataSource = null;
                 repFav.DataSource = favoritos;
@@ -76,10 +74,11 @@ namespace CatalogoWeb
                 else
                     lblFavoritos.Visible = false;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                Session.Add("ErrorCode", "Hubo un problema al cargar la página");
+                Session.Add("Error", ex.Message);
+                Response.Redirect("Error.aspx", false);
             }
         }
 
@@ -93,10 +92,12 @@ namespace CatalogoWeb
                 int idProd = int.Parse(imgbtnId.AlternateText);
                 Response.Redirect("Details.aspx?id=" + idProd);
             }
-            catch (Exception)
+            catch (ThreadAbortException) { }
+            catch (Exception ex)
             {
-
-                throw;
+                Session.Add("ErrorCode", "Hubo un problema al cargar la página");
+                Session.Add("Error", ex.Message);
+                Response.Redirect("Error.aspx", false);
             }
         }
     }

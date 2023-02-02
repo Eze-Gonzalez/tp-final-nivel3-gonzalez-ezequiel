@@ -46,7 +46,6 @@
                     <asp:Label ID="lblErrorPrecio" CssClass="danger" Visible="false" runat="server" Text="Label"></asp:Label>
                 </div>
                 <asp:RequiredFieldValidator ErrorMessage="Debe ingresar un precio para el producto " CssClass="danger" ControlToValidate="txtPrecio" runat="server" />
-                <%--<asp:RegularExpressionValidator ErrorMessage="Debe ingresar solo numeros para ingresar un precio" CssClass="danger" ValidationExpression="^[0-9]+$" ControlToValidate="txtPrecio" runat="server" />--%>
             </div>
         </div>
         <div class="col-6">
@@ -74,7 +73,7 @@
                     <div class="mb-3">
                         <%if (rdbLocal.Checked)
                             { %>
-                        <input class="form-control" type="file" id="txtImagenLocal" runat="server">
+                        <input class="form-control" type="file" id="txtImagenLocal" runat="server" onchange="ValidateSize(this)">
                         <%}
                             else if (rdbUrl.Checked)
                             { %>

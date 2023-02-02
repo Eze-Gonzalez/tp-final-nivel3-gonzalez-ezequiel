@@ -16,17 +16,27 @@ namespace CatalogoWeb
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            Title = "Iniciar Sesión";
-            if (Validar.sesion(Session["usuario"]))
+            try
             {
-                Session.Add("ErrorCode", "Ya hay una sesión iniciada");
-                Session.Add("Error", "Ya hay una sesión activa, si desea iniciar sesión con otra cuenta, primero cierre esta sesión y luego inicie sesión nuevamente.");
-                Response.Redirect("Error.aspx");
+                Title = "Iniciar Sesión";
+                if (Validar.sesion(Session["usuario"]))
+                {
+                    Session.Add("ErrorCode", "Ya hay una sesión iniciada");
+                    Session.Add("Error", "Ya hay una sesión activa, si desea iniciar sesión con otra cuenta, primero cierre esta sesión y luego inicie sesión nuevamente.");
+                    Response.Redirect("Error.aspx");
+                }
+                else if (Session["cont"] != null && (int)Session["cont"] >= 5 && Session["usuarioEmergencia"] != null)
+                {
+                    Session.Add("ErrorLogin", "Alcanzó los intentos máximos para iniciar sesión, si olvidó su contraseña, puede cambiarla");
+                    Response.Redirect("ChangePass.aspx");
+                }
             }
-            else if (Session["cont"] != null && (int)Session["cont"] >= 5 && Session["usuarioEmergencia"] != null)
+            catch (ThreadAbortException) { }
+            catch (Exception ex)
             {
-                Session.Add("ErrorLogin", "Alcanzó los intentos máximos para iniciar sesión, si olvidó su contraseña, puede cambiarla");
-                Response.Redirect("ChangePass.aspx");
+                Session.Add("ErrorCode", "Hubo un problema al cargar la página");
+                Session.Add("Error", ex.Message);
+                Response.Redirect("Error.aspx", false);
             }
         }
 
@@ -36,28 +46,27 @@ namespace CatalogoWeb
             string titulo;
             string mensaje;
             string script;
-            Page.Validate();
-            if (!Page.IsValid)
-            {
-                status = false;
-                titulo = "No se admiten campos vacíos";
-                mensaje = "Debe completar ambos campos para iniciar sesión.";
-                script = string.Format("crearAlerta({0}, '{1}', '{2}');", status.ToString().ToLower(), titulo, mensaje);
-                ScriptManager.RegisterStartupScript(this, GetType(), "crearAlerta", script, true);
-                return;
-            }
-            int cont;
-            if (Session["cont"] == null)
-            {
-                cont = 1;
-            }
-            else
-            {
-                cont = (int)Session["cont"];
-            }
-
             try
             {
+                Page.Validate();
+                if (!Page.IsValid)
+                {
+                    status = false;
+                    titulo = "No se admiten campos vacíos";
+                    mensaje = "Debe completar ambos campos para iniciar sesión.";
+                    script = string.Format("crearAlerta({0}, '{1}', '{2}');", status.ToString().ToLower(), titulo, mensaje);
+                    ScriptManager.RegisterStartupScript(this, GetType(), "crearAlerta", script, true);
+                    return;
+                }
+                int cont;
+                if (Session["cont"] == null)
+                {
+                    cont = 1;
+                }
+                else
+                {
+                    cont = (int)Session["cont"];
+                }
                 Usuario usuario = new Usuario();
                 if (Validar.campoEmail(txtEmail.Text))
                 {
@@ -113,7 +122,7 @@ namespace CatalogoWeb
             {
                 Session.Add("ErrorCode", "Hubo un error al conectar con la base de datos.");
                 Session.Add("Error", ex.Message);
-                Response.Redirect("Error.aspx");
+                Response.Redirect("Error.aspx", false);
             }
             catch (Exception)
             {
