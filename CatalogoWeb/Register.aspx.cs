@@ -51,14 +51,24 @@ namespace CatalogoWeb
                     ScriptManager.RegisterStartupScript(this, GetType(), "crearAlerta", script, true);
                 }
                 txtEmail.Text = txtEmail.Text.ToLower();
-                Usuario usuario = new Usuario();
-                mensaje = Helper.registro(usuario, txtEmail.Text, txtPassword.Text, txtRepetir.Text, ref status, ref titulo);
-                script = string.Format("crearAlerta({0},'{1}','{2}');", status.ToString().ToLower(), titulo, mensaje);
-                ScriptManager.RegisterStartupScript(this, GetType(), "crearAlerta", script, true);
-                if (status)
+                if (Validar.longitudCampos(txtEmail.Text))
                 {
-                    Session.Add("usuario", usuario);
-                    Response.Redirect("MyProfile.aspx?id=" + usuario.Id);
+                    Usuario usuario = new Usuario();
+                    mensaje = Helper.registro(usuario, txtEmail.Text, txtPassword.Text, txtRepetir.Text, ref status, ref titulo);
+                    script = string.Format("crearAlerta({0},'{1}','{2}');", status.ToString().ToLower(), titulo, mensaje);
+                    ScriptManager.RegisterStartupScript(this, GetType(), "crearAlerta", script, true);
+                    if (status)
+                    {
+                        Session.Add("usuario", usuario);
+                        Response.Redirect("MyProfile.aspx?id=" + usuario.Id);
+                    }
+                }
+                else
+                {
+                    titulo = "Email demasiado largo";
+                    mensaje = "La longitud del email es demasiado larga, pruebe con uno mas corto.";
+                    script = string.Format("crearAlerta({0},'{1}','{2}');", false.ToString().ToLower(), titulo, mensaje);
+                    ScriptManager.RegisterStartupScript(this, GetType(), "crearAlerta", script, true);
                 }
             }
             catch (ThreadAbortException) { }

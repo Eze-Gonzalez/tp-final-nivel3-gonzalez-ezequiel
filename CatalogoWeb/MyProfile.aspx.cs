@@ -69,20 +69,28 @@ namespace CatalogoWeb
                 else
                     imagenPerfil = string.IsNullOrEmpty(txtImagenUrl.Text) ? usuario.UrlImagen : txtImagenUrl.Text;
 
-                if (Validar.datosPerfil(usuario, txtNombre.Text, txtApellido.Text, imagenPerfil) || fileLocal.HasFile)
+                if (Validar.longitudCampos(txtNombre.Text, txtApellido.Text, imgPerfil.ImageUrl))
                 {
-                    lblSinCambios.Visible = false;
-                    mensaje = Helper.cargarDatosUsuario(usuario, txtNombre.Text, txtApellido.Text, imagenPerfil, ref status, ref titulo);
-                    script = string.Format("crearAlerta({0}, '{1}', '{2}');", status.ToString().ToLower(), titulo, mensaje);
-                    ScriptManager.RegisterStartupScript(this, GetType(), "crearAlerta", script, true);
-                    txtNombre.Text = usuario.Nombre;
-                    txtApellido.Text = usuario.Apellido;
+                    if (Validar.datosPerfil(usuario, txtNombre.Text, txtApellido.Text, imagenPerfil) || fileLocal.HasFile)
+                    {
+                        lblSinCambios.Visible = false;
+                        mensaje = Helper.cargarDatosUsuario(usuario, txtNombre.Text, txtApellido.Text, imagenPerfil, ref status, ref titulo);
+                        script = string.Format("crearAlerta({0}, '{1}', '{2}');", status.ToString().ToLower(), titulo, mensaje);
+                        txtNombre.Text = usuario.Nombre;
+                        txtApellido.Text = usuario.Apellido;
+                    }
+                    else
+                        lblSinCambios.Visible = true;
+                    if (status)
+                        cargarControles(usuario);
                 }
                 else
-                    lblSinCambios.Visible = true;
-                if (status)
-                    cargarControles(usuario);
-
+                {
+                    titulo = "Error al guardar los datos";
+                    mensaje = "Uno o más campos exceden la cantidad máxima de caracteres, intente nuevamente.";
+                    script = string.Format("crearAlerta({0}, '{1}', '{2}');", false.ToString().ToLower(), titulo, mensaje);
+                }
+                ScriptManager.RegisterStartupScript(this, GetType(), "crearAlerta", script, true);
             }
             catch (Exception ex)
             {
@@ -136,10 +144,19 @@ namespace CatalogoWeb
                 }
                 else
                 {
-                    txtEmailActual.Text = txtEmailActual.Text.ToLower();
-                    txtEmailNuevo.Text = txtEmailNuevo.Text.ToLower();
-                    mensaje = Helper.cargarEmail(usuario, txtEmailActual.Text, txtEmailNuevo.Text, ref status, ref titulo);
-                    script = string.Format("crearAlerta({0}, '{1}', '{2}');", status.ToString().ToLower(), titulo, mensaje);
+                    if (Validar.longitudCampos(txtEmailNuevo.Text))
+                    {
+                        txtEmailActual.Text = txtEmailActual.Text.ToLower();
+                        txtEmailNuevo.Text = txtEmailNuevo.Text.ToLower();
+                        mensaje = Helper.cargarEmail(usuario, txtEmailActual.Text, txtEmailNuevo.Text, ref status, ref titulo);
+                        script = string.Format("crearAlerta({0}, '{1}', '{2}');", status.ToString().ToLower(), titulo, mensaje);
+                    }
+                    else
+                    {
+                        titulo = "Email demasiado largo";
+                        mensaje = "El nuevo email es demasiado larga, pruebe con uno mas corto.";
+                        script = string.Format("crearAlerta({0}, '{1}', '{2}');", false.ToString().ToLower(), titulo, mensaje);
+                    }
                 }
                 if (status)
                 {

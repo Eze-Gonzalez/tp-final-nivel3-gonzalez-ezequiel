@@ -254,5 +254,68 @@ namespace Validaciones
                 throw;
             }
         }
+        //Valida longitud de campos
+        public static bool longitudCampos(string codigo, string nombre, string descripcion, string img)
+        {
+            try
+            {
+                bool status = true;
+                //@codigo varchar(50),
+                //@nombre varchar(50),
+                //@descripcion varchar(150),
+                //@idMarca int,
+                //@idCategoria int,
+                //@img varchar(1000),
+                //@precio money,
+                if (codigo.Length > 50)
+                    status = false;
+                if (nombre.Length > 50)
+                    status = false;
+                if (descripcion.Length > 150)
+                    status = false;
+                if (img.Length > 1000)
+                    status = false;
+                return status;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+        public static bool longitudCampos(string nombre, string apellido, string img)
+        {
+            try
+            {
+                bool status = true;
+                if (nombre.Length > 50)
+                    status = false;
+                if (apellido.Length > 50)
+                    status = false;
+                if (img.Length > 500)
+                    status = false;
+                return status;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+        public static bool longitudCampos(string emailPass)
+        {
+            try
+            {
+                bool status = true;
+                if (emailPass.Length > 100)
+                    status = false;
+                return status;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
     }
 }

@@ -94,6 +94,7 @@ namespace CatalogoWeb
             try
             {
                 DatosProducto.eliminar(int.Parse(Request.QueryString["id"]));
+                DatosFavorito.forzarEliminacion(int.Parse(Request.QueryString["Id"]));
                 Response.Redirect("ProductList.aspx", false);
             }
             catch (Exception ex)

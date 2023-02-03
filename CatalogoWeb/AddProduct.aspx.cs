@@ -74,70 +74,80 @@ namespace CatalogoWeb
                 if (!Page.IsValid)
                     return;
                 txtCodigo.Text = txtCodigo.Text.ToUpper();
-                Producto producto = new Producto();
-                producto.Categoria = new Categoria();
-                producto.Marca = new Marca();
-                producto.Codigo = txtCodigo.Text;
-                producto.Nombre = txtNombre.Text;
-                producto.Descripcion = txtDescripcion.Text;
-                producto.Categoria.Id = int.Parse(ddlCategoria.SelectedValue);
-                producto.Marca.Id = int.Parse(ddlMarca.SelectedValue);
-                producto.Precio = Helper.cargarPrecio(txtPrecio.Text);
-                if (rdbLocal.Checked)
+                if(Validar.longitudCampos(txtCodigo.Text, txtNombre.Text, txtDescripcion.Text, imgProducto.ImageUrl))
                 {
+                    Producto producto = new Producto();
+                    producto.Categoria = new Categoria();
+                    producto.Marca = new Marca();
+                    producto.Codigo = txtCodigo.Text;
+                    producto.Nombre = txtNombre.Text;
+                    producto.Descripcion = txtDescripcion.Text;
+                    producto.Categoria.Id = int.Parse(ddlCategoria.SelectedValue);
+                    producto.Marca.Id = int.Parse(ddlMarca.SelectedValue);
+                    producto.Precio = Helper.cargarPrecio(txtPrecio.Text);
+                    if (rdbLocal.Checked)
+                    {
+                        if (Request.QueryString["id"] != null)
+                        {
+                            if (txtImagenLocal.Value != null)
+                            {
+                                producto.Id = int.Parse(Request.QueryString["id"]);
+                                string ruta = Server.MapPath("./Imagenes/Productos/");
+                                string img = "product-" + producto.Id + ".png";
+                                txtImagenLocal.PostedFile.SaveAs(ruta + img);
+                                producto.ImagenUrl = img;
+                            }
+                        }
+                        else
+                        {
+                            if (txtImagenLocal.Value != null)
+                            {
+                                DatosProducto datos = new DatosProducto();
+                                string ruta = Server.MapPath("./Imagenes/Productos/");
+                                string img = "product-" + (datos.ultimoId() + 1) + ".png";
+                                txtImagenLocal.PostedFile.SaveAs(ruta + img);
+                                producto.ImagenUrl = img;
+                            }
+                        }
+                    }
+                    else if (Validar.campo(txtImagenUrl.Text) && txtImagenUrl.Text.Length < 1000)
+                        producto.ImagenUrl = txtImagenUrl.Text;
                     if (Request.QueryString["id"] != null)
                     {
-                        if (txtImagenLocal.Value != null)
-                        {
-                            producto.Id = int.Parse(Request.QueryString["id"]);
-                            string ruta = Server.MapPath("./Imagenes/Productos/");
-                            string img = "product-" + producto.Id + ".png";
-                            txtImagenLocal.PostedFile.SaveAs(ruta + img);
-                            producto.ImagenUrl = img;
-                        }
+                        producto.Id = int.Parse(Request.QueryString["id"]);
+                        DatosProducto.agregar(producto, false);
+                        Response.Redirect("Details.aspx?id=" + producto.Id);
                     }
                     else
                     {
-                        if (txtImagenLocal.Value != null)
+                        if (Validar.codigoExistente(producto.Codigo))
                         {
-                            DatosProducto datos = new DatosProducto();
-                            string ruta = Server.MapPath("./Imagenes/Productos/");
-                            string img = "product-" + (datos.ultimoId() + 1) + ".png";
-                            txtImagenLocal.PostedFile.SaveAs(ruta + img);
-                            producto.ImagenUrl = img;
+                            lblErrorCodigo.Text = "El código ingresado ya se encuentra en uso, ingrese otro código";
+                            lblErrorCodigo.Visible = true;
+                            return;
+                        }
+                        else if (Validar.nombreExistente(producto.Nombre))
+                        {
+                            lblErrorCodigo.Visible = false;
+                            lblErrorNombre.Text = "El nombre ingresado ya se encuentra en uso, ingrese otro nombre";
+                            lblErrorNombre.Visible = true;
+                            return;
+                        }
+                        else
+                        {
+                            lblErrorCodigo.Visible = false;
+                            lblErrorNombre.Visible = false;
+                            DatosProducto.agregar(producto);
+                            Response.Redirect("ProductList.aspx");
                         }
                     }
-                }
-                else if (Validar.campo(txtImagenUrl.Text))
-                    producto.ImagenUrl = txtImagenUrl.Text;
-                if (Request.QueryString["id"] != null)
-                {
-                    producto.Id = int.Parse(Request.QueryString["id"]);
-                    DatosProducto.agregar(producto, false);
-                    Response.Redirect("Details.aspx?id=" + producto.Id);
                 }
                 else
                 {
-                    if (Validar.codigoExistente(producto.Codigo))
-                    {
-                        lblErrorCodigo.Text = "El código ingresado ya se encuentra en uso, ingrese otro código";
-                        lblErrorCodigo.Visible = true;
-                        return;
-                    }
-                    else if (Validar.nombreExistente(producto.Nombre))
-                    {
-                        lblErrorCodigo.Visible = false;
-                        lblErrorNombre.Text = "El nombre ingresado ya se encuentra en uso, ingrese otro nombre";
-                        lblErrorNombre.Visible = true;
-                        return;
-                    }
-                    else
-                    {
-                        lblErrorCodigo.Visible = false;
-                        lblErrorNombre.Visible = false;
-                        DatosProducto.agregar(producto);
-                        Response.Redirect("ProductList.aspx");
-                    }
+                    string titulo = "No se pudo agregar el producto";
+                    string mensaje = "Uno o más campos exceden la cantidad máxima de caracteres, intente nuevamente.";
+                    string script = string.Format("crearAlerta({0}, '{1}', '{2}');", false.ToString().ToLower(), titulo, mensaje);
+                    ScriptManager.RegisterStartupScript(this, GetType(), "crearAlerta", script, true);
                 }
             }
             catch (FormatException)

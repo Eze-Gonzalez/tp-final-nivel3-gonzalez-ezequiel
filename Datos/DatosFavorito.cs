@@ -82,5 +82,24 @@ namespace Datos
                 datos.cerrarConexion();
             }
         }
+        public static void forzarEliminacion(int idProd)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.consultaEmbebida("delete from Favoritos where IdArticulo = @id");
+                datos.parametros("@id", idProd);
+                datos.ejecutar();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
     }
 }
