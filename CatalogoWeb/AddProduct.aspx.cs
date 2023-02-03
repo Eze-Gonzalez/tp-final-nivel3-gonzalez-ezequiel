@@ -36,13 +36,15 @@ namespace CatalogoWeb
                     btnAgregar.Text = "Modificar";
                     DatosProducto datos = new DatosProducto();
                     Producto producto = datos.traerProducto(int.Parse(Request.QueryString["id"]));
+                    lblAgregar.Text = "Modificar " + producto.Nombre;
                     Title = "Modificar " + producto.Nombre;
                     txtCodigo.Text = producto.Codigo;
                     txtNombre.Text = producto.Nombre;
                     txtDescripcion.Text = producto.Descripcion;
                     ddlCategoria.SelectedValue = producto.Categoria.Id.ToString();
                     ddlMarca.SelectedValue = producto.Marca.Id.ToString();
-                    txtPrecio.Text = producto.Precio.ToString();
+                    string precio = producto.Precio.ToString();
+                    txtPrecio.Text = precio;
                     if (Validar.imagen(producto.ImagenUrl, producto.Id))
                     {
                         rdbUrl.Checked = true;
@@ -55,6 +57,7 @@ namespace CatalogoWeb
                 else
                 {
                     Title = "Agregar producto";
+                    lblAgregar.Text = "Agregar un nuevo producto";
                     imgProducto.ImageUrl = "https://i.imgur.com/yzczBvI.png";
                 }
             }

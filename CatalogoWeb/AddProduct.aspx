@@ -5,7 +5,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <div class="row text-light mb-5">
         <div class="col center-row">
-            <h3>Agregar un nuevo producto</h3>
+            <asp:Label ID="lblAgregar" CssClass="h3" runat="server" Text="Label"></asp:Label>
         </div>
     </div>
     <div class="row text-light">

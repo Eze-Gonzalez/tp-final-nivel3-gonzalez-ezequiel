@@ -94,8 +94,8 @@ namespace Helpers
             {
                 if (Validar.campo(precio))
                 {
-                    if (precio.Contains("."))
-                        precio = precio.Replace(".", ",");
+                    if (precio.Contains(",")) // reemplazar por . si se utiliza fuera de somee.com
+                        precio = precio.Replace(",", "."); //reemplazar a precio.Replace(".", ","); si se utiliza fuera de somee.com
                     price = decimal.Parse(precio);
                 }
                 return Math.Round(price, 2, MidpointRounding.AwayFromZero);
