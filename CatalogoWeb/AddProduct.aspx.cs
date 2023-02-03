@@ -73,7 +73,7 @@ namespace CatalogoWeb
                 Page.Validate();
                 if (!Page.IsValid)
                     return;
-
+                txtCodigo.Text = txtCodigo.Text.ToUpper();
                 Producto producto = new Producto();
                 producto.Categoria = new Categoria();
                 producto.Marca = new Marca();

@@ -58,6 +58,7 @@ namespace CatalogoWeb
                     ScriptManager.RegisterStartupScript(this, GetType(), "crearAlerta", script, true);
                     return;
                 }
+                txtEmail.Text = txtEmail.Text.ToLower();
                 int cont;
                 if (Session["cont"] == null)
                 {

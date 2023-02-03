@@ -19,7 +19,7 @@ namespace CatalogoWeb
         private string emailCodificado;
         private string passCodificada;
         private string script;
-        private bool status;
+        private bool status = false;
         protected void Page_Load(object sender, EventArgs e)
         {
             Title = "Mi perfil";
@@ -31,13 +31,9 @@ namespace CatalogoWeb
                     if (!IsPostBack)
                     {
                         lblUsuario.Text = Helper.nombre(usuario);
-                        emailCodificado = usuario.Email;
-                        passCodificada = usuario.Pass;
-                        Helper.codificar(ref emailCodificado, ref passCodificada);
+                        codificar(usuario);
                         txtNombre.Text = usuario.Nombre;
                         txtApellido.Text = usuario.Apellido;
-                        lblEmailUser.Text = emailCodificado;
-                        lblPassUser.Text = passCodificada;
                         imgPerfil.ImageUrl = Helper.cargarImagen(usuario);
                     }
                 }
@@ -85,14 +81,8 @@ namespace CatalogoWeb
                 else
                     lblSinCambios.Visible = true;
                 if (status)
-                {
-                    lblUsuario.Text = Helper.nombre(usuario);
-                    Label lblMaster = (Label)Master.FindControl("lblPerfil");
-                    Image imgMaster = (Image)Master.FindControl("imgPerfil");
-                    lblMaster.Text = lblUsuario.Text;
-                    imgMaster.ImageUrl = imgPerfil.ImageUrl;
-                }
-                    
+                    cargarControles(usuario);
+
             }
             catch (Exception ex)
             {
@@ -146,16 +136,15 @@ namespace CatalogoWeb
                 }
                 else
                 {
+                    txtEmailActual.Text = txtEmailActual.Text.ToLower();
+                    txtEmailNuevo.Text = txtEmailNuevo.Text.ToLower();
                     mensaje = Helper.cargarEmail(usuario, txtEmailActual.Text, txtEmailNuevo.Text, ref status, ref titulo);
                     script = string.Format("crearAlerta({0}, '{1}', '{2}');", status.ToString().ToLower(), titulo, mensaje);
                 }
                 if (status)
                 {
-                    passCodificada = usuario.Pass;
-                    emailCodificado = usuario.Email;
-                    Helper.codificar(ref emailCodificado, ref passCodificada);
-                    lblEmailUser.Text = emailCodificado;
-                    lblPassUser.Text = passCodificada;
+                    codificar(usuario);
+                    cargarControles(usuario);
                 }
                 ScriptManager.RegisterStartupScript(this, GetType(), "crearAlerta", script, true);
             }
@@ -179,6 +168,41 @@ namespace CatalogoWeb
         protected void txtNombre_TextChanged(object sender, EventArgs e)
         {
             lblSinCambios.Visible = false;
+        }
+        private void codificar(Usuario usuario)
+        {
+            try
+            {
+                emailCodificado = usuario.Email;
+                passCodificada = usuario.Pass;
+                Helper.codificar(ref emailCodificado, ref passCodificada);
+                lblEmailUser.Text = emailCodificado;
+                lblPassUser.Text = passCodificada;
+            }
+            catch (Exception ex)
+            {
+                Session.Add("ErrorCode", "Hubo un problema al cargar la pagina");
+                Session.Add("Error", ex.Message);
+                Response.Redirect("Default.aspx", false);
+            }
+        }
+        private void cargarControles(Usuario usuario)
+        {
+            try
+            {
+                lblUsuario.Text = Helper.nombre(usuario);
+                Label lblMaster = (Label)Master.FindControl("lblPerfil");
+                Image imgMaster = (Image)Master.FindControl("imgPerfil");
+                lblMaster.Text = lblUsuario.Text;
+                imgMaster.ImageUrl = imgPerfil.ImageUrl;
+                Session["usuario"] = usuario;
+            }
+            catch (Exception ex)
+            {
+                Session.Add("ErrorCode", "Hubo un error al cargar la página");
+                Session.Add("Error", ex.Message);
+                Response.Redirect("Error.aspx", false);
+            }
         }
     }
 }

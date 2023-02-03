@@ -290,7 +290,7 @@ namespace Helpers
                         else
                         {
                             titulo = "Contraseña no válida";
-                            mensaje = "Debe ingresar una nueva contraseña de al menos 6 caracteres, con al menos un número, una mayúscula y una minúscula.";
+                            mensaje = "Debe ingresar una nueva contraseña de 3 a 20 digitos, con al menos un número, una mayúscula y una minúscula.";
                         }
                     }
                     else
@@ -372,7 +372,7 @@ namespace Helpers
             {
                 int longitud;
                 string subSPrincipal = email.Substring(0, 3);
-                string subSecundario = email.Substring(3);
+                string subSecundario = email.Substring(2);
                 longitud = subSecundario.Length;
                 string auxsubSecundario = "";
                 for (int i = 1; i < subSecundario.Length; i++)

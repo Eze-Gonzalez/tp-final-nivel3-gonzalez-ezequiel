@@ -49,6 +49,7 @@ namespace CatalogoWeb
                 string titulo = "";
                 string mensaje;
                 string script;
+                txtEmail.Text = txtEmail.Text.ToLower();
                 Usuario usuario = Session["usuarioEmergencia"] != null ? (Usuario)Session["usuarioEmergencia"] : null;
                 if (!Page.IsValid)
                 {

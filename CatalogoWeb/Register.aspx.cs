@@ -50,6 +50,7 @@ namespace CatalogoWeb
                     script = string.Format("crearAlerta({0},'{1}','{2}');", status.ToString().ToLower(), titulo, mensaje);
                     ScriptManager.RegisterStartupScript(this, GetType(), "crearAlerta", script, true);
                 }
+                txtEmail.Text = txtEmail.Text.ToLower();
                 Usuario usuario = new Usuario();
                 mensaje = Helper.registro(usuario, txtEmail.Text, txtPassword.Text, txtRepetir.Text, ref status, ref titulo);
                 script = string.Format("crearAlerta({0},'{1}','{2}');", status.ToString().ToLower(), titulo, mensaje);

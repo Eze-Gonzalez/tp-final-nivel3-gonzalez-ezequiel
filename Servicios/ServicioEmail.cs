@@ -19,7 +19,7 @@ namespace Servicios
                 smtp = new SmtpClient();
                 smtp.Credentials = new NetworkCredential("6dd5f76512f7b3", "9d53556cb70915");
                 smtp.EnableSsl = true;
-                smtp.Host = "smtp.mailtrap.io";
+                smtp.Host = "sandbox.smtp.mailtrap.io";
                 smtp.Port = 2525;
             }
             catch (Exception ex)
